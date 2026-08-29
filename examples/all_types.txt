@@ -1,0 +1,7 @@
+CafÃ©	 FuÃŸball Ã–kostrom mit Herz â™¥ .
+Die Vögel fliegen gerne durch die kühle Märzluft.
+Unicode replacement character ï¿½
+ISO-8859-1 codepoint identified as control 
+Line with ASCII only characters.
+Invalid UTF-8 codepoint 
+í €
