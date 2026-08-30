@@ -67,3 +67,5 @@ target_link_libraries(ea
         ICU::uc
         ICU::i18n
 )
+
+install(TARGETS ea)
