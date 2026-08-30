@@ -32,6 +32,9 @@ if (UNIX)
     add_compile_options(-w)
 endif()
 
+enable_testing()
+include(CTest)
+
 include (FetchContent)
 
 FetchContent_Declare(
@@ -115,4 +118,4 @@ if(UNIX)
 endif()
 
 add_subdirectory(src)
-#add_subdirectory(test)
+add_subdirectory(test)
