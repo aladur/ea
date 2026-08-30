@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 set(CMP0135)
 
-project(encoding
+project(ea
         VERSION 0.1.0
         DESCRIPTION "A command line tool for encoding analysis"
         LANGUAGES CXX)
