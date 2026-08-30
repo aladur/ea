@@ -7,7 +7,7 @@ set(unittests_HEADER
 
 add_executable(unittests ${unittests_SOURCES} ${unittests_HEADER})
 target_include_directories(unittests PRIVATE
-    "../src"
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_BINARY_DIR}/src
 )
 
@@ -17,5 +17,9 @@ target_include_directories(unittests SYSTEM PRIVATE
 )
 
 target_link_libraries(unittests PRIVATE
+    ea::lib
     gtest
 )
+
+include(GoogleTest)
+gtest_discover_tests(unittests DISCOVERY_MODE PRE_TEST)
