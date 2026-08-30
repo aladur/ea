@@ -5,11 +5,30 @@ ea - Building from source
 
 ## Linux
 
-On Linux distributions using a debian package manager install the following packages.
+On **Debian** based Linux distributions like **Ubuntu** or **Linux Mint** install the following packages.
 
 ```sh
 $ [sudo] apt-get install build-essential git cmake libboost-program-opions-dev libicu-dev
 ```
+
+On **Red Hat** based Linux distributions like **Fedora** or **CentOS** install the following packages.
+
+```sh
+$ [sudo] dnf install git make cmake boost-devel libicu-devel
+```
+
+On **Arch Linux** based Linux distributions like **Manjaro** or **CachyOS** install the following packages.
+
+```sh
+$ [sudo] pacman -S git make cmake boost boost-libs icu
+```
+
+On **Alpine Linux** distribution install the following packages.
+
+```sh
+$ [sudo] apk add git cmake build-base boost-dev icu-dev
+```
+
 
 ## Windows
 
