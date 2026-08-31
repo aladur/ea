@@ -131,7 +131,7 @@ After all dependent libraries are available ea can be downloaded from [ea github
 
 ```sh
 git clone https://github.com/aladur/ea.git
-cmake -S ea -B ea_build -DBoost_DIR=/d/projects/boost-1.86.0_install/lib/cmake/Boost-1.86.0 -DICU_ROOT=/d/projects/iicu4c-78.3_install
+cmake -S ea -B ea_build -DBoost_DIR=/d/projects/boost-1.86.0_install/lib/cmake/Boost-1.86.0 -DICU_ROOT=/d/projects/icu4c-78.3_install
 cmake --build ea_build --config Release
 ```
 
