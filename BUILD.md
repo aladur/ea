@@ -23,6 +23,13 @@ On **Arch Linux** based Linux distributions like **Manjaro** or **CachyOS** inst
 $ [sudo] pacman -S git make cmake boost boost-libs icu
 ```
 
+On **SUSE Linux** based Linux distributions like **openSUSE** or **GeckoLinux** install the following packages.
+
+```sh
+$ [sudo] zypper install --type pattern devel_basis
+$ [sudo] zypper install git cmake gcc-c++-15 libboost_program_options-devel libboost_program_options1_86_0 libicu-devel icu
+```
+
 On **Alpine Linux** distribution install the following packages.
 
 ```sh
