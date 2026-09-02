@@ -66,6 +66,7 @@ target_link_libraries(ea
         Boost::program_options
         ICU::uc
         ICU::i18n
+        ICU::data
 )
 
 install(TARGETS ea)

@@ -18,6 +18,9 @@ target_include_directories(unittests SYSTEM PRIVATE
 
 target_link_libraries(unittests PRIVATE
     ea::lib
+    ICU::uc
+    ICU::i18n
+    ICU::data
     gtest
 )
 

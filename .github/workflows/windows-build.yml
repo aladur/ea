@@ -1,0 +1,104 @@
+name: windows-build
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'docker/**'
+      - 'LICENSE'
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**/*.md'
+      - 'docker/**'
+      - 'LICENSE'
+env:
+    BOOST_VERSION: "1.92.0"
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ windows-2022, windows-2025 ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: 'true'
+      - uses: microsoft/setup-msbuild@v3
+
+      - name: Download and Build boost
+        shell: bash
+        run: |
+          echo Download and build b2
+          version=5.5.3
+          file=b2-${version}.tar.bz2
+          s256=d3b914917f8ccf615ee7ec78e59b96c7b49c39f551d5b73525871b2f44cf70d5
+          urlbase=https://github.com/bfgroup/b2/releases/download
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L ${urlbase}/${version}/${file} -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          tar xf ${file}
+          cd b2-${version}
+          ./bootstrap.bat
+          ./b2 install --prefix=../bin
+          cd ..
+          echo Download and build boost
+          version=$BOOST_VERSION
+          file=boost-${version}-b2-nodocs.tar.xz
+          s256=ea7b982002cc9dfbe59b0b217b206f470dc75f3de0bb2973d844118934d82411
+          urlbase=https://github.com/boostorg/boost/releases/download
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L ${urlbase}/boost-${version}/${file} -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          tar xf $file
+          cd boost-${version}
+          toolset="msvc-14.3"
+          if [[ "${{ matrix.os }}" == "windows-2025" ]]; then
+              toolset="msvc-14.5"
+          fi
+          ../bin/b2.exe \
+            --with-program_options \
+            toolset=${toolset} \
+            address-model=64 \
+            variant=debug,release \
+            link=static,shared \
+            threading=multi \
+            --prefix=../boost_install \
+            install
+
+      - name: Download icu binary
+        shell: bash
+        run: |
+          version=78.3
+          file=icu4c-${version}-Win64-MSVC2022.zip
+          s256=446b671f9437227daa79e221d4521d75793f9ecd65ac44c06e34dd848f201ac2
+          urlbase=https://github.com/unicode-org/icu/releases/download
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L ${urlbase}/release-${version}/${file} -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          mkdir icu4c_install
+          unzip $file -d icu4c_install
+
+      - name: Build ea
+        shell: bash
+        run: |
+          boost_version=$BOOST_VERSION
+          pwd=`pwd`
+          cmake -S . -B ea_build \
+            -DBoost_DIR=${pwd}/boost_install/lib/cmake/Boost-${boost_version} \
+            -DICU_ROOT=${pwd}/icu4c_install \
+            -DCMAKE_INSTALL_DIR=${pwd}/ea_install
+          cmake --build ea_build --config Release
+          cmake --install ea_build --config Release --strip
+
+      - name: Test ea
+        shell: bash
+        continue-on-error: false
+        run: |
+          cd ea_build
+          test/Release/unittests
+
