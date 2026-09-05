@@ -93,7 +93,14 @@ jobs:
             -DICU_ROOT=${pwd}/icu4c_install \
             -DCMAKE_INSTALL_DIR=${pwd}/ea_install
           cmake --build ea_build --config Release
-          cmake --install ea_build --config Release --strip
+          cmake --install ea_build --config Release --strip --prefix=install
+          cp icu4c_install/bin64/icudt78.dll install/bin
+          cp icu4c_install/bin64/icuuc78.dll install/bin
+          ea_version=`grep -oP 'CMAKE_PROJECT_VERSION:STATIC=\K.*' ea_build/CMakeCache.txt`
+          echo EA_VERSION=${ea_version} >> %GITHUB_ENV%
+          mkdir artifacts
+          cd install/bin
+          sha256sum ea.exe > ../../artifacts/ea.exe.sha256sum.txt
 
       - name: Test ea
         shell: bash
@@ -101,4 +108,44 @@ jobs:
         run: |
           cd ea_build
           test/Release/unittests
+          install/bin/ea.exe --color examples/all_types.txt
 
+      - name: Create Installer
+        shell: bash
+        run: |
+          file=vc_redist.x64.exe
+          s256=843068991daaa1f73ad9f6239bce4d0f6a07a51f18c37ea2a867e9beca71295c
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L https://aka.ms/vc14/${file} -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          makensis installer/ea.nsi //DEA_VERSION=$EA_VERSION
+          file=EncodingAnalzer-Setup-${EA_VERSION}.exe
+          sha256sum $file > artifacts/$file.sha256sum.txt
+          cp $file artifacts
+
+
+      - name: Scan built Executables with Microsoft Defender
+        shell: pwsh
+        run: |
+          Update-MpSignature
+          $file = "$PWD\\install\\bin\\ea.exe"
+          Write-Host "Scanning $file"
+          Start-MpScan -ScanPath $file
+          $file = "$PWD\\EncodingAnalyzer-Setup-$EA_VERSION.exe"
+          Write-Host "Scanning $file"
+          Start-MpScan -ScanPath $file
+          $threats = Get-MpThreatDetection
+          if ($threats -and $threats.Count -gt 0) {
+            Write-Host "Defender detected threats:"
+            $threats | Format-Table -AutoSize
+            exit 1
+          } else {
+            Write-Host "No Defender detections."
+          }
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ea-windows-build-$EA_VERSION-${{matrix.os}}-msvc-artifacts
+          path: artifacts
+          if-no-files-found: error
