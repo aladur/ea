@@ -15,6 +15,8 @@ on:
       - 'LICENSE'
 env:
     BOOST_VERSION: "1.92.0"
+    NSIS_VERSION: "3.12"
+    ENVAR_VERSION: "0.3.1"
 
 jobs:
   build-and-test:
@@ -33,7 +35,7 @@ jobs:
       - name: Download and Build boost
         shell: bash
         run: |
-          echo Download and build b2
+          echo ==== Download and build b2
           version=5.5.3
           file=b2-${version}.tar.bz2
           s256=d3b914917f8ccf615ee7ec78e59b96c7b49c39f551d5b73525871b2f44cf70d5
@@ -46,7 +48,7 @@ jobs:
           ./bootstrap.bat
           ./b2 install --prefix=../bin
           cd ..
-          echo Download and build boost
+          echo ==== Download and build boost
           version=$BOOST_VERSION
           file=boost-${version}-b2-nodocs.tar.xz
           s256=ea7b982002cc9dfbe59b0b217b206f470dc75f3de0bb2973d844118934d82411
@@ -93,12 +95,83 @@ jobs:
             -DICU_ROOT=${pwd}/icu4c_install \
             -DCMAKE_INSTALL_DIR=${pwd}/ea_install
           cmake --build ea_build --config Release
-          cmake --install ea_build --config Release --strip
+          cmake --install ea_build --config Release --strip --prefix=install
+          cp icu4c_install/bin64/icudt78.dll install/bin
+          cp icu4c_install/bin64/icuuc78.dll install/bin
+          version=`grep -oP 'CMAKE_PROJECT_VERSION:STATIC=\K.*' ea_build/CMakeCache.txt`
+          echo APPVERSION=${version} >> $GITHUB_ENV
+          dir=artifacts/ea-${version}-${{matrix.os}}
+          mkdir -p $dir
+          cd install/bin
+          sha256sum ea.exe > ../../$dir/ea.exe.sha256sum.txt
 
       - name: Test ea
         shell: bash
         continue-on-error: false
         run: |
+          install/bin/ea.exe --color=auto examples/all_types.txt
           cd ea_build
           test/Release/unittests
 
+      - name: Download NSIS installer + EnVar Plugin
+        shell: bash
+        run: |
+          echo ==== Download and install NSIS installer
+          nsis=nsis-$NSIS_VERSION
+          file=${nsis}.zip
+          s256=56581f90db321581c5381193d796fffcf2d24b2f8fed2160a6c6a3baa67f2c4f
+          urlbase=https://sourceforge.net/projects/nsis/files/NSIS%203
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L ${urlbase}/$NSIS_VERSION/${file}/download -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          unzip $file
+          echo ==== Download and install EnVar plugin
+          file=EnVar-Plugin.zip
+          s256=e5b337fcad68252d18282f7259a0306053626e41b9480fa09df3fab012b85e00
+          urlbase=https://github.com/GsNSIS/EnVar/releases/download
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L ${urlbase}/v$ENVAR_VERSION/${file} -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          unzip $file -d $nsis
+
+      - name: Create Installer
+        shell: bash
+        run: |
+          nsis=nsis-$NSIS_VERSION
+          echo Download VC++ Redistributable
+          file=vc_redist.x64.exe
+          s256=843068991daaa1f73ad9f6239bce4d0f6a07a51f18c37ea2a867e9beca71295c
+          echo $s256 $file > ${file}.sha256sum.txt
+          curl -sS --retry 3 -L https://aka.ms/vc14/${file} -o $file
+          sha256sum -c ${file}.sha256sum.txt
+          ${nsis}/makensis //DAPPVERSION=$APPVERSION installer/ea.nsi
+          file=EncodingAnalyzer-Setup-${APPVERSION}.exe
+          dir=artifacts/ea-${APPVERSION}-${{matrix.os}}
+          sha256sum $file > $dir/$file.sha256sum.txt
+          cp $file $dir
+
+      - name: Scan built Executables with Microsoft Defender
+        shell: pwsh
+        run: |
+          Update-MpSignature
+          $file = "$PWD\\install\\bin\\ea.exe"
+          Write-Host "Scanning $file"
+          Start-MpScan -ScanPath $file
+          $file = "$PWD\\EncodingAnalyzer-Setup-$env:APPVERSION.exe"
+          Write-Host "Scanning $file"
+          Start-MpScan -ScanPath $file
+          $threats = Get-MpThreatDetection
+          if ($threats -and $threats.Count -gt 0) {
+            Write-Host "Defender detected threats:"
+            $threats | Format-Table -AutoSize
+            exit 1
+          } else {
+            Write-Host "No Defender detections."
+          }
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: ea-windows-build-${{env.APPVERSION}}-${{matrix.os}}-msvc-artifacts
+          path: artifacts
+          if-no-files-found: error
