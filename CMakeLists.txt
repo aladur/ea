@@ -5,7 +5,16 @@ set(CMP0135)
 project(ea
         VERSION 0.1.0
         DESCRIPTION "A command line tool for encoding analysis"
+        HOMEPAGE_URL "https://github.com/aladur/ea"
         LANGUAGES CXX)
+
+# Optionally a pre-release version like "-rc", "-alpha", "-beta" can
+# be defined.
+set(VERSION_PRERELEASE "-alpha" CACHE STRING
+    "pre-release version like '-rc', '-alpha', '-beta'")
+set(PROJECT_VERSION_FULL "${PROJECT_VERSION}${VERSION_PRERELEASE}")
+
+message(STATUS "Building version: ${PROJECT_VERSION_FULL}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

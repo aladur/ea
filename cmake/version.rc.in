@@ -15,12 +15,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "\0"
             VALUE "FileDescription",  "Character Encoding Analyzer\0"
-            VALUE "FileVersion",      "@PROJECT_VERSION@\0"
+            VALUE "FileVersion",      "@PROJECT_VERSION_FULL@\0"
             VALUE "InternalName",     "ea.exe\0"
             VALUE "LegalCopyright",   "Copyright (C) 2026, W. Schwotzer\0"
             VALUE "OriginalFilename", "ea.exe\0"
             VALUE "ProductName",      "ea\0"
-            VALUE "ProductVersion",   "@PROJECT_VERSION@\0"
+            VALUE "ProductVersion",   "@PROJECT_VERSION_FULL@\0"
         END
     END
     BLOCK "VarFileInfo"
