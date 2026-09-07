@@ -27,7 +27,7 @@
 CRCCheck on
 SetDateSave on
 SetDatablockOptimize on
-BGGradient 080820 5455FF 5455FF
+BGGradient 080820 5555FF 5555FF
 SetCompressor /SOLID lzma
 LicenseBkColor /windows
 
@@ -121,6 +121,7 @@ Section "Binary Files" BinaryFiles
   SetOutPath $INSTDIR ; Set output path to the installation directory.
   ; Add files to be extracted to the current $OUTDIR path
   File /a "${BASEDIR}\install\bin\ea.exe"
+  File /a "${BASEDIR}\install\share\icons\ea.ico"
   File /a "${BASEDIR}\install\bin\icudt78.dll"
   File /a "${BASEDIR}\install\bin\icuuc78.dll"
   File /a /oname=LICENSE.txt "${BASEDIR}\LICENSE"
@@ -199,7 +200,7 @@ Section "-Registry update"
   
   WriteRegStr   HKLM "${ARP}" "DisplayName"     "$DisplayName"
   WriteRegStr   HKLM "${ARP}" "DisplayVersion"  "${APPVERSION}"
-  WriteRegStr   HKLM "${ARP}" "DisplayIcon"     "$INSTDIR\ea.exe"
+  WriteRegStr   HKLM "${ARP}" "DisplayIcon"     "$INSTDIR\ea.ico"
   WriteRegStr   HKLM "${ARP}" "HelpLink"        "https://github.com/aladur/ea"
   WriteRegStr   HKLM "${ARP}" "InstallLocation" "$INSTDIR"
   WriteRegStr   HKLM "${ARP}" "UninstallString" "$INSTDIR\uninstall.exe"
