@@ -99,7 +99,8 @@ jobs:
           cp icu4c_install/bin64/icudt78.dll install/bin
           cp icu4c_install/bin64/icuuc78.dll install/bin
           version=`grep -oP 'CMAKE_PROJECT_VERSION:STATIC=\K.*' ea_build/CMakeCache.txt`
-          echo APPVERSION=${version} >> $GITHUB_ENV
+          prerel=`grep -oP 'VERSION_PRERELEASE:STATIC=\K.*' ea_build/CMakeCache.txt`
+          echo APPVERSION=${version}${prerel} >> $GITHUB_ENV
           dir=artifacts/ea-${version}-${{matrix.os}}
           mkdir -p $dir
           cd install/bin
@@ -152,8 +153,40 @@ jobs:
 
       - name: Scan built Executables with Microsoft Defender
         shell: pwsh
+        timeout-minutes: 10
         run: |
-          Update-MpSignature
+          # Try to update signatures with timeout and retry
+          $maxAttempts = 3
+          $attempt = 0
+          $updated = $false
+          while ($attempt -lt $maxAttempts -and -not $updated) {
+            $attempt++
+            try {
+              Write-Host "Attempting to update Defender signatures (attempt $attempt/$maxAttempts)..."
+              $job = Start-Job -ScriptBlock {
+                Update-MpSignature -ErrorAction Stop
+              }
+              $result = Wait-Job -Job $job -Timeout 120
+              if ($result) {
+              Receive-Job -Job $job
+              $updated = $true
+              Write-Host "Signatures updated successfully"
+              } else {
+                Remove-Job -Job $job -Force
+                Write-Host "Update-MpSignature timed out after 120 seconds"
+              }
+            }
+            catch {
+              Write-Host "Error updating signatures: $_"
+            }
+            if (-not $updated -and $attempt -lt $maxAttempts) {
+              Write-Host "Retrying in 10 seconds..."
+              Start-Sleep -Seconds 10
+            }
+          }
+          if (-not $updated) {
+            Write-Host "Warning: Could not update signatures after $maxAttempts attempts, continuing..."
+          }
           $file = "$PWD\\install\\bin\\ea.exe"
           Write-Host "Scanning $file"
           Start-MpScan -ScanPath $file

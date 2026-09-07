@@ -123,6 +123,11 @@ if(UNIX)
     set(CMAKE_SKIP_INSTALL_RPATH OFF)
 endif()
 
+configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/version.rc.in
+    ${CMAKE_BINARY_DIR}/version.rc
+)
+
 add_subdirectory(src)
 add_subdirectory(test)
 add_subdirectory(examples)
@@ -139,3 +144,9 @@ if(NOT TARGET uninstall)
     add_custom_target(uninstall
       COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
+
+install(
+    FILES
+        ea.ico
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons
+)
