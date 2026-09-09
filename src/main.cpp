@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 
         if (vm.count("version"))
         {
-            std::cout << "ea " << PROJECT_VERSION << "\n";
+            std::cout << "ea " << PROJECT_VERSION_FULL << "\n";
             return 0;
         }
 
