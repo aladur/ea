@@ -45,7 +45,12 @@ set(ea_HEADER
     EncodingApplication.h
 )
 
-add_executable(ea main.cpp ${ea_HEADER})
+add_executable(ea
+    main.cpp
+    ${ea_HEADER}
+    ${CMAKE_BINARY_DIR}/version.rc
+)
+
 add_executable(ea::ea ALIAS ea)
 
 if(WIN32)
