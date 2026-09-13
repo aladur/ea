@@ -14,9 +14,12 @@
 !addplugindir /amd64-unicode "Plugins\amd64-unicode"
 
 !define APPNAME    "EncodingAnalyzer"
-; The variable APPVERSION have to be set as command line parameters:
-; //DEA_VERSION=<version>
+; The variables APPVERSION and FULLVERSION have to be set as command line
+; parameters:
+; //DAPPVERSION=<version>
+; //DFULLVERSION=<version>
 ;!define APPVERSION "0.1.0"
+;!define FULLVERSION "0.1.0-alpha"
 ; Refreshing Windows Defines
 !define SHCNE_ASSOCCHANGED 0x8000000
 !define SHCNF_IDLIST 0
@@ -27,7 +30,7 @@
 CRCCheck on
 SetDateSave on
 SetDatablockOptimize on
-BGGradient 080820 5455FF 5455FF
+BGGradient 080820 5555FF 5555FF
 SetCompressor /SOLID lzma
 LicenseBkColor /windows
 
@@ -35,16 +38,16 @@ LicenseBkColor /windows
 VIAddVersionKey ProductName     "${APPNAME}"
 VIAddVersionKey LegalCopyright  "(C) 2026 W. Schwotzer"
 VIAddVersionKey Comment         "A Character Encoding Analyzer"
-VIAddVersionKey ProductVersion  "${APPVERSION}"
+VIAddVersionKey ProductVersion  "${FULLVERSION}"
 VIAddVersionKey FileDescription "Character Encoding Analyzer"
 VIAddVersionKey FileVersion     "${APPVERSION}.0"
 VIProductVersion "${APPVERSION}.0"
 
 ; The name of the installer
-Name "${APPNAME} ${APPVERSION}"
+Name "${APPNAME} ${FULLVERSION}"
 
 ; The installation file to create
-OutFile "..\${APPNAME}-Setup-${APPVERSION}.exe"
+OutFile "..\${APPNAME}-Setup-${FULLVERSION}.exe"
 
 ; Have Windows Vista, 2008, 7, etc. trust us to not be a "legacy" installer
 ;RequestExecutionLevel admin
@@ -121,6 +124,7 @@ Section "Binary Files" BinaryFiles
   SetOutPath $INSTDIR ; Set output path to the installation directory.
   ; Add files to be extracted to the current $OUTDIR path
   File /a "${BASEDIR}\install\bin\ea.exe"
+  File /a "${BASEDIR}\install\share\icons\ea.ico"
   File /a "${BASEDIR}\install\bin\icudt78.dll"
   File /a "${BASEDIR}\install\bin\icuuc78.dll"
   File /a /oname=LICENSE.txt "${BASEDIR}\LICENSE"
@@ -195,11 +199,11 @@ Section "-Registry update"
   Call SplitFirstStrPart
   Pop $VersionMajor
   Pop $VersionMinor
-  StrCpy $DisplayName "${APPNAME} ${APPVERSION}"
+  StrCpy $DisplayName "${APPNAME} ${FULLVERSION}"
   
   WriteRegStr   HKLM "${ARP}" "DisplayName"     "$DisplayName"
-  WriteRegStr   HKLM "${ARP}" "DisplayVersion"  "${APPVERSION}"
-  WriteRegStr   HKLM "${ARP}" "DisplayIcon"     "$INSTDIR\ea.exe"
+  WriteRegStr   HKLM "${ARP}" "DisplayVersion"  "${FULLVERSION}"
+  WriteRegStr   HKLM "${ARP}" "DisplayIcon"     "$INSTDIR\ea.ico"
   WriteRegStr   HKLM "${ARP}" "HelpLink"        "https://github.com/aladur/ea"
   WriteRegStr   HKLM "${ARP}" "InstallLocation" "$INSTDIR"
   WriteRegStr   HKLM "${ARP}" "UninstallString" "$INSTDIR\uninstall.exe"

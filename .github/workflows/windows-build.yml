@@ -99,8 +99,10 @@ jobs:
           cp icu4c_install/bin64/icudt78.dll install/bin
           cp icu4c_install/bin64/icuuc78.dll install/bin
           version=`grep -oP 'CMAKE_PROJECT_VERSION:STATIC=\K.*' ea_build/CMakeCache.txt`
+          prerel=`grep -oP 'VERSION_PRERELEASE:STRING=\K.*' ea_build/CMakeCache.txt`
           echo APPVERSION=${version} >> $GITHUB_ENV
-          dir=artifacts/ea-${version}-${{matrix.os}}
+          echo FULLVERSION=${version}${prerel} >> $GITHUB_ENV
+          dir=artifacts/ea-${version}${prerel}-${{matrix.os}}
           mkdir -p $dir
           cd install/bin
           sha256sum ea.exe > ../../$dir/ea.exe.sha256sum.txt
@@ -144,20 +146,55 @@ jobs:
           echo $s256 $file > ${file}.sha256sum.txt
           curl -sS --retry 3 -L https://aka.ms/vc14/${file} -o $file
           sha256sum -c ${file}.sha256sum.txt
-          ${nsis}/makensis //DAPPVERSION=$APPVERSION installer/ea.nsi
-          file=EncodingAnalyzer-Setup-${APPVERSION}.exe
-          dir=artifacts/ea-${APPVERSION}-${{matrix.os}}
+          ${nsis}/makensis \
+              //DAPPVERSION=$APPVERSION \
+              //DFULLVERSION=$FULLVERSION \
+              installer/ea.nsi
+          file=EncodingAnalyzer-Setup-${FULLVERSION}.exe
+          dir=artifacts/ea-${FULLVERSION}-${{matrix.os}}
           sha256sum $file > $dir/$file.sha256sum.txt
           cp $file $dir
 
       - name: Scan built Executables with Microsoft Defender
         shell: pwsh
+        timeout-minutes: 10
         run: |
-          Update-MpSignature
+          # Try to update signatures with timeout and retry
+          $maxAttempts = 3
+          $attempt = 0
+          $updated = $false
+          while ($attempt -lt $maxAttempts -and -not $updated) {
+            $attempt++
+            try {
+              Write-Host "Attempting to update Defender signatures (attempt $attempt/$maxAttempts)..."
+              $job = Start-Job -ScriptBlock {
+                Update-MpSignature -ErrorAction Stop
+              }
+              $result = Wait-Job -Job $job -Timeout 120
+              if ($result) {
+              Receive-Job -Job $job
+              $updated = $true
+              Write-Host "Signatures updated successfully"
+              } else {
+                Remove-Job -Job $job -Force
+                Write-Host "Update-MpSignature timed out after 120 seconds"
+              }
+            }
+            catch {
+              Write-Host "Error updating signatures: $_"
+            }
+            if (-not $updated -and $attempt -lt $maxAttempts) {
+              Write-Host "Retrying in 10 seconds..."
+              Start-Sleep -Seconds 10
+            }
+          }
+          if (-not $updated) {
+            Write-Host "Warning: Could not update signatures after $maxAttempts attempts, continuing..."
+          }
           $file = "$PWD\\install\\bin\\ea.exe"
           Write-Host "Scanning $file"
           Start-MpScan -ScanPath $file
-          $file = "$PWD\\EncodingAnalyzer-Setup-$env:APPVERSION.exe"
+          $file = "$PWD\\EncodingAnalyzer-Setup-$env:FULLVERSION.exe"
           Write-Host "Scanning $file"
           Start-MpScan -ScanPath $file
           $threats = Get-MpThreatDetection
@@ -172,6 +209,6 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: ea-windows-build-${{env.APPVERSION}}-${{matrix.os}}-msvc-artifacts
+          name: ea-windows-build-${{env.FULLVERSION}}-${{matrix.os}}-msvc-artifacts
           path: artifacts
           if-no-files-found: error
