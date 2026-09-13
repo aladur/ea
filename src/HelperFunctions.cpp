@@ -25,6 +25,7 @@ SOFTWARE.
 #include "HelperFunctions.h"
 #include "TypeDefinitions.h"
 #include "Codepoint.h"
+#include <cstdint>
 #include <string>
 #include <array>
 #include <sstream>
@@ -249,6 +250,95 @@ std::string ToUtf8(const Codepoint &cp, const std::string &encoding)
     }
 
     return {};
+}
+
+bool IsValidStandard(std::string standard)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    const std::uint16_t scount = ucnv_countStandards();
+
+    boost::to_lower(standard);
+    if (U_SUCCESS(status))
+    {
+        for (std::uint16_t i = 0; i < scount; ++i)
+        {
+            const char *sname = ucnv_getStandard(i, &status);
+            if (sname != nullptr && U_SUCCESS(status))
+            {
+                std::string standardName = sname;
+                boost::to_lower(standardName);
+                if (standard == standardName)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+void OutputAvailableStandards(std::ostream &os)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    const std::uint16_t scount = ucnv_countStandards();
+
+    if (U_SUCCESS(status))
+    {
+        for (uint16_t i = 0; i < scount; ++i)
+        {
+            const char *sname = ucnv_getStandard(i, &status);
+            if (sname != nullptr && U_SUCCESS(status) && sname[0] != '\0')
+            {
+                os << sname << "\n";
+            }
+        }
+    }
+}
+
+void OutputAvailableEncodings(std::ostream &os, const std::string &standard,
+        bool withAliases, bool isSingleByte)
+{
+    const auto count = ucnv_countAvailable();
+    std::vector<std::string> names;
+
+    for (int i = 0; i < count; ++i)
+    {
+        const char *pname = ucnv_getAvailableName(i);
+        if (pname != nullptr && (!isSingleByte || IsSingleByteEncoding(pname)))
+        {
+            std::string allNames;
+            UErrorCode status = U_ZERO_ERROR;
+            const char *sname = pname;
+            if (!standard.empty())
+            {
+                sname = ucnv_getStandardName(pname, standard.c_str(), &status);
+            }
+            if (sname != nullptr && U_SUCCESS(status))
+            {
+                allNames = sname;
+                const std::uint16_t acount = ucnv_countAliases(sname, &status);
+                if (withAliases && U_SUCCESS(status))
+                {
+                    for (std::uint16_t j = 0; j < acount; ++j)
+                    {
+                        const char *aname = ucnv_getAlias(pname, j, &status);
+                        if (U_SUCCESS(status))
+                        {
+                            allNames.append(";").append(aname);
+                        }
+                    }
+                }
+                names.emplace_back(allNames);
+            }
+        }
+    }
+
+    std::sort(names.begin(), names.end());
+    for (const auto &name : names)
+    {
+        os << name << "\n";
+    }
 }
 
 std::string AsControlCharacter(const Codepoint &cp)

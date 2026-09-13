@@ -43,6 +43,10 @@ extern EncodingType GetCodepointType(const Codepoint &cp,
 extern bool IsSingleByteEncoding(const std::string &encoding);
 extern std::string ToUtf8(const Codepoint &cp);
 extern std::string ToUtf8(const Codepoint &cp, const std::string &encoding);
+extern void OutputAvailableStandards(std::ostream &os);
+extern void OutputAvailableEncodings(std::ostream &os,
+        const std::string &standard, bool withAliases, bool isSingleByte);
+bool IsValidStandard(std::string standard);
 extern std::string AsControlCharacter(const Codepoint &cp);
 extern Codepoint GetUtf8Character(const char *data, int size);
 extern void PrepareConsoleForUtf8();
