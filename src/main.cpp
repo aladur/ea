@@ -58,8 +58,9 @@ int main(int argc, char* argv[])
             ("help,h", "Output a usage message and exit")
             ("version,V", "Output the version number and exit")
             ("encoding,e",
-             po::value<std::string>()->default_value("ISO-8859-1"),
+             po::value<std::string>()->default_value("none"),
              "Fallback encoding hint (in addition to UTF-8).\n"
+             "'none' means no fallback encoding.\n"
              "'list' lists available single byte encodings and exits.\n"
              "'list-a' same as 'list' with aliases.\n"
              "'list-standards' lists available standards and exits.\n"
@@ -189,20 +190,23 @@ int main(int argc, char* argv[])
         }
 
         std::string error;
-        if (!IsValidEncoding(encoding, error))
+        if (boost::to_lower_copy(encoding) != "none")
         {
-            std::stringstream messageStream;
+            if (!IsValidEncoding(encoding, error))
+            {
+                std::stringstream messageStream;
 
-            messageStream << "Encoding '" << encoding <<
-                "' is unknown";
-            throw std::runtime_error(messageStream.str());
-        }
+                messageStream << "Encoding '" << encoding <<
+                    "' is unknown";
+                throw std::runtime_error(messageStream.str());
+            }
 
-        if (!IsSingleByteEncoding(encoding))
-        {
-            throw std::runtime_error(
-                    "Only single byte encodings like ISO-8859-x or "
-                    "Windows-125x are supported");
+            if (!IsSingleByteEncoding(encoding))
+            {
+                throw std::runtime_error(
+                        "Only single byte encodings like ISO-8859-x or "
+                        "Windows-125x are supported");
+            }
         }
 
         if (!IsValidColorMode(colorModeString))

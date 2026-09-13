@@ -166,6 +166,11 @@ bool IsValidColorMode(const std::string &colorString)
 EncodingType GetCodepointType(const Codepoint &cp,
         const std::string &encoding)
 {
+    if (encoding == "none")
+    {
+        return EncodingType::Unknown;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     std::array<char, 2> source{};
     std::array<char, 8> target{};
@@ -285,7 +290,7 @@ void OutputAvailableStandards(std::ostream &os)
 
     if (U_SUCCESS(status))
     {
-        for (uint16_t i = 0; i < scount; ++i)
+        for (std::uint16_t i = 0; i < scount; ++i)
         {
             const char *sname = ucnv_getStandard(i, &status);
             if (sname != nullptr && U_SUCCESS(status) && sname[0] != '\0')
@@ -299,10 +304,10 @@ void OutputAvailableStandards(std::ostream &os)
 void OutputAvailableEncodings(std::ostream &os, const std::string &standard,
         bool withAliases, bool isSingleByte)
 {
-    const auto count = ucnv_countAvailable();
+    const std::int32_t count = ucnv_countAvailable();
     std::vector<std::string> names;
 
-    for (int i = 0; i < count; ++i)
+    for (std::int32_t i = 0; i < count; ++i)
     {
         const char *pname = ucnv_getAvailableName(i);
         if (pname != nullptr && (!isSingleByte || IsSingleByteEncoding(pname)))
