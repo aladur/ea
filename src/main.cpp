@@ -33,6 +33,7 @@ SOFTWARE.
 #include <fstream>
 #include <filesystem>
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 #include <unicode/unistr.h>
 #include <unicode/ustream.h>
 
@@ -58,7 +59,18 @@ int main(int argc, char* argv[])
             ("version,V", "Output the version number and exit")
             ("encoding,e",
              po::value<std::string>()->default_value("ISO-8859-1"),
-             "Fallback encoding hint for input file (in addition to UTF-8)")
+             "Fallback encoding hint (in addition to UTF-8).\n"
+             "'list' lists available single byte encodings and exits.\n"
+             "'list-a' same as 'list' with aliases.\n"
+             "'list-standards' lists available standards and exits.\n"
+             "'list-<standard>' lists available single byte encodings\n"
+             " for given <standard> and exits.\n"
+             "'list-<standard>-a' same as 'list-<standard>' with\n"
+             " aliases.\n"
+             "Examples:\n"
+             "ea -e iso-8859-1\n"
+             "ea -e standards\n"
+             "ea -e list-iana-a")
             ("count,c", po::bool_switch(&printSummary),
              "Print character count per category")
             ("statistics,s", po::bool_switch(&printStatistics),
@@ -134,6 +146,37 @@ int main(int argc, char* argv[])
             return 0;
         }
 
+        const auto encoding = vm["encoding"].as<std::string>();
+        const auto lcEncoding = boost::to_lower_copy(encoding);
+        if (lcEncoding.substr(0, 4) == "list")
+        {
+            if (lcEncoding == "list-standards")
+            {
+                OutputAvailableStandards(std::cout);
+                return 0;
+            }
+
+            std::string standard;
+            const bool withAliases =
+                (lcEncoding.substr(lcEncoding.size() - 2U, 2U) == "-a");
+            if (encoding.size() > 6U)
+            {
+                const auto offset = withAliases ? 7U : 0U;
+                standard =
+                    lcEncoding.substr(5U, lcEncoding.size() - offset);
+            }
+            if (!IsValidStandard(standard))
+            {
+                std::stringstream messageStream;
+
+                messageStream << "'" << standard << "' is not a valid standard";
+                throw std::runtime_error(messageStream.str());
+            }
+
+            OutputAvailableEncodings(std::cout, standard, withAliases, true);
+            return 0;
+        }
+
         if (printAll)
         {
             printSummary = true;
@@ -146,14 +189,20 @@ int main(int argc, char* argv[])
         }
 
         std::string error;
-        const auto encoding = vm["encoding"].as<std::string>();
         if (!IsValidEncoding(encoding, error))
         {
             std::stringstream messageStream;
 
             messageStream << "Encoding '" << encoding <<
-                "' is unknown or unsupported";
+                "' is unknown";
             throw std::runtime_error(messageStream.str());
+        }
+
+        if (!IsSingleByteEncoding(encoding))
+        {
+            throw std::runtime_error(
+                    "Only single byte encodings like ISO-8859-x or "
+                    "Windows-125x are supported");
         }
 
         if (!IsValidColorMode(colorModeString))
@@ -165,12 +214,6 @@ int main(int argc, char* argv[])
             throw std::runtime_error(messageStream.str());
         }
 
-        if (!IsSingleByteEncoding(encoding))
-        {
-            throw std::runtime_error(
-                    "Only single byte encodings like ISO-8859-x or "
-                    "Windows-125x are supported");
-        }
 
         if (vm.count("FILE") > 0)
         {
