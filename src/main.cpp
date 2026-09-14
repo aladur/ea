@@ -83,8 +83,11 @@ int main(int argc, char* argv[])
                         ->implicit_value("auto"),
              "Set color mode: auto, always, never")
             ("filter,f",
-             po::value<std::string>()->default_value("as,un,co,fa,un"),
-             "Filter output for list of categories")
+             po::value<std::string>()->default_value("c,a,u,f,i"),
+             "Filter output for a list of categories (use a comma\n"
+             "separated list of first character of each category).\n"
+             "For example to display lines containing control or\n"
+             "unicode characters use: ea -f c,u")
             ("with-filename,H", po::bool_switch(&printFilename),
              "Print filename for each line of file content")
             ("line-number,n", po::bool_switch(&printLineNumber),
@@ -122,8 +125,8 @@ int main(int argc, char* argv[])
                 "- CONTROL characters\n"
                 "- ASCII encoded characters\n"
                 "- UNICODE encoded characters\n"
-                "- Characters encoded in a fallback encoding\n"
-                "- Characters with UNKNOWN encoding\n"
+                "- Characters encoded in a FALLBACK encoding\n"
+                "- Characters with INDETERMINATE encoding\n"
                 "\n"
                 "- Print file content with (optionally) different colors for "
                 "each category.\n"
@@ -135,12 +138,12 @@ int main(int argc, char* argv[])
                 "of categories.\n"
                 "Available categories:\n"
                 "\n"
-                "    control,ascii,unicode,fallback,unknown\n"
+                "    control,ascii,unicode,fallback,indeterminate\n"
                 "\n"
                 "The first two characters of a category are sufficient. "
                 "For example to filter\n"
-                "output for ASCII, UNICODE and fallback encoding, use "
-                "--filter as,fa,un.\n"
+                "output for ASCII, UNICODE and FALLBACK encoding, use "
+                "--filter as,un,fa.\n"
                 "\n";
 
             std::cout << desc << "\n";

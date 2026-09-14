@@ -158,7 +158,7 @@ int EncodingApplication::Run()
                     (encodingType == EncodingType::Fallback) ?
                         ToUtf8(codepoint, fallbackEncoding_) :
                         ((encodingType == EncodingType::Control ||
-                          encodingType == EncodingType::Unknown) ?
+                          encodingType == EncodingType::Indeterminate) ?
                         "" : ToUtf8(codepoint));
 
                 std::cout << std::dec << count << " ";
@@ -185,7 +185,7 @@ std::string EncodingApplication::AsUtf8String(const TypedCodepoint &tcp) const
     {
         case EncodingType::Control:
             [[fallthrough]];
-        case EncodingType::Unknown:
+        case EncodingType::Indeterminate:
             return AsControlCharacter(tcp.codepoint);
 
         case EncodingType::Ascii:
@@ -220,7 +220,7 @@ void EncodingApplication::UpdateColor(EncodingType encodingType)
     {
         color = Color::YELLOW;
     }
-    else if (encodingType == EncodingType::Unknown)
+    else if (encodingType == EncodingType::Indeterminate)
     {
         color = Color::RED;
     }
@@ -238,7 +238,7 @@ const std::vector<EncodingType> &EncodingApplication::GetEncodingTypes()
         EncodingType::Ascii,
         EncodingType::Unicode,
         EncodingType::Fallback,
-        EncodingType::Unknown,
+        EncodingType::Indeterminate,
     };
 
     return encodingTypes;
@@ -250,8 +250,8 @@ const std::vector<std::string> &EncodingApplication::GetEncodingNames()
         "CONTROL",
         "ASCII",
         "UNICODE",
-        fallbackEncoding_.c_str(),
-        "UNKNOWN",
+        "FALLBACK(" + fallbackEncoding_ + ")",
+        "INDETERMINATE",
     };
 
     return encodingNames;
