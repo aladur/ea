@@ -155,7 +155,7 @@ int EncodingApplication::Run()
             {
                 const auto count = stat.GetCount(codepoint);
                 const std::string utf8Char =
-                    (encodingType == EncodingType::Default) ?
+                    (encodingType == EncodingType::Fallback) ?
                         ToUtf8(codepoint, fallbackEncoding_) :
                         ((encodingType == EncodingType::Control ||
                           encodingType == EncodingType::Unknown) ?
@@ -193,7 +193,7 @@ std::string EncodingApplication::AsUtf8String(const TypedCodepoint &tcp) const
         case EncodingType::Unicode:
             return ToUtf8(tcp.codepoint);
 
-        case EncodingType::Default:
+        case EncodingType::Fallback:
             return ToUtf8(tcp.codepoint, fallbackEncoding_);
     }
 
@@ -216,7 +216,7 @@ void EncodingApplication::UpdateColor(EncodingType encodingType)
     {
         color = Color::CYAN;
     }
-    else if (encodingType == EncodingType::Default)
+    else if (encodingType == EncodingType::Fallback)
     {
         color = Color::YELLOW;
     }
@@ -237,7 +237,7 @@ const std::vector<EncodingType> &EncodingApplication::GetEncodingTypes()
         EncodingType::Control,
         EncodingType::Ascii,
         EncodingType::Unicode,
-        EncodingType::Default,
+        EncodingType::Fallback,
         EncodingType::Unknown,
     };
 

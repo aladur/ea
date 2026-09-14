@@ -43,7 +43,7 @@ enum class EncodingType : uint8_t
 {
     Control,
     Ascii,
-    Default,
+    Fallback,
     Unicode,
     Unknown,
 };

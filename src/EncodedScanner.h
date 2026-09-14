@@ -37,7 +37,7 @@ class EncodedScanner
 {
 public:
     EncodedScanner(std::istream &istream,
-            const std::string &defaultEncoding);
+            const std::string &fallbackEncoding);
 
     std::optional<TypedCodepoint> GetNext(unsigned &size);
 
@@ -47,7 +47,7 @@ protected:
 
 private:
     std::istream &istream_;
-    std::string defaultEncoding_;
+    std::string fallbackEncoding_;
     std::vector<uint8_t> buffer_{};
     unsigned int filePosition_{};
 };
