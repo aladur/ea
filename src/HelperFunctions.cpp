@@ -51,8 +51,8 @@ std::string to_string(EncodingType type)
             return "EncodingType::Control";
         case EncodingType::Ascii:
             return "EncodingType::Ascii";
-        case EncodingType::Default:
-            return "EncodingType::Default";
+        case EncodingType::Fallback:
+            return "EncodingType::Fallback";
         case EncodingType::Unicode:
             return "EncodingType::Unicode";
         case EncodingType::Unknown:
@@ -193,7 +193,7 @@ EncodingType GetCodepointType(const Codepoint &cp,
 
     const auto codepoint = GetUtf8Character(target.data(), byteCount - 1);
     return (u_charType(codepoint) == U_CONTROL_CHAR) ?
-        EncodingType::Control : EncodingType::Default;
+        EncodingType::Control : EncodingType::Fallback;
 }
 
 bool IsSingleByteEncoding(const std::string &encoding)

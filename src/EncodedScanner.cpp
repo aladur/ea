@@ -31,9 +31,9 @@ SOFTWARE.
 #include <iostream>
 
 EncodedScanner::EncodedScanner(std::istream &istream,
-            const std::string &defaultEncoding)
+            const std::string &fallbackEncoding)
     : istream_(istream)
-    , defaultEncoding_(defaultEncoding)
+    , fallbackEncoding_(fallbackEncoding)
 {
 }
 
@@ -79,7 +79,7 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
     {
         TypedCodepoint result;
         result.codepoint = buffer_.front();
-        result.type = GetCodepointType(result.codepoint, defaultEncoding_);
+        result.type = GetCodepointType(result.codepoint, fallbackEncoding_);
         buffer_.erase(buffer_.begin());
         size = 1U;
         return result;
