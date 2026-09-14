@@ -55,8 +55,8 @@ std::string to_string(EncodingType type)
             return "EncodingType::Fallback";
         case EncodingType::Unicode:
             return "EncodingType::Unicode";
-        case EncodingType::Unknown:
-            return "EncodingType::Unknown";
+        case EncodingType::Indeterminate:
+            return "EncodingType::Indeterminate";
         default:
             return "<unknown>";
     }
@@ -168,7 +168,7 @@ EncodingType GetCodepointType(const Codepoint &cp,
 {
     if (encoding == "none")
     {
-        return EncodingType::Unknown;
+        return EncodingType::Indeterminate;
     }
 
     UErrorCode status = U_ZERO_ERROR;
@@ -188,7 +188,7 @@ EncodingType GetCodepointType(const Codepoint &cp,
 
     if (byteCount == 0 || U_FAILURE(status))
     {
-        return EncodingType::Unknown;
+        return EncodingType::Indeterminate;
     }
 
     const auto codepoint = GetUtf8Character(target.data(), byteCount - 1);

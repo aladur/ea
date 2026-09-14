@@ -43,9 +43,9 @@ enum class EncodingType : uint8_t
 {
     Control,
     Ascii,
-    Fallback,
     Unicode,
-    Unknown,
+    Fallback,
+    Indeterminate,
 };
 
 enum class ColorMode : uint8_t
