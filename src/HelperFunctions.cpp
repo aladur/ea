@@ -25,14 +25,16 @@ SOFTWARE.
 #include "HelperFunctions.h"
 #include "TypeDefinitions.h"
 #include "Codepoint.h"
+#include <cctype>
 #include <cstdint>
+#include <utility>
 #include <string>
 #include <array>
 #include <sstream>
 #include <ostream>
 #include <iostream>
 #include <algorithm>
-#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string.hpp>
 #include <unicode/unistr.h>
 #include <unicode/ucnv.h>
 #include <unicode/utypes.h>
@@ -398,6 +400,66 @@ Codepoint GetUtf8Character(const char *data, int size)
                     (static_cast<uint32_t>(data[1]) & 0x3FU) << 12U |
                     (static_cast<uint32_t>(data[2]) & 0x3FU) << 6U |
                     (static_cast<uint32_t>(data[3]) & 0x3FU);
+    }
+}
+
+EncodingTypes ToCategories(const std::string categoriesString, std::string &invalidCategory)
+{
+    using Type = std::vector<std::pair<std::string, EncodingTypes>>;
+
+    static const Type validCategories{
+        { "ascii", EncodingTypes::Ascii },
+        { "control", EncodingTypes::Control },
+        { "unicode", EncodingTypes::Unicode },
+        { "fallback", EncodingTypes::Fallback },
+        { "indeterminate", EncodingTypes::Indeterminate },
+    };
+    auto result = EncodingTypes::None;
+    std::vector<std::string> categories;
+
+    invalidCategory.clear();
+    boost::split(categories, categoriesString, boost::is_any_of(","));
+
+    for (const auto &category : categories)
+    {
+        bool hasFound = false;
+
+        for (const auto &validCategory : validCategories)
+        {
+            if (validCategory.first.find(category) == 0U)
+            {
+                result |= validCategory.second;
+                hasFound = true;
+                break;
+            }
+        }
+
+        if (!hasFound)
+        {
+            invalidCategory = category;
+            return EncodingTypes::None;
+        }
+    }
+
+    return result;
+}
+
+EncodingTypes ToEncodingTypes(EncodingType encodingType)
+{
+    switch (encodingType)
+    {
+        case EncodingType::Control:
+            return EncodingTypes::Control;
+        case EncodingType::Ascii:
+            return EncodingTypes::Ascii;
+        case EncodingType::Unicode:
+            return EncodingTypes::Unicode;
+        case EncodingType::Fallback:
+            return EncodingTypes::Fallback;
+        case EncodingType::Indeterminate:
+            return EncodingTypes::Indeterminate;
+        default:
+            return EncodingTypes::None;
     }
 }
 

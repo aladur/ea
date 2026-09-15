@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include "TypeDefinitions.h"
+#include "HelperFunctions.h"
 #include "RichLinePrinter.h"
 #include <ostream>
 #include <optional>
@@ -31,10 +32,12 @@ RichLinePrinter::RichLinePrinter(
         std::ostream &os,
         bool printFilename,
         bool printLineNumber,
+        EncodingTypes categoryFilter,
         std::optional<std::string> optFilename)
     : ostream_(os)
     , printFilename_(printFilename)
     , printLineNumber_(printLineNumber)
+    , categoryFilter_(categoryFilter)
     , filename_(optFilename.value_or(std::string("(standard input)")))
     , currentColor_(Color::RESET)
 {
@@ -46,9 +49,9 @@ void RichLinePrinter::Reset()
     lineStream_.str("");
 }
 
-void RichLinePrinter::PrintLine(bool withColor)
+void RichLinePrinter::PrintLine(bool withColor, EncodingTypes categories)
 {
-    if (true) // TODO filter
+    if ((categoryFilter_ & categories) != EncodingTypes::None)
     {
         if (printFilename_)
         {
@@ -85,8 +88,6 @@ void RichLinePrinter::PrintLine(bool withColor)
 
     Reset();
     ++lineNumber_;
-
-    //hasNonAscii = false;
 }
 
 void RichLinePrinter::UpdateColor(const char *color)

@@ -49,6 +49,57 @@ extern void OutputAvailableEncodings(std::ostream &os,
 bool IsValidStandard(std::string standard);
 extern std::string AsControlCharacter(const Codepoint &cp);
 extern Codepoint GetUtf8Character(const char *data, int size);
+extern EncodingTypes ToCategories(const std::string categoryString,
+        std::string &invalidCategory);
+extern EncodingTypes ToEncodingTypes(EncodingType encodingType);
 extern void PrepareConsoleForUtf8();
+
+inline EncodingTypes operator| (EncodingTypes lhs, EncodingTypes rhs)
+{
+    using T1 = std::underlying_type_t<EncodingTypes>;
+
+    return static_cast<EncodingTypes>(static_cast<T1>(lhs) |
+                                      static_cast<T1>(rhs));
+}
+
+inline EncodingTypes operator& (EncodingTypes lhs, EncodingTypes rhs)
+{
+    using T1 = std::underlying_type_t<EncodingTypes>;
+
+    return static_cast<EncodingTypes>(static_cast<T1>(lhs) &
+                                      static_cast<T1>(rhs));
+}
+
+inline bool operator== (EncodingTypes lhs, EncodingTypes rhs)
+{
+    using T1 = std::underlying_type_t<EncodingTypes>;
+
+    return static_cast<T1>(lhs) == static_cast<T1>(rhs);
+}
+
+inline bool operator!= (EncodingTypes lhs, EncodingTypes rhs)
+{
+    using T1 = std::underlying_type_t<EncodingTypes>;
+
+    return static_cast<T1>(lhs) != static_cast<T1>(rhs);
+}
+
+inline EncodingTypes operator|= (EncodingTypes &lhs, EncodingTypes rhs)
+{
+    return lhs = lhs | rhs;
+}
+
+inline EncodingTypes operator&= (EncodingTypes &lhs, EncodingTypes rhs)
+{
+    return lhs = lhs & rhs;
+}
+
+inline EncodingTypes operator~ (EncodingTypes rhs)
+{
+    using T1 = std::underlying_type_t<EncodingTypes>;
+
+    return static_cast<EncodingTypes>(~static_cast<T1>(rhs));
+}
+
 #endif
 

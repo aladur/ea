@@ -151,6 +151,15 @@ int main(int argc, char* argv[])
         }
 
         const auto encoding = vm["encoding"].as<std::string>();
+        std::string invalidCategory;
+        const auto categoryFilter =
+            ToCategories(vm["filter"].as<std::string>(), invalidCategory);
+        if (!invalidCategory.empty())
+        {
+            throw std::runtime_error("Undefined filter category '" +
+                    invalidCategory + "'");
+        }
+        const auto colorMode = ToMode(colorModeString);
         const auto lcEncoding = boost::to_lower_copy(encoding);
         if (lcEncoding.substr(0, 4) == "list")
         {
@@ -250,7 +259,7 @@ int main(int argc, char* argv[])
                 EncodingApplication app(istream,
                         encoding, printLines, printSummary, printStatistics,
                         printFilename, printLineNumber,
-                        ToMode(colorModeString),
+                        colorMode, categoryFilter,
                         filePath.filename().string());
 
                 const auto exitCode = app.Run();
@@ -265,7 +274,7 @@ int main(int argc, char* argv[])
 
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
-                printFilename, printLineNumber, ToMode(colorModeString));
+                printFilename, printLineNumber, colorMode, categoryFilter);
 
         return app.Run();
 

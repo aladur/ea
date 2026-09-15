@@ -25,6 +25,7 @@ SOFTWARE.
 #ifndef RICHLINEPRINTER_INCLUDED
 #define RICHLINEPRINTER_INCLUDED
 
+#include "TypeDefinitions.h"
 #include <utility>
 #include <string>
 #include <sstream>
@@ -39,11 +40,12 @@ public:
             std::ostream &os,
             bool printFilename,
             bool printLineNumber,
+            EncodingTypes categoryFilter,
             std::optional<std::string> optFilename = std::nullopt);
     RichLinePrinter(std::ostream&& stream) = delete;
 
     void Reset();
-    void PrintLine(bool withColor);
+    void PrintLine(bool withColor, EncodingTypes categories);
     void UpdateColor(const char *color);
 
     template<typename T>
@@ -58,6 +60,7 @@ private:
     std::stringstream lineStream_;
     bool printFilename_{};
     bool printLineNumber_{};
+    EncodingTypes categoryFilter_{EncodingTypes::None};
     std::string filename_;
     std::size_t lineNumber_{1U};
     const char *currentColor_{};
