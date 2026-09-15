@@ -48,6 +48,17 @@ enum class EncodingType : uint8_t
     Indeterminate,
 };
 
+// Bitfield enum to store multiple encoding types.
+enum class EncodingTypes : uint8_t
+{
+    None = 0U,
+    Control = 1U,
+    Ascii = 2U,
+    Unicode = 4U,
+    Fallback = 8U,
+    Indeterminate = 16U,
+};
+
 enum class ColorMode : uint8_t
 {
     Never,

@@ -47,6 +47,7 @@ EncodingApplication::EncodingApplication(
         bool printFilename,
         bool printLineNumber,
         ColorMode colorMode,
+        EncodingTypes categoryFilter,
         std::optional<std::string> optFilename)
     : istream_(is)
     , fallbackEncoding_(fallbackEncoding)
@@ -56,9 +57,10 @@ EncodingApplication::EncodingApplication(
     , printFilename_(printFilename)
     , printLineNumber_(printLineNumber)
     , colorMode_(colorMode)
+    , categoryFilter_(categoryFilter)
     , optFilename_(optFilename)
     , linePrinter_(std::cout, printFilename_, printLineNumber_,
-                   optFilename)
+                   categoryFilter_, optFilename)
 {
     if (!istream_.good())
     {
@@ -81,6 +83,7 @@ int EncodingApplication::Run()
     BomType bomType{};
     bool withColor = (colorMode_ == ColorMode::Always ||
                       (colorMode_ == ColorMode::Auto && IS_ATTY(STDOUT_FD)));
+    auto categories = EncodingTypes::None;
 
     for (const auto encodingType : GetEncodingTypes())
     {
@@ -97,13 +100,19 @@ int EncodingApplication::Run()
         {
             const auto encodingType = optResult.value().type;
             const auto &codepoint = optResult.value().codepoint;
+            const bool isNewLine = codepoint == Codepoint(0x0A) &&
+                encodingType == EncodingType::Control;
+            if (!isNewLine)
+            {
+                categories |= ToEncodingTypes(encodingType);
+            }
             statistics[encodingType].Add(codepoint);
-            if (encodingType == EncodingType::Control &&
-                codepoint == Codepoint(0x0A))
+            if (isNewLine)
             {
                 if (printLines_)
                 {
-                    linePrinter_.PrintLine(withColor);
+                    linePrinter_.PrintLine(withColor, categories);
+                    categories = EncodingTypes::None;
                 }
                 continue;
             }
@@ -127,8 +136,9 @@ int EncodingApplication::Run()
 
     if (printLines_)
     {
-        linePrinter_.PrintLine(withColor);
+        linePrinter_.PrintLine(withColor, categories);
     }
+    categories = EncodingTypes::None;
 
     if (printSummary_)
     {
