@@ -74,17 +74,17 @@ std::string to_string(BomType type)
     switch (type)
     {
         case BomType::None:
-            return "EncodingType::None";
+            return "BomType::None";
         case BomType::Utf8:
-            return "EncodingType::Utf8";
+            return "BomType::Utf8";
         case BomType::Utf16BE:
-            return "EncodingType::Utf16BE";
+            return "BomType::Utf16BE";
         case BomType::Utf16LE:
-            return "EncodingType::Utf16LE";
+            return "BomType::Utf16LE";
         case BomType::Utf32BE:
-            return "EncodingType::Utf32BE";
+            return "BomType::Utf32BE";
         case BomType::Utf32LE:
-            return "EncodingType::Utf32LE";
+            return "BomType::Utf32LE";
         default:
             return "<unknown>";
     }
