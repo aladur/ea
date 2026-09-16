@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
         bool printAll = false;
         bool printLineNumber = false;
         bool printFilename = false;
+        bool printCategories = false;
         std::string colorModeString{"auto"};
         po::options_description desc("Supported options", 80, 58);
         desc.add_options()
@@ -92,6 +93,8 @@ int main(int argc, char* argv[])
              "Print filename for each line of file content")
             ("line-number,n", po::bool_switch(&printLineNumber),
              "Print line number for each line of file content")
+            ("categories-per-line,C", po::bool_switch(&printCategories),
+             "Print categories used for each line of file content")
             ("FILE", po::value<std::vector<fs::path>>(),
              "Input file(s) to process");
 
@@ -258,7 +261,7 @@ int main(int argc, char* argv[])
 
                 EncodingApplication app(istream,
                         encoding, printLines, printSummary, printStatistics,
-                        printFilename, printLineNumber,
+                        printFilename, printLineNumber, printCategories,
                         colorMode, categoryFilter,
                         filePath.filename().string());
 
@@ -274,7 +277,8 @@ int main(int argc, char* argv[])
 
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
-                printFilename, printLineNumber, colorMode, categoryFilter);
+                printFilename, printLineNumber, printCategories,
+                colorMode, categoryFilter);
 
         return app.Run();
 

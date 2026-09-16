@@ -42,6 +42,7 @@ public:
             const std::string &fallbackEncoding,
             bool printLines, bool printSummary, bool printStatistics,
             bool printFilename, bool printLineNumber,
+            bool printCategories,
             ColorMode colorMode, EncodingTypes categoryFilter,
             std::optional<std::string> optFilename = std::nullopt);
     EncodingApplication() = delete;
@@ -63,6 +64,7 @@ private:
     bool printStatistics_;
     bool printFilename_;
     bool printLineNumber_;
+    bool printCategories_;
     ColorMode colorMode_;
     EncodingTypes categoryFilter_;
     std::optional<std::string> optFilename_;

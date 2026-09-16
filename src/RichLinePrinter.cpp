@@ -25,18 +25,22 @@ SOFTWARE.
 #include "TypeDefinitions.h"
 #include "HelperFunctions.h"
 #include "RichLinePrinter.h"
-#include <ostream>
 #include <optional>
+#include <ostream>
+#include <utility>
+#include <vector>
 
 RichLinePrinter::RichLinePrinter(
         std::ostream &os,
         bool printFilename,
         bool printLineNumber,
+        bool printCategories,
         EncodingTypes categoryFilter,
         std::optional<std::string> optFilename)
     : ostream_(os)
     , printFilename_(printFilename)
     , printLineNumber_(printLineNumber)
+    , printCategories_(printCategories)
     , categoryFilter_(categoryFilter)
     , filename_(optFilename.value_or(std::string("(standard input)")))
     , currentColor_(Color::RESET)
@@ -79,6 +83,11 @@ void RichLinePrinter::PrintLine(bool withColor, EncodingTypes categories)
             }
         }
 
+        if (printCategories_)
+        {
+            PrintCategories(withColor, categories);
+        }
+
         if (withColor)
         {
             UpdateColor(Color::RESET);
@@ -96,5 +105,43 @@ void RichLinePrinter::UpdateColor(const char *color)
     {
         currentColor_ = color;
         lineStream_ << currentColor_;
+    }
+}
+
+void RichLinePrinter::PrintCategories(bool withColor, EncodingTypes categories)
+{
+    struct CategoryProps_t
+    {
+        char id;
+        EncodingTypes type;
+        const char *color;
+    };
+    static const std::vector<CategoryProps_t> categoryProperties{
+        { 'a', EncodingTypes::Ascii, Color::RESET },
+        { 'u', EncodingTypes::Unicode, Color::GREEN },
+        { 'f', EncodingTypes::Fallback, Color::YELLOW },
+        { 'i', EncodingTypes::Indeterminate, Color::RED },
+        { 'c', EncodingTypes::Control, Color::CYAN },
+    };
+
+    for (const auto &props : categoryProperties)
+    {
+        const bool isSet = ((categories & props.type) != EncodingTypes::None);
+
+        if (withColor)
+        {
+            ostream_ << (isSet ? props.color : Color::RESET);
+        }
+
+        ostream_ << (isSet ? props.id : '-');
+    }
+
+    if (withColor)
+    {
+        ostream_ << Color::BLUE << ':' << Color::RESET;
+    }
+    else
+    {
+        ostream_ << ':';
     }
 }
