@@ -40,6 +40,7 @@ public:
             std::ostream &os,
             bool printFilename,
             bool printLineNumber,
+            bool printCategories,
             EncodingTypes categoryFilter,
             std::optional<std::string> optFilename = std::nullopt);
     RichLinePrinter(std::ostream&& stream) = delete;
@@ -55,11 +56,15 @@ public:
         return *this;
     }
 
+protected:
+    void PrintCategories(bool withColor, EncodingTypes categories);
+
 private:
     std::ostream &ostream_;
     std::stringstream lineStream_;
     bool printFilename_{};
     bool printLineNumber_{};
+    bool printCategories_{};
     EncodingTypes categoryFilter_{EncodingTypes::None};
     std::string filename_;
     std::size_t lineNumber_{1U};

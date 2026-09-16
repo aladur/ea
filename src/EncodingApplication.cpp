@@ -46,6 +46,7 @@ EncodingApplication::EncodingApplication(
         bool printStatistics,
         bool printFilename,
         bool printLineNumber,
+        bool printCategories,
         ColorMode colorMode,
         EncodingTypes categoryFilter,
         std::optional<std::string> optFilename)
@@ -56,10 +57,12 @@ EncodingApplication::EncodingApplication(
     , printStatistics_(printStatistics)
     , printFilename_(printFilename)
     , printLineNumber_(printLineNumber)
+    , printCategories_(printCategories)
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
     , optFilename_(optFilename)
     , linePrinter_(std::cout, printFilename_, printLineNumber_,
+                   printCategories_,
                    categoryFilter_, optFilename)
 {
     if (!istream_.good())
