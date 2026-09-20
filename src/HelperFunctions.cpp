@@ -193,9 +193,23 @@ EncodingType GetCodepointType(const Codepoint &cp,
         return EncodingType::Indeterminate;
     }
 
+    if (byteCount == 4 &&
+        target[0] == '\xEF' && target[1] == '\xBF' && target[2] == '\xBD')
+    {
+        // If the codepoint converts to unicode replacement character
+        // it is treated as indeterminate for the given encoding.
+        // Example:
+        // iso-8859-3 has replacement char.: A5, AE, BE, C3, D0, E3, F0
+        return EncodingType::Indeterminate;
+    }
+
     const auto codepoint = GetUtf8Character(target.data(), byteCount - 1);
+    // If the codepoint converted to utf-8 returns a char. of type control
+    // it is treated as indeterminate for the given encoding.
+    // Example: iso-8859-1 has control: 80 - 9F
+    // Example: windows-1252 has control: 81, 8D, 8F, 90, 9D.
     return (u_charType(codepoint) == U_CONTROL_CHAR) ?
-        EncodingType::Control : EncodingType::Fallback;
+        EncodingType::Indeterminate : EncodingType::Fallback;
 }
 
 bool IsSingleByteEncoding(const std::string &encoding)
