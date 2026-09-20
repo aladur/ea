@@ -1,0 +1,66 @@
+name: linux-build
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'docker/**'
+      - 'LICENSE'
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**/*.md'
+      - 'docker/**'
+      - 'LICENSE'
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ ubuntu-24.04, ubuntu-26.04 ]
+        compiler: [g++, clang++]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        # Use bash login shell sourcing ~/.bash_profile
+        shell: bash -leo pipefail {0}
+    env:
+      CXX: ${{ matrix.compiler }}
+    steps:
+
+      - name: Context
+        run: |
+          CCVER='/[^0-9]([0-9]+\.[0-9]+\.[0-9]+)/p;q'
+          uname -a
+          VER=`$CXX --version | sed -nE $CCVER`
+          echo "C++ compiler version:" $VER
+          echo "Number of cores: " `grep -c processor /proc/cpuinfo`
+          echo `lscpu | grep "^CPU(s):"`
+          echo `lscpu | grep "Thread(s)"`
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: 'true'
+
+      - name: Install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install build-essential cmake ninja-build libboost-program-options-dev libicu-dev -y
+
+      - name: Build ea
+        run: |
+          cmake -S . -B ea_build -G Ninja -DCMAKE_VERBOSE_MAKEFILE=ON
+          cmake --build ea_build
+          cmake --install ea_build --strip --prefix=install
+
+      - name: Test
+        run: |
+          install/bin/ea --color=auto examples/all_types.txt
+          ldd install/bin/ea
+          cd ea_build
+          test/unittests
+
