@@ -1,0 +1,76 @@
+name: macos-build
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'docker/**'
+      - 'LICENSE'
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '**/*.md'
+      - 'docker/**'
+      - 'LICENSE'
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ macos-15, macos-26 ]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        # Use bash login shell sourcing ~/.bash_profile
+        # Keep exit code when using pipes.
+        shell: bash -leo pipefail {0}
+    env:
+      CXX: clang++
+    steps:
+
+      - name: Install packages
+        run: |
+          brew untap aws/tap
+          brew install gnu-sed boost icu4c@78
+          echo "/opt/homebrew/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
+          ICU_PREFIX=$(brew --prefix icu4c)
+          echo "ICU_ROOT=${ICU_PREFIX}" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=${ICU_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}" >> $GITHUB_ENV
+
+      - name: Context
+        run: |
+          CCVER='/[^0-9]([0-9]+\.[0-9]+\.[0-9]+)/p;q'
+          uname -a
+          sysctl hw.physicalcpu
+          sysctl hw.logicalcpu
+          echo "SHELL:" $SHELL
+          VER=`$CXX --version | sed -nE $CCVER`
+          echo "C++ compiler version:" $VER
+          echo "Runner arch:" $RUNNER_ARCH
+          echo "Runner OS:" $RUNNER_OS
+          echo "Shell:" $SHELL
+          echo "PATH:" $PATH
+          echo `sed --version | sed -ne "/^sed.*[0-9]\+\.[0-9]\+/p;q"`
+          cmake --version
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: 'true'
+
+      - name: Build ea
+        run: |
+          cmake -S . -B ea_build -DICU_ROOT=${{ env.ICU_ROOT }} -DCMAKE_VERBOSE_MAKEFILE=ON
+          cmake --build ea_build
+          cmake --install ea_build --strip --prefix=install
+
+      - name: Test ea
+        run: |
+          install/bin/ea --color=auto examples/all_types.txt
+          otool -L install/bin/ea
+          cd ea_build
+          test/unittests
+
