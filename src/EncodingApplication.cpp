@@ -87,6 +87,7 @@ int EncodingApplication::Run()
     bool withColor = (colorMode_ == ColorMode::Always ||
                       (colorMode_ == ColorMode::Auto && IS_ATTY(STDOUT_FD)));
     auto categories = EncodingTypes::None;
+    bool isCR = false;
 
     for (const auto encodingType : GetEncodingTypes())
     {
@@ -103,13 +104,40 @@ int EncodingApplication::Run()
         {
             const auto encodingType = optResult.value().type;
             const auto &codepoint = optResult.value().codepoint;
-            const bool isNewLine = codepoint == Codepoint(0x0A) &&
-                encodingType == EncodingType::Control;
-            if (!isNewLine)
+            const bool isNewLine = encodingType == EncodingType::Control &&
+                codepoint == Codepoint(0x0A);
+            bool wasSingleCR = (isCR && !isNewLine);
+            isCR = encodingType == EncodingType::Control &&
+                codepoint == Codepoint(0x0D);
+            if (!isCR && !isNewLine)
             {
                 categories |= ToEncodingTypes(encodingType);
             }
-            statistics[encodingType].Add(codepoint);
+
+            if (wasSingleCR)
+            {
+                // Previous codepoint was a CR without LF.
+                const TypedCodepoint typed{Codepoint(0x0D),
+                                           EncodingType::Control};
+
+                categories |= ToEncodingTypes(EncodingType::Control);
+                statistics[typed.type].Add(typed.codepoint);
+
+                if (printLines_)
+                {
+                    if (withColor)
+                    {
+                        UpdateColor(encodingType);
+                    }
+                    linePrinter_ << AsUtf8String(typed);
+                }
+            }
+
+            if (isCR)
+            {
+                continue;
+            }
+
             if (isNewLine)
             {
                 if (printLines_)
@@ -118,6 +146,10 @@ int EncodingApplication::Run()
                     categories = EncodingTypes::None;
                 }
                 continue;
+            }
+            else
+            {
+                statistics[encodingType].Add(codepoint);
             }
 
             if (printLines_)

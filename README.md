@@ -2,7 +2,7 @@ ea - Character Encoding Analyzer
 
 Analyze a text file or stream for the following character encoding categories
 
-- CONTROL characters.
+- CONTROL characters (except for newline).
 - ASCII encoded characters.
 - UNICODE encoded characters.
 - Characters encoded in a FALLBACK encoding.

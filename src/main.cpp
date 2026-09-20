@@ -122,10 +122,10 @@ int main(int argc, char* argv[])
             std::cout <<
                 "Usage: ea [OPTIONS]... [FILE]...\n"
                 "\n"
-                "Analyze a text file for the following character encoding\n"
-                "categories\n"
+                "Analyze a text file for the following character encoding "
+                "categories:\n"
                 "\n"
-                "- CONTROL characters\n"
+                "- CONTROL characters (except for newline)\n"
                 "- ASCII encoded characters\n"
                 "- UNICODE encoded characters\n"
                 "- Characters encoded in a FALLBACK encoding\n"
@@ -136,6 +136,10 @@ int main(int argc, char* argv[])
                 "- Optionally print character count for each category\n"
                 "- Optionally print character count for each character in "
                 "each category\n"
+                "- Optionally on each line print the filename and line "
+                "number.\n"
+                "- Optionally a category filter can be set which line to "
+                "print.\n"
                 "\n"
                 "By applying a filter output is only processed for a subset "
                 "of categories.\n"
@@ -143,10 +147,10 @@ int main(int argc, char* argv[])
                 "\n"
                 "    control,ascii,unicode,fallback,indeterminate\n"
                 "\n"
-                "The first two characters of a category are sufficient. "
+                "The first character of a category is sufficient. "
                 "For example to filter\n"
                 "output for ASCII, UNICODE and FALLBACK encoding, use "
-                "--filter as,un,fa.\n"
+                "--filter a,u,f.\n"
                 "\n";
 
             std::cout << desc << "\n";
@@ -249,7 +253,7 @@ int main(int argc, char* argv[])
                     throw std::runtime_error(messageStream.str());
                 }
 
-                std::ifstream istream(filePath);
+                std::ifstream istream(filePath, std::ios::binary);
                 if (!istream.is_open())
                 {
                     std::stringstream messageStream;
