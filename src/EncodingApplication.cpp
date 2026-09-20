@@ -29,7 +29,7 @@ SOFTWARE.
 #include "TypeDefinitions.h"
 #include "Codepoint.h"
 #include "HelperFunctions.h"
-#include "RichLinePrinter.h"
+#include "EncodedOutput.h"
 #include <boost/program_options.hpp>
 #include <unicode/uchar.h>
 #include <cassert>
@@ -62,7 +62,7 @@ EncodingApplication::EncodingApplication(
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
     , optFilename_(optFilename)
-    , linePrinter_(std::cout, printFilename_, printLineNumber_,
+    , output_(std::cout, printFilename_, printLineNumber_,
                    printCategories_,
                    categoryFilter_, optFilename)
 {
@@ -130,7 +130,7 @@ int EncodingApplication::Run()
                     {
                         UpdateColor(encodingType);
                     }
-                    linePrinter_ << AsUtf8String(typed);
+                    output_ << AsUtf8String(typed);
                 }
             }
 
@@ -143,7 +143,7 @@ int EncodingApplication::Run()
             {
                 if (printLines_)
                 {
-                    linePrinter_.PrintLine(withColor, categories);
+                    output_.PrintLine(withColor, categories);
                     categories = EncodingTypes::None;
                 }
                 continue;
@@ -159,7 +159,7 @@ int EncodingApplication::Run()
                 {
                     UpdateColor(encodingType);
                 }
-                linePrinter_ << AsUtf8String(optResult.value());
+                output_ << AsUtf8String(optResult.value());
             }
             if (isFirst)
             {
@@ -172,7 +172,7 @@ int EncodingApplication::Run()
 
     if (printLines_)
     {
-        linePrinter_.PrintLine(withColor, categories);
+        output_.PrintLine(withColor, categories);
     }
     categories = EncodingTypes::None;
 
@@ -278,7 +278,7 @@ void EncodingApplication::UpdateColor(EncodingType encodingType)
 
     if (color != nullptr)
     {
-        linePrinter_.UpdateColor(color);
+        output_.UpdateColor(color);
     }
 }
 

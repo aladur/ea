@@ -32,25 +32,25 @@ SOFTWARE.
 #include <ostream>
 #include <optional>
 
-class RichLinePrinter
+class EncodedOutput
 {
 public:
-    RichLinePrinter() = delete;
-    RichLinePrinter(
+    EncodedOutput() = delete;
+    EncodedOutput(
             std::ostream &os,
             bool printFilename,
             bool printLineNumber,
             bool printCategories,
             EncodingTypes categoryFilter,
             std::optional<std::string> optFilename = std::nullopt);
-    RichLinePrinter(std::ostream&& stream) = delete;
+    EncodedOutput(std::ostream&& stream) = delete;
 
     void Reset();
     void PrintLine(bool withColor, EncodingTypes categories);
     void UpdateColor(const char *color);
 
     template<typename T>
-    RichLinePrinter& operator<<(T&& value)
+    EncodedOutput& operator<<(T&& value)
     {
         lineStream_ << std::forward<T>(value);
         return *this;

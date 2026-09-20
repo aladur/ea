@@ -10,10 +10,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(libea_SOURCES
     CharacterStatistics.cpp
+    EncodedOutput.cpp
     EncodedScanner.cpp
     EncodingApplication.cpp
     HelperFunctions.cpp
-    RichLinePrinter.cpp
     TypeDefinitions.cpp
 )
 
@@ -21,10 +21,10 @@ set(libea_HEADER
     CharacterStatistics.h
     Codepoint.h
     Definitions.h
+    EncodedOutput.h
     EncodedScanner.h
     EncodingApplication.h
     HelperFunctions.h
-    RichLinePrinter.h
     TypeDefinitions.h
     version.h
 )
