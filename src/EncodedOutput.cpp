@@ -24,13 +24,13 @@ SOFTWARE.
 
 #include "TypeDefinitions.h"
 #include "HelperFunctions.h"
-#include "RichLinePrinter.h"
+#include "EncodedOutput.h"
 #include <optional>
 #include <ostream>
 #include <utility>
 #include <vector>
 
-RichLinePrinter::RichLinePrinter(
+EncodedOutput::EncodedOutput(
         std::ostream &os,
         bool printFilename,
         bool printLineNumber,
@@ -47,13 +47,13 @@ RichLinePrinter::RichLinePrinter(
 {
 }
 
-void RichLinePrinter::Reset()
+void EncodedOutput::Reset()
 {
     lineStream_.clear();
     lineStream_.str("");
 }
 
-void RichLinePrinter::PrintLine(bool withColor, EncodingTypes categories)
+void EncodedOutput::PrintLine(bool withColor, EncodingTypes categories)
 {
     if ((categoryFilter_ & categories) != EncodingTypes::None)
     {
@@ -99,7 +99,7 @@ void RichLinePrinter::PrintLine(bool withColor, EncodingTypes categories)
     ++lineNumber_;
 }
 
-void RichLinePrinter::UpdateColor(const char *color)
+void EncodedOutput::UpdateColor(const char *color)
 {
     if (currentColor_ != color)
     {
@@ -108,7 +108,7 @@ void RichLinePrinter::UpdateColor(const char *color)
     }
 }
 
-void RichLinePrinter::PrintCategories(bool withColor, EncodingTypes categories)
+void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)
 {
     struct CategoryProps_t
     {

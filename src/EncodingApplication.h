@@ -26,7 +26,7 @@ SOFTWARE.
 #define ENCODINGAPPLICATION_INCLUDED
 
 #include "TypeDefinitions.h"
-#include "RichLinePrinter.h"
+#include "EncodedOutput.h"
 #include <unicode/unistr.h>
 #include <unicode/ustream.h>
 #include <optional>
@@ -68,7 +68,7 @@ private:
     ColorMode colorMode_;
     EncodingTypes categoryFilter_;
     std::optional<std::string> optFilename_;
-    RichLinePrinter linePrinter_;
+    EncodedOutput output_;
 };
 
 #endif
