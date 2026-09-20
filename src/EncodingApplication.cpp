@@ -33,6 +33,7 @@ SOFTWARE.
 #include <boost/program_options.hpp>
 #include <unicode/uchar.h>
 #include <cassert>
+#include <cstddef>
 #include <stdexcept>
 #include <sstream>
 #include <string>
@@ -177,13 +178,18 @@ int EncodingApplication::Run()
 
     if (printSummary_)
     {
+        std::size_t sum = 0U;
+
         std::cout << "BOM: " << AsHumanReadable(bomType) << "\n";
         for (int i = 0; i < static_cast<int>(GetEncodingNames().size()); ++i)
         {
             const auto encodingType = GetEncodingTypes()[i];
             std::cout << statistics[encodingType].GetCount() << " " <<
                 GetEncodingNames()[i] << " characters\n";
+            sum += statistics[encodingType].GetCount();
         }
+
+        std::cout << sum << " characters in total" << "\n";
     }
 
     if (printStatistics_)
