@@ -47,6 +47,7 @@ public:
             bool printLineNumber,
             bool printCategories,
             EncodingTypes categoryFilter,
+            OutputBomMode outputBomMode,
             const std::string &fallbackEncoding,
             std::optional<std::string> optFilename = std::nullopt,
             std::optional<fs::path> optOutputFilePath = std::nullopt);
@@ -73,12 +74,14 @@ private:
     bool printLineNumber_{};
     bool printCategories_{};
     EncodingTypes categoryFilter_{EncodingTypes::None};
+    OutputBomMode outputBomMode_{OutputBomMode::AsInput};
     std::string fallbackEncoding_;
     std::string filename_;
     std::optional<fs::path> optOutputFilePath_;
     std::size_t lineNumber_{1U};
     const char *currentColor_{};
     bool hasReplacementCharacter_{};
+    bool isBomProcessed{};
 };
 
 #endif

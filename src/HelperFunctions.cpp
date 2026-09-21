@@ -477,6 +477,25 @@ EncodingTypes ToEncodingTypes(EncodingType encodingType)
     }
 }
 
+OutputBomMode ToOutputBomMode(const std::string &outputBomString)
+{
+    if (outputBomString == "no")
+    {
+        return OutputBomMode::No;
+    }
+    else if (outputBomString == "yes")
+    {
+        return OutputBomMode::Yes;
+    }
+    else if (outputBomString == "as_input" || outputBomString.empty())
+    {
+        return OutputBomMode::AsInput;
+    }
+
+    throw std::runtime_error("Undefined --output-bom value '" +
+        outputBomString + "'. Valid is 'yes', 'no', 'as_input'");
+}
+
 void PrepareConsoleForUtf8()
 {
 #ifdef _WIN32

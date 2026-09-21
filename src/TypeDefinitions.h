@@ -76,6 +76,13 @@ enum class BomType : uint8_t
     Utf32BE,
 };
 
+enum class OutputBomMode : uint8_t
+{
+    No,
+    Yes,
+    AsInput,
+};
+
 struct TypedCodepoint
 {
     Codepoint codepoint{};

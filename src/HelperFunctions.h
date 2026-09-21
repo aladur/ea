@@ -52,6 +52,7 @@ extern Codepoint GetUtf8Character(const char *data, int size);
 extern EncodingTypes ToCategories(const std::string categoryString,
         std::string &invalidCategory);
 extern EncodingTypes ToEncodingTypes(EncodingType encodingType);
+extern OutputBomMode ToOutputBomMode(const std::string &outputBomString);
 extern void PrepareConsoleForUtf8();
 
 inline EncodingTypes operator| (EncodingTypes lhs, EncodingTypes rhs)
