@@ -33,6 +33,9 @@ SOFTWARE.
 #include <string>
 #include <vector>
 #include <istream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class EncodingApplication
 {
@@ -44,7 +47,8 @@ public:
             bool printFilename, bool printLineNumber,
             bool printCategories,
             ColorMode colorMode, EncodingTypes categoryFilter,
-            std::optional<std::string> optFilename = std::nullopt);
+            std::optional<std::string> optFilename = std::nullopt,
+            std::optional<fs::path> optOutputFilePath = std::nullopt);
     EncodingApplication() = delete;
 
     int Run();
@@ -59,15 +63,10 @@ protected:
 private:
     std::istream &istream_;
     std::string fallbackEncoding_;
-    bool printLines_;
     bool printSummary_;
     bool printStatistics_;
-    bool printFilename_;
-    bool printLineNumber_;
-    bool printCategories_;
     ColorMode colorMode_;
     EncodingTypes categoryFilter_;
-    std::optional<std::string> optFilename_;
     EncodedOutput output_;
 };
 

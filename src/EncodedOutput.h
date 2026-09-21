@@ -30,7 +30,11 @@ SOFTWARE.
 #include <string>
 #include <sstream>
 #include <ostream>
+#include <fstream>
 #include <optional>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class EncodedOutput
 {
@@ -38,37 +42,43 @@ public:
     EncodedOutput() = delete;
     EncodedOutput(
             std::ostream &os,
+            bool printLines,
             bool printFilename,
             bool printLineNumber,
             bool printCategories,
             EncodingTypes categoryFilter,
-            std::optional<std::string> optFilename = std::nullopt);
+            const std::string &fallbackEncoding,
+            std::optional<std::string> optFilename = std::nullopt,
+            std::optional<fs::path> optOutputFilePath = std::nullopt);
     EncodedOutput(std::ostream&& stream) = delete;
 
     void Reset();
     void PrintLine(bool withColor, EncodingTypes categories);
     void UpdateColor(const char *color);
-
-    template<typename T>
-    EncodedOutput& operator<<(T&& value)
-    {
-        lineStream_ << std::forward<T>(value);
-        return *this;
-    }
+    void Output(const TypedCodepoint &typedCodepoint);
+    bool HasReplacementCharacter() const;
+    const std::optional<fs::path> &GetOptOutputFilePath() const;
 
 protected:
     void PrintCategories(bool withColor, EncodingTypes categories);
+    std::string AsUtf8String(const TypedCodepoint &tcp) const;
+    std::string ConvertToUtf8(const TypedCodepoint &tcp);
 
 private:
     std::ostream &ostream_;
     std::stringstream lineStream_;
+    std::ofstream outputFileStream_;
+    bool printLines_{};
     bool printFilename_{};
     bool printLineNumber_{};
     bool printCategories_{};
     EncodingTypes categoryFilter_{EncodingTypes::None};
+    std::string fallbackEncoding_;
     std::string filename_;
+    std::optional<fs::path> optOutputFilePath_;
     std::size_t lineNumber_{1U};
     const char *currentColor_{};
+    bool hasReplacementCharacter_{};
 };
 
 #endif
