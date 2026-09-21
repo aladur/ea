@@ -47,6 +47,7 @@ public:
             bool printFilename, bool printLineNumber,
             bool printCategories,
             ColorMode colorMode, EncodingTypes categoryFilter,
+            OutputBomMode outputBomMode,
             std::optional<std::string> optFilename = std::nullopt,
             std::optional<fs::path> optOutputFilePath = std::nullopt);
     EncodingApplication() = delete;

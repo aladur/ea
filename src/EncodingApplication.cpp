@@ -51,6 +51,7 @@ EncodingApplication::EncodingApplication(
         bool printCategories,
         ColorMode colorMode,
         EncodingTypes categoryFilter,
+        OutputBomMode outputBomMode,
         std::optional<std::string> optFilename,
         std::optional<fs::path> optOutputFilePath)
     : istream_(is)
@@ -65,6 +66,7 @@ EncodingApplication::EncodingApplication(
                 printLineNumber,
                 printCategories,
                 categoryFilter_,
+                outputBomMode,
                 fallbackEncoding_,
                 optFilename,
                 optOutputFilePath)

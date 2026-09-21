@@ -42,6 +42,7 @@ EncodedOutput::EncodedOutput(
         bool printLineNumber,
         bool printCategories,
         EncodingTypes categoryFilter,
+        OutputBomMode outputBomMode,
         const std::string &fallbackEncoding,
         std::optional<std::string> optFilename,
         std::optional<fs::path> optOutputFilePath)
@@ -51,6 +52,7 @@ EncodedOutput::EncodedOutput(
     , printLineNumber_(printLineNumber)
     , printCategories_(printCategories)
     , categoryFilter_(categoryFilter)
+    , outputBomMode_(outputBomMode)
     , fallbackEncoding_(fallbackEncoding)
     , filename_(optFilename.value_or(std::string("(standard input)")))
     , optOutputFilePath_(optOutputFilePath)
@@ -145,12 +147,42 @@ void EncodedOutput::UpdateColor(const char *color)
 
 void EncodedOutput::Output(const TypedCodepoint &tcp)
 {
-    outputFileStream_ << ConvertToUtf8(tcp);
-
     if (printLines_)
     {
         lineStream_ << AsUtf8String(tcp);
     }
+
+    if (isBomProcessed)
+    {
+        // A BOM in between is ignored.
+        if (tcp.codepoint == Codepoint(0xFEFF))
+        {
+            return;
+        }
+    }
+    else
+    {
+        isBomProcessed = true;
+
+        switch (outputBomMode_)
+        {
+            case OutputBomMode::Yes:
+                outputFileStream_ << '\xEF' << '\xBB' << '\xBF';
+                [[fallthrough]];
+            case OutputBomMode::No:
+                if (tcp.codepoint == Codepoint(0xFEFF))
+                {
+                    return;
+                }
+                break;
+
+            case OutputBomMode::AsInput:
+                break;
+        }
+    }
+
+    outputFileStream_ << ConvertToUtf8(tcp);
+
 }
 
 void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)

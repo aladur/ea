@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
         bool printFilename = false;
         bool printCategories = false;
         std::string colorModeString{"auto"};
+        std::string outputBomString;
         std::optional<fs::path> optOutputFilename;
         po::options_description desc("Supported options", 80, 58);
         desc.add_options()
@@ -99,6 +100,10 @@ int main(int argc, char* argv[])
              "Print categories used for each line of file content")
             ("output-file,o", po::value<std::string>(),
              "Convert input and write as UTF-8 file")
+            ("output-bom,b", po::value<std::string>(&outputBomString)
+                        ->implicit_value("yes"),
+             "Output file BOM can be: 'yes', 'no', 'as_input' (default).\n"
+             "'as_input' uses the BOM of the first input file (if present).")
             ("FILE", po::value<std::vector<fs::path>>(),
              "Input file(s) to process");
 
@@ -169,6 +174,14 @@ int main(int argc, char* argv[])
         {
             optOutputFilename = vm["output-file"].as<std::string>();
         }
+
+        if (!optOutputFilename.has_value() && !outputBomString.empty())
+        {
+            throw std::runtime_error("--output-bom only can be used "
+                "together with --output-file");
+        }
+        const auto outputBomMode = ToOutputBomMode(outputBomString);
+
         if (!invalidCategory.empty())
         {
             throw std::runtime_error("Undefined filter category '" +
@@ -279,7 +292,7 @@ int main(int argc, char* argv[])
                 EncodingApplication app(istream,
                         encoding, printLines, printSummary, printStatistics,
                         printFilename, printLineNumber, printCategories,
-                        colorMode, categoryFilter,
+                        colorMode, categoryFilter, outputBomMode,
                         filePath.filename().string(),
                         optOutputFilename);
 
@@ -296,7 +309,8 @@ int main(int argc, char* argv[])
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
                 printFilename, printLineNumber, printCategories,
-                colorMode, categoryFilter, std::nullopt, optOutputFilename);
+                colorMode, categoryFilter, outputBomMode,
+                std::nullopt, optOutputFilename);
 
         return app.Run();
 
