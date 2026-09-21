@@ -27,6 +27,7 @@ SOFTWARE.
 #include "Definitions.h"
 #include "version.h"
 #include <stdexcept>
+#include <optional>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -54,6 +55,7 @@ int main(int argc, char* argv[])
         bool printFilename = false;
         bool printCategories = false;
         std::string colorModeString{"auto"};
+        std::optional<fs::path> optOutputFilename;
         po::options_description desc("Supported options", 80, 58);
         desc.add_options()
             ("help,h", "Output a usage message and exit")
@@ -95,6 +97,8 @@ int main(int argc, char* argv[])
              "Print line number for each line of file content")
             ("categories-per-line,C", po::bool_switch(&printCategories),
              "Print categories used for each line of file content")
+            ("output-file,o", po::value<std::string>(),
+             "Convert input and write as UTF-8 file")
             ("FILE", po::value<std::vector<fs::path>>(),
              "Input file(s) to process");
 
@@ -161,6 +165,10 @@ int main(int argc, char* argv[])
         std::string invalidCategory;
         const auto categoryFilter =
             ToCategories(vm["filter"].as<std::string>(), invalidCategory);
+        if (vm.count("output-file"))
+        {
+            optOutputFilename = vm["output-file"].as<std::string>();
+        }
         if (!invalidCategory.empty())
         {
             throw std::runtime_error("Undefined filter category '" +
@@ -227,6 +235,11 @@ int main(int argc, char* argv[])
                         "Windows-125x are supported");
             }
         }
+        else if (optOutputFilename.has_value())
+        {
+            throw std::runtime_error(
+                "Output filename only can be set if --encoding is set");
+        }
 
         if (!IsValidColorMode(colorModeString))
         {
@@ -267,7 +280,8 @@ int main(int argc, char* argv[])
                         encoding, printLines, printSummary, printStatistics,
                         printFilename, printLineNumber, printCategories,
                         colorMode, categoryFilter,
-                        filePath.filename().string());
+                        filePath.filename().string(),
+                        optOutputFilename);
 
                 const auto exitCode = app.Run();
                 if (exitCode != 0)
@@ -282,7 +296,7 @@ int main(int argc, char* argv[])
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
                 printFilename, printLineNumber, printCategories,
-                colorMode, categoryFilter);
+                colorMode, categoryFilter, std::nullopt, optOutputFilename);
 
         return app.Run();
 

@@ -35,6 +35,7 @@ SOFTWARE.
 #include <cassert>
 #include <cstddef>
 #include <stdexcept>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <iostream>
@@ -50,21 +51,23 @@ EncodingApplication::EncodingApplication(
         bool printCategories,
         ColorMode colorMode,
         EncodingTypes categoryFilter,
-        std::optional<std::string> optFilename)
+        std::optional<std::string> optFilename,
+        std::optional<fs::path> optOutputFilePath)
     : istream_(is)
     , fallbackEncoding_(fallbackEncoding)
-    , printLines_(printLines)
     , printSummary_(printSummary)
     , printStatistics_(printStatistics)
-    , printFilename_(printFilename)
-    , printLineNumber_(printLineNumber)
-    , printCategories_(printCategories)
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
-    , optFilename_(optFilename)
-    , output_(std::cout, printFilename_, printLineNumber_,
-                   printCategories_,
-                   categoryFilter_, optFilename)
+    , output_(std::cout,
+                printLines,
+                printFilename,
+                printLineNumber,
+                printCategories,
+                categoryFilter_,
+                fallbackEncoding_,
+                optFilename,
+                optOutputFilePath)
 {
     if (!istream_.good())
     {
@@ -124,14 +127,11 @@ int EncodingApplication::Run()
                 categories |= ToEncodingTypes(EncodingType::Control);
                 statistics[typed.type].Add(typed.codepoint);
 
-                if (printLines_)
+                if (withColor)
                 {
-                    if (withColor)
-                    {
-                        UpdateColor(encodingType);
-                    }
-                    output_ << AsUtf8String(typed);
+                    UpdateColor(encodingType);
                 }
+                output_.Output(typed);
             }
 
             if (isCR)
@@ -141,11 +141,8 @@ int EncodingApplication::Run()
 
             if (isNewLine)
             {
-                if (printLines_)
-                {
-                    output_.PrintLine(withColor, categories);
-                    categories = EncodingTypes::None;
-                }
+                output_.PrintLine(withColor, categories);
+                categories = EncodingTypes::None;
                 continue;
             }
             else
@@ -153,14 +150,12 @@ int EncodingApplication::Run()
                 statistics[encodingType].Add(codepoint);
             }
 
-            if (printLines_)
+            if (withColor)
             {
-                if (withColor)
-                {
-                    UpdateColor(encodingType);
-                }
-                output_ << AsUtf8String(optResult.value());
+                UpdateColor(encodingType);
             }
+            output_.Output(optResult.value());
+
             if (isFirst)
             {
                 bomType = EvaluateBomType(optResult.value().codepoint, size);
@@ -170,10 +165,7 @@ int EncodingApplication::Run()
 
     } while (optResult.has_value());
 
-    if (printLines_)
-    {
-        output_.PrintLine(withColor, categories);
-    }
+    output_.PrintLine(withColor, categories);
     categories = EncodingTypes::None;
 
     if (printSummary_)
@@ -227,28 +219,19 @@ int EncodingApplication::Run()
         }
     }
 
-    return 0;
-}
-
-std::string EncodingApplication::AsUtf8String(const TypedCodepoint &tcp) const
-{
-    switch (tcp.type)
+    const auto &optOutputFilePath = output_.GetOptOutputFilePath();
+    if (output_.HasReplacementCharacter() && optOutputFilePath.has_value())
     {
-        case EncodingType::Control:
-            [[fallthrough]];
-        case EncodingType::Indeterminate:
-            return AsControlCharacter(tcp.codepoint);
+        std::cerr <<
+            "Warning: Output file " << optOutputFilePath.value() <<
 
-        case EncodingType::Ascii:
-            [[fallthrough]];
-        case EncodingType::Unicode:
-            return ToUtf8(tcp.codepoint);
-
-        case EncodingType::Fallback:
-            return ToUtf8(tcp.codepoint, fallbackEncoding_);
+            ((optOutputFilePath.value().string().size() > 16U) ? "\n" : " ") <<
+            "contains UTF-8 replacement character(s).\n"
+            "Codepoints of category INDETERMINATE cannot be converted to "
+            "UTF-8.\n";
     }
 
-    return {};
+    return 0;
 }
 
 void EncodingApplication::UpdateColor(EncodingType encodingType)

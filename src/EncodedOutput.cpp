@@ -26,25 +26,49 @@ SOFTWARE.
 #include "HelperFunctions.h"
 #include "EncodedOutput.h"
 #include <optional>
+#include <ios>
 #include <ostream>
 #include <utility>
 #include <vector>
+#include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 EncodedOutput::EncodedOutput(
         std::ostream &os,
+        bool printLines,
         bool printFilename,
         bool printLineNumber,
         bool printCategories,
         EncodingTypes categoryFilter,
-        std::optional<std::string> optFilename)
+        const std::string &fallbackEncoding,
+        std::optional<std::string> optFilename,
+        std::optional<fs::path> optOutputFilePath)
     : ostream_(os)
+    , printLines_(printLines)
     , printFilename_(printFilename)
     , printLineNumber_(printLineNumber)
     , printCategories_(printCategories)
     , categoryFilter_(categoryFilter)
+    , fallbackEncoding_(fallbackEncoding)
     , filename_(optFilename.value_or(std::string("(standard input)")))
+    , optOutputFilePath_(optOutputFilePath)
     , currentColor_(Color::RESET)
 {
+    if (optOutputFilePath.has_value())
+    {
+        outputFileStream_ =
+            std::ofstream(optOutputFilePath.value(), std::ios::binary);
+        if (!outputFileStream_.is_open())
+        {
+            std::stringstream messageStream;
+
+            messageStream << "Error opening " <<
+                    optOutputFilePath.value().string();
+            throw std::runtime_error(messageStream.str());
+        }
+    }
 }
 
 void EncodedOutput::Reset()
@@ -55,6 +79,17 @@ void EncodedOutput::Reset()
 
 void EncodedOutput::PrintLine(bool withColor, EncodingTypes categories)
 {
+#ifdef _WIN32
+    outputFileStream_ << "\r\n";
+#else
+    outputFileStream_ << "\n";
+#endif
+
+    if (!printLines_)
+    {
+        return;
+    }
+
     if ((categoryFilter_ & categories) != EncodingTypes::None)
     {
         if (printFilename_)
@@ -108,6 +143,16 @@ void EncodedOutput::UpdateColor(const char *color)
     }
 }
 
+void EncodedOutput::Output(const TypedCodepoint &tcp)
+{
+    outputFileStream_ << ConvertToUtf8(tcp);
+
+    if (printLines_)
+    {
+        lineStream_ << AsUtf8String(tcp);
+    }
+}
+
 void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)
 {
     struct CategoryProps_t
@@ -144,4 +189,58 @@ void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)
     {
         ostream_ << ':';
     }
+}
+
+std::string EncodedOutput::AsUtf8String(const TypedCodepoint &tcp) const
+{
+    switch (tcp.type)
+    {
+        case EncodingType::Control:
+            [[fallthrough]];
+        case EncodingType::Indeterminate:
+            return AsControlCharacter(tcp.codepoint);
+
+        case EncodingType::Ascii:
+            [[fallthrough]];
+        case EncodingType::Unicode:
+            return ToUtf8(tcp.codepoint);
+
+        case EncodingType::Fallback:
+            return ToUtf8(tcp.codepoint, fallbackEncoding_);
+    }
+
+    return {};
+}
+
+std::string EncodedOutput::ConvertToUtf8(const TypedCodepoint &tcp)
+{
+    switch (tcp.type)
+    {
+        case EncodingType::Control:
+        case EncodingType::Ascii:
+            return std::string(1, tcp.codepoint & '\xFF');
+
+        case EncodingType::Unicode:
+            return ToUtf8(tcp.codepoint);
+
+        case EncodingType::Fallback:
+            return ToUtf8(tcp.codepoint, fallbackEncoding_);
+
+        case EncodingType::Indeterminate:
+            // For unknown codepoint use UTF-8 replacement character.
+            hasReplacementCharacter_ = true;
+            return std::string("\xEF\xBF\xBD");
+    }
+
+    return {};
+}
+
+bool EncodedOutput::HasReplacementCharacter() const
+{
+    return hasReplacementCharacter_;
+}
+
+const std::optional<fs::path> &EncodedOutput::GetOptOutputFilePath() const
+{
+    return optOutputFilePath_;
 }
