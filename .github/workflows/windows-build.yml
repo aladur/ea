@@ -111,7 +111,7 @@ jobs:
         shell: bash
         continue-on-error: false
         run: |
-          install/bin/ea.exe --color=auto examples/all_types.txt
+          install/bin/ea.exe --color=auto examples/example_all_categories.txt
           cd ea_build
           test/Release/unittests
 

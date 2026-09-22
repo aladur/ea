@@ -135,7 +135,7 @@ Section "Example Files" ExampleFiles
 
   SectionIn RO
   SetOutPath $INSTDIR\Examples
-  File /a "${BASEDIR}\install\share\doc\ea\examples\all_types.txt"
+  File /a "${BASEDIR}\install\share\doc\ea\examples\example_all_categories.txt"
   File /a "${BASEDIR}\install\share\doc\ea\examples\example_utf8.txt"
   File /a "${BASEDIR}\install\share\doc\ea\examples\example_windows1252.txt"
 
