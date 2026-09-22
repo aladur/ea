@@ -39,6 +39,12 @@ namespace Color
     extern const char* BOLD;
 }
 
+namespace Utf8
+{
+    extern const char* BOM;
+    extern const char* REPLACEMENT_CHARACTER;
+}
+
 enum class EncodingType : uint8_t
 {
     Control,

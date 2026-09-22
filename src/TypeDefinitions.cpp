@@ -36,3 +36,9 @@ namespace Color
     const char* BOLD = "\033[1m";
 }
 
+namespace Utf8
+{
+    const char* BOM = "\xEF\xBB\xBF";
+    const char* REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
+}
+

@@ -193,8 +193,7 @@ EncodingType GetCodepointType(const Codepoint &cp,
         return EncodingType::Indeterminate;
     }
 
-    if (byteCount == 4 &&
-        target[0] == '\xEF' && target[1] == '\xBF' && target[2] == '\xBD')
+    if (strncmp(target.data(), Utf8::REPLACEMENT_CHARACTER, 3U) == 0U)
     {
         // If the codepoint converts to unicode replacement character
         // it is treated as indeterminate for the given encoding.

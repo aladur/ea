@@ -224,13 +224,25 @@ int EncodingApplication::Run()
     const auto &optOutputFilePath = output_.GetOptOutputFilePath();
     if (output_.HasReplacementCharacter() && optOutputFilePath.has_value())
     {
-        std::cerr <<
-            "Warning: Output file " << optOutputFilePath.value() <<
+        const char *s1 =
+            (optOutputFilePath.value().string().size() > 22U) ? "\n" : " ";
+        const char *s2 =
+            (optOutputFilePath.value().string().size() > 22U) ? " " : "\n";
 
-            ((optOutputFilePath.value().string().size() > 16U) ? "\n" : " ") <<
-            "contains UTF-8 replacement character(s).\n"
-            "Codepoints of category INDETERMINATE cannot be converted to "
-            "UTF-8.\n";
+        std::cerr <<
+            "Warning: In the output file " << optOutputFilePath.value() <<
+            s1 << "at least one codepoint has" << s2 <<
+            "been converted to UTF-8 REPLACEMENT CHARACTER (" <<
+            Utf8::REPLACEMENT_CHARACTER << ").\n"
+            "Reason: Codepoints of category INDETERMINATE cannot be "
+            "converted to UTF-8.\n";
+
+        if (fallbackEncoding_ == "none")
+        {
+            std::cerr <<
+                "Defining a fallback encoding with --encoding can potentially "
+                "resolve this.\n";
+        }
     }
 
     return 0;
