@@ -250,11 +250,6 @@ int main(int argc, char* argv[])
                         "Windows-125x are supported");
             }
         }
-        else if (optOutputFilename.has_value())
-        {
-            throw std::runtime_error(
-                "Output filename only can be set if --encoding is set");
-        }
 
         if (!IsValidColorMode(colorModeString))
         {

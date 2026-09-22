@@ -167,7 +167,7 @@ void EncodedOutput::Output(const TypedCodepoint &tcp)
         switch (outputBomMode_)
         {
             case OutputBomMode::Yes:
-                outputFileStream_ << '\xEF' << '\xBB' << '\xBF';
+                outputFileStream_ << Utf8::BOM;
                 [[fallthrough]];
             case OutputBomMode::No:
                 if (tcp.codepoint == Codepoint(0xFEFF))
@@ -261,7 +261,7 @@ std::string EncodedOutput::ConvertToUtf8(const TypedCodepoint &tcp)
         case EncodingType::Indeterminate:
             // For unknown codepoint use UTF-8 replacement character.
             hasReplacementCharacter_ = true;
-            return std::string("\xEF\xBF\xBD");
+            return std::string(Utf8::REPLACEMENT_CHARACTER);
     }
 
     return {};
