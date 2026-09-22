@@ -69,7 +69,7 @@ jobs:
 
       - name: Test ea
         run: |
-          install/bin/ea --color=auto examples/all_types.txt
+          install/bin/ea --color=auto examples/example_all_categories.txt
           otool -L install/bin/ea
           cd ea_build
           test/unittests

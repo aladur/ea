@@ -16,4 +16,4 @@ cmake --build . -j8
 sudo cmake --install . --strip
 ldd src/ea
 test/unittests
-ea /usr/share/doc/ea/examples/all_types.txt
+ea /usr/share/doc/ea/examples/example_all_categories.txt

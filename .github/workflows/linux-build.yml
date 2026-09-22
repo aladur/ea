@@ -59,7 +59,7 @@ jobs:
 
       - name: Test
         run: |
-          install/bin/ea --color=auto examples/all_types.txt
+          install/bin/ea --color=auto examples/example_all_categories.txt
           ldd install/bin/ea
           cd ea_build
           test/unittests
