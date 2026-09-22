@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
         bool printLineNumber = false;
         bool printFilename = false;
         bool printCategories = false;
-        std::string colorModeString{"auto"};
+        std::string colorModeString;
         std::string outputBomString;
         std::optional<fs::path> optOutputFilename;
         po::options_description desc("Supported options", 80, 58);
@@ -83,9 +83,11 @@ int main(int argc, char* argv[])
             ("all,a", po::bool_switch(&printAll),
              "Print file contents, character count and statistics")
             ("color", po::value<std::string>(&colorModeString)
-                        ->default_value("never")
+                        ->default_value("auto")
                         ->implicit_value("auto"),
-             "Set color mode: auto, always, never")
+             "Set color mode: 'always', 'never', 'auto'. 'auto' only\n"
+             "emits color codes when standard output is connected to a\n"
+             "terminal.")
             ("filter,f",
              po::value<std::string>()->default_value("c,a,u,f,i"),
              "Filter output for a list of categories (use a comma\n"
