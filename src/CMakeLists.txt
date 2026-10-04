@@ -14,6 +14,7 @@ set(libea_SOURCES
     EncodedScanner.cpp
     EncodingApplication.cpp
     HelperFunctions.cpp
+    IcuExtensions.cpp
     TypeDefinitions.cpp
 )
 
@@ -25,6 +26,7 @@ set(libea_HEADER
     EncodedScanner.h
     EncodingApplication.h
     HelperFunctions.h
+    IcuExtensions.h
     TypeDefinitions.h
     version.h
 )
