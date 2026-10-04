@@ -25,6 +25,7 @@ SOFTWARE.
 #include "HelperFunctions.h"
 #include "TypeDefinitions.h"
 #include "Codepoint.h"
+#include "IcuExtensions.h"
 #include <cctype>
 #include <cstdint>
 #include <utility>
@@ -165,6 +166,21 @@ bool IsValidColorMode(const std::string &colorString)
             balgo::to_lower_copy(colorString)) != colorModes.cend();
 }
 
+std::string GetStandardName(const std::string &encoding)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter* conv = ucnv_open(encoding.c_str(), &status);
+
+    if (U_SUCCESS(status) && conv != NULL)
+    {
+        const auto *sname = ucnv_getName(conv, &status);
+        ucnv_close(conv);
+        return sname;
+    }
+
+    return {};
+}
+
 EncodingType GetCodepointType(const Codepoint &cp,
         const std::string &encoding)
 {
@@ -193,6 +209,7 @@ EncodingType GetCodepointType(const Codepoint &cp,
         return EncodingType::Indeterminate;
     }
 
+
     if (strncmp(target.data(), Utf8::REPLACEMENT_CHARACTER, 3U) == 0U)
     {
         // If the codepoint converts to unicode replacement character
@@ -202,13 +219,25 @@ EncodingType GetCodepointType(const Codepoint &cp,
         return EncodingType::Indeterminate;
     }
 
+    const auto standardName = GetStandardName(encoding);
+    const auto hasC1Controls = HasC1ControlsDefined(standardName);
+    const auto invalidCodepoints = GetInvalidCodepoints(standardName);
+    const auto iter = invalidCodepoints.find(cp);
+    if (iter != invalidCodepoints.cend())
+    {
+        return EncodingType::Indeterminate;
+    }
+
     const auto codepoint = GetUtf8Character(target.data(), byteCount - 1);
-    // If the codepoint converted to utf-8 returns a char. of type control
-    // it is treated as indeterminate for the given encoding.
+    // If the encodings has C1 controls not defined and the codepoint
+    // converted to utf-8 returns the identical codepoint of type control it
+    // is treated as indeterminate for the given encoding.
     // Example: iso-8859-1 has control: 80 - 9F
     // Example: windows-1252 has control: 81, 8D, 8F, 90, 9D.
     return (u_charType(codepoint) == U_CONTROL_CHAR) ?
-        EncodingType::Indeterminate : EncodingType::Fallback;
+        ((hasC1Controls && cp == codepoint) ?
+         EncodingType::Control : EncodingType::Indeterminate)
+        : EncodingType::Fallback;
 }
 
 bool IsSingleByteEncoding(const std::string &encoding)
