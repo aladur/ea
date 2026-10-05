@@ -1,7 +1,7 @@
-CafÃ©	 FuÃŸball Ã–kostrom mit Herz â™¥ .
-Die Vögel fliegen gerne durch die kühle Märzluft.
-Unicode replacement character ï¿½
-ISO-8859-1 codepoint identified as control 
-Line with ASCII only characters.
-Invalid UTF-8 codepoint 
-í €
+ASCII:         The quick brown fox jumps over the lazy dog.
+UTF-8:         CafÃ©, FuÃŸball & Ã–kostrom fÃ¼r wenig â‚¬.
+Windows-1252:  Café, Fußball & Ökostrom für wenig €.
+Mixed:         CafÃ©, FuÃŸball & Ökostrom für wenig €.
+Controls:      DLE  DC1  DC2  DC3 .
+Indeterminate:      (on Windows-1252).
+In one line:   CafÃ©, FuÃŸball & Ökostrom für wenig €. DLE  .
