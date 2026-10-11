@@ -543,6 +543,7 @@ OutputBomMode ToOutputBomMode(const std::string &outputBomString)
 std::array<EncodingType, 256U> GetCodepointTypes(const std::string &encoding)
 {
     std::array<EncodingType, 256U> result;
+    static const auto max = static_cast<std::uint32_t>(result.size());
 
     if (encoding == "none")
     {
@@ -564,14 +565,14 @@ std::array<EncodingType, 256U> GetCodepointTypes(const std::string &encoding)
         result[cp.Value()] = EncodingType::Control;
 
         ++cp;
-        for (; cp < Codepoint(result.size()); ++cp)
+        for (; cp < Codepoint(max); ++cp)
         {
             result[cp.Value()] = EncodingType::Indeterminate;
         }
     }
     else
     {
-        for (Codepoint cp = 0U; cp < Codepoint(result.size()); ++cp)
+        for (Codepoint cp = 0U; cp < Codepoint(max); ++cp)
         {
             result[cp.Value()] = GetCodepointType(cp, encoding);
         }
