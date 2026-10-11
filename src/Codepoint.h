@@ -26,24 +26,27 @@ SOFTWARE.
 #define CODEPOINT_INCLUDED
 
 #include <cstdint>
+#include <ios>
 #include <iomanip>
+#include <functional>
 #include <ostream>
+#include <iostream>
 #include <unicode/uchar.h>
 
 class Codepoint
 {
 public:
-    Codepoint(uint32_t value = 0U) noexcept
+    Codepoint(std::uint32_t value = 0U) noexcept
       : value_(value)
     {
     }
 
-    constexpr uint32_t Value() const noexcept
+    constexpr std::uint32_t Value() const noexcept
     {
         return value_;
     }
 
-    explicit constexpr operator uint32_t() const noexcept
+    explicit constexpr operator std::uint32_t() const noexcept
     {
         return value_;
     }
@@ -58,13 +61,24 @@ public:
         return value_ < cp.value_;
     }
 
+    bool operator>= (const Codepoint &cp) const noexcept
+    {
+        return value_ >= cp.value_;
+    }
+
     bool operator== (const Codepoint &cp) const noexcept
     {
         return value_ == cp.value_;
     }
 
+    Codepoint &operator++ () noexcept
+    {
+        value_ += 1;
+        return *this;
+    }
+
 private:
-    uint32_t value_{};
+    std::uint32_t value_{};
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Codepoint& cp)

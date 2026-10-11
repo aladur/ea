@@ -26,7 +26,7 @@ SOFTWARE.
 #define RICHLINEPRINTER_INCLUDED
 
 #include "TypeDefinitions.h"
-#include <utility>
+#include <cstddef>
 #include <string>
 #include <sstream>
 #include <ostream>
@@ -54,7 +54,8 @@ public:
     EncodedOutput(std::ostream&& stream) = delete;
 
     void Reset();
-    void PrintLine(bool withColor, EncodingTypes categories);
+    void PrintLine(bool withColor, EncodingTypes categories,
+                   bool isLastLine = false);
     void UpdateColor(const char *color);
     void Output(const TypedCodepoint &typedCodepoint);
     bool HasReplacementCharacter() const;

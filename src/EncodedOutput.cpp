@@ -22,16 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "Codepoint.h"
 #include "TypeDefinitions.h"
 #include "HelperFunctions.h"
 #include "EncodedOutput.h"
 #include <optional>
 #include <ios>
-#include <ostream>
-#include <utility>
 #include <vector>
+#include <sstream>
+#include <ostream>
 #include <fstream>
 #include <filesystem>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -79,13 +81,17 @@ void EncodedOutput::Reset()
     lineStream_.str("");
 }
 
-void EncodedOutput::PrintLine(bool withColor, EncodingTypes categories)
+void EncodedOutput::PrintLine(bool withColor, EncodingTypes categories,
+        bool isLastLine)
 {
+    if (!isLastLine)
+    {
 #ifdef _WIN32
     outputFileStream_ << "\r\n";
 #else
     outputFileStream_ << "\n";
 #endif
+    }
 
     if (!printLines_)
     {
@@ -182,7 +188,6 @@ void EncodedOutput::Output(const TypedCodepoint &tcp)
     }
 
     outputFileStream_ << ConvertToUtf8(tcp);
-
 }
 
 void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)
@@ -233,8 +238,15 @@ std::string EncodedOutput::AsUtf8String(const TypedCodepoint &tcp) const
             return AsControlCharacter(tcp.codepoint);
 
         case EncodingType::Ascii:
-            [[fallthrough]];
+            return ToUtf8(tcp.codepoint);
+
         case EncodingType::Unicode:
+            if (u_charType(tcp.codepoint) == U_CONTROL_CHAR)
+            {
+                std::stringstream stream;
+                stream << tcp.codepoint;
+                return stream.str();
+            }
             return ToUtf8(tcp.codepoint);
 
         case EncodingType::Fallback:
@@ -246,6 +258,7 @@ std::string EncodedOutput::AsUtf8String(const TypedCodepoint &tcp) const
 
 std::string EncodedOutput::ConvertToUtf8(const TypedCodepoint &tcp)
 {
+
     switch (tcp.type)
     {
         case EncodingType::Control:

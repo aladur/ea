@@ -29,6 +29,7 @@ SOFTWARE.
 #include "TypeDefinitions.h"
 #include "Codepoint.h"
 #include "HelperFunctions.h"
+#include "IcuExtensions.h"
 #include "EncodedOutput.h"
 #include <boost/program_options.hpp>
 #include <unicode/uchar.h>
@@ -88,11 +89,16 @@ int EncodingApplication::Run()
     std::unordered_map<EncodingType, CharacterStatistics> statistics;
     std::optional<TypedCodepoint> optResult;
     std::stringstream lineStream;
+    const auto standardName = GetStandardName(fallbackEncoding_);
+    const auto family = GetFamily(standardName);
+    const bool isAscii = (family == "ASCII");
+    const bool isEbcdic = (family == "EBCDIC");
     bool isFirst = true;
     BomType bomType{};
     bool withColor = (colorMode_ == ColorMode::Always ||
                       (colorMode_ == ColorMode::Auto && IS_ATTY(STDOUT_FD)));
     auto categories = EncodingTypes::None;
+    const auto fallbackEncodingTypes = GetCodepointTypes(fallbackEncoding_);
     bool isCR = false;
 
     for (const auto encodingType : GetEncodingTypes())
@@ -108,13 +114,23 @@ int EncodingApplication::Run()
 
         if (optResult.has_value())
         {
-            const auto encodingType = optResult.value().type;
-            const auto &codepoint = optResult.value().codepoint;
+            const auto codepoint = optResult.value().codepoint;
+            if (optResult.value().type == EncodingType::Fallback)
+            {
+                optResult.value().type =
+                    fallbackEncodingTypes[codepoint.Value()];
+            }
+            auto encodingType = optResult.value().type;
+
+            //std::cout << "codepoint=" << std::hex << codepoint <<
+            //    " type=" << encodingType << "\n";
             const bool isNewLine = encodingType == EncodingType::Control &&
-                codepoint == Codepoint(0x0A);
-            bool wasSingleCR = (isCR && !isNewLine);
-            isCR = encodingType == EncodingType::Control &&
-                codepoint == Codepoint(0x0D);
+                ((isAscii && codepoint == Codepoint(0x0A)) ||
+                 (isEbcdic && (codepoint == Codepoint(0x15) ||
+                               codepoint == Codepoint(0x25))));
+            bool wasSingleCR = (isAscii && isCR && !isNewLine);
+            isCR = (encodingType == EncodingType::Control &&
+                codepoint == Codepoint(0x0D));
             if (!isCR && !isNewLine)
             {
                 categories |= ToEncodingTypes(encodingType);
@@ -167,7 +183,7 @@ int EncodingApplication::Run()
 
     } while (optResult.has_value());
 
-    output_.PrintLine(withColor, categories);
+    output_.PrintLine(withColor, categories, true);
     categories = EncodingTypes::None;
 
     if (printSummary_)
@@ -199,7 +215,7 @@ int EncodingApplication::Run()
             for (const auto codepoint : stat.GetCodepoints())
             {
                 const auto count = stat.GetCount(codepoint);
-                const std::string utf8Char =
+                std::string utf8Char =
                     (encodingType == EncodingType::Fallback) ?
                         ToUtf8(codepoint, fallbackEncoding_) :
                         ((encodingType == EncodingType::Control ||
@@ -209,6 +225,11 @@ int EncodingApplication::Run()
                 std::cout << std::dec << count << " ";
                 if (encodingType == EncodingType::Unicode)
                 {
+                    if (u_charType(codepoint) == U_CONTROL_CHAR)
+                    {
+                        utf8Char = "";
+                    }
+
                     std::cout << codepoint << " " << utf8Char << "\n";
                 }
                 else
