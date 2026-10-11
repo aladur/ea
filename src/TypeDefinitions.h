@@ -26,6 +26,7 @@ SOFTWARE.
 #define TYPEDEFINITIONS_INCLUDED
 
 #include "Codepoint.h"
+#include <cstdint>
 
 namespace Color
 {
@@ -45,7 +46,7 @@ namespace Utf8
     extern const char* REPLACEMENT_CHARACTER;
 }
 
-enum class EncodingType : uint8_t
+enum class EncodingType : std::uint8_t
 {
     Control,
     Ascii,
@@ -55,7 +56,7 @@ enum class EncodingType : uint8_t
 };
 
 // Bitfield enum to store multiple encoding types.
-enum class EncodingTypes : uint8_t
+enum class EncodingTypes : std::uint8_t
 {
     None = 0U,
     Control = 1U,
@@ -65,14 +66,14 @@ enum class EncodingTypes : uint8_t
     Indeterminate = 16U,
 };
 
-enum class ColorMode : uint8_t
+enum class ColorMode : std::uint8_t
 {
     Never,
     Auto,
     Always,
 };
 
-enum class BomType : uint8_t
+enum class BomType : std::uint8_t
 {
     None,
     Utf8,
@@ -82,7 +83,7 @@ enum class BomType : uint8_t
     Utf32BE,
 };
 
-enum class OutputBomMode : uint8_t
+enum class OutputBomMode : std::uint8_t
 {
     No,
     Yes,

@@ -24,7 +24,6 @@ SOFTWARE.
 
 #include "Codepoint.h"
 #include "EncodedScanner.h"
-#include "HelperFunctions.h"
 #include <optional>
 #include <string>
 #include <istream>
@@ -42,17 +41,15 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
     auto CreateResultFct = [&](unsigned size){
         TypedCodepoint result;
         result.codepoint = GetUtf8CharacterFromBuffer(size);
-        auto category = u_charType(result.codepoint);
-        result.type = (category == U_CONTROL_CHAR) ? EncodingType::Control :
-            ((result.codepoint < Codepoint(0x7FU)) ?
-             EncodingType::Ascii : EncodingType::Unicode);
+        result.type = EncodingType::Unicode;
         buffer_.erase(buffer_.begin(), buffer_.begin() + size);
 
         return result;
     };
     size = 0U;
 
-    if (IsUtf8CharacterInBuffer(size))
+    // Check for UTF-8 encoded character (with min. 2-byte size)
+    if (IsUtf8CharacterInBuffer(size, false))
     {
         return CreateResultFct(size);
     }
@@ -68,7 +65,7 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
                 break;
             }
             buffer_.push_back(static_cast<uint8_t>(data));
-            if (IsUtf8CharacterInBuffer(size))
+            if (IsUtf8CharacterInBuffer(size, false))
             {
                 return CreateResultFct(size);
             }
@@ -79,7 +76,7 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
     {
         TypedCodepoint result;
         result.codepoint = buffer_.front();
-        result.type = GetCodepointType(result.codepoint, fallbackEncoding_);
+        result.type = EncodingType::Fallback;
         buffer_.erase(buffer_.begin());
         size = 1U;
         return result;
@@ -88,7 +85,8 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
     return std::nullopt;
 }
 
-bool EncodedScanner::IsUtf8CharacterInBuffer(unsigned &size) const
+bool EncodedScanner::IsUtf8CharacterInBuffer(unsigned &size,
+        bool withSingleByte) const
 {
     bool isUtf8 = false;
 
@@ -103,7 +101,7 @@ bool EncodedScanner::IsUtf8CharacterInBuffer(unsigned &size) const
                 break;
 
             case 1U:
-                isUtf8 = ((buffer_[0] & 0x80) == 0x00);
+                isUtf8 = withSingleByte && ((buffer_[0] & 0x80) == 0x00);
                 break;
 
             case 2U:

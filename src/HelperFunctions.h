@@ -27,7 +27,9 @@ SOFTWARE.
 
 #include "Codepoint.h"
 #include "TypeDefinitions.h"
+#include <type_traits>
 #include <string>
+#include <array>
 #include <ostream>
 
 extern std::string to_string(EncodingType type);
@@ -55,6 +57,8 @@ extern EncodingTypes ToCategories(const std::string categoryString,
 extern EncodingTypes ToEncodingTypes(EncodingType encodingType);
 extern OutputBomMode ToOutputBomMode(const std::string &outputBomString);
 extern void PrepareConsoleForUtf8();
+extern std::array<EncodingType, 256U> GetCodepointTypes(
+        const std::string &encoding);
 
 inline EncodingTypes operator| (EncodingTypes lhs, EncodingTypes rhs)
 {

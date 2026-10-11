@@ -28,6 +28,8 @@ SOFTWARE.
 #include "IcuExtensions.h"
 #include <cctype>
 #include <cstdint>
+#include <iomanip>
+#include <stdexcept>
 #include <utility>
 #include <string>
 #include <array>
@@ -168,6 +170,11 @@ bool IsValidColorMode(const std::string &colorString)
 
 std::string GetStandardName(const std::string &encoding)
 {
+    if (encoding == "none")
+    {
+        return "none";
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     UConverter* conv = ucnv_open(encoding.c_str(), &status);
 
@@ -221,22 +228,31 @@ EncodingType GetCodepointType(const Codepoint &cp,
 
     const auto standardName = GetStandardName(encoding);
     const auto hasC1Controls = HasC1ControlsDefined(standardName);
+    const auto family = GetFamily(standardName);
+    const bool isAscii = (family == "ASCII");
+    const bool isEbcdic = (family == "EBCDIC");
     const auto invalidCodepoints = GetInvalidCodepoints(standardName);
     const auto iter = invalidCodepoints.find(cp);
+    if (isAscii && cp.Value() >= 0x20U && cp.Value() < 0x7F)
+    {
+        return EncodingType::Ascii;
+    }
+
     if (iter != invalidCodepoints.cend())
     {
         return EncodingType::Indeterminate;
     }
 
     const auto codepoint = GetUtf8Character(target.data(), byteCount - 1);
-    // If the encodings has C1 controls not defined and the codepoint
-    // converted to utf-8 returns the identical codepoint of type control it
-    // is treated as indeterminate for the given encoding.
-    // Example: iso-8859-1 has control: 80 - 9F
-    // Example: windows-1252 has control: 81, 8D, 8F, 90, 9D.
+    // If the encoding is ASCII compatible and has C1 controls not defined
+    // and the codepoint converted to utf-8 returns a codepoint >= 0x80 of
+    // type control it is treated as indeterminate for the given encoding.
+    // EBCDIC compatible encondings have no indeterminates.
+    // Example: iso-8859-x has control: 80 - 9F (hasC1Control)
+    // Example: windows-1252 has indeterminate: 81, 8D, 8F, 90, 9D.
     return (u_charType(codepoint) == U_CONTROL_CHAR) ?
-        ((hasC1Controls && cp == codepoint) ?
-         EncodingType::Control : EncodingType::Indeterminate)
+        ((isAscii && (cp.Value() < 0x80U || hasC1Controls)) || isEbcdic) ?
+         EncodingType::Control : EncodingType::Indeterminate
         : EncodingType::Fallback;
 }
 
@@ -392,18 +408,18 @@ void OutputAvailableEncodings(std::ostream &os, const std::string &standard,
 
 std::string AsControlCharacter(const Codepoint &cp)
 {
-    if (cp.Value() > 0x10FFFF)
+    if (cp.Value() > 0x10FFFFU)
     {
         return {};
     }
 
     int width = 6;
 
-    if (cp.Value() <= 0xFF)
+    if (cp.Value() <= 0xFFU)
     {
         width = 2;
     }
-    else if (cp.Value() <= 0xFFFF)
+    else if (cp.Value() <= 0xFFFFU)
     {
         width = 4;
     }
@@ -522,6 +538,46 @@ OutputBomMode ToOutputBomMode(const std::string &outputBomString)
 
     throw std::runtime_error("Undefined --output-bom value '" +
         outputBomString + "'. Valid is 'yes', 'no', 'as_input'");
+}
+
+std::array<EncodingType, 256U> GetCodepointTypes(const std::string &encoding)
+{
+    std::array<EncodingType, 256U> result;
+
+    if (encoding == "none")
+    {
+        // If there is no fallback encoding only codepoints
+        // U+0000 - U+00FF are treated as "fallback" under the hood
+        // resulting in codepoint type ASCII, Control or Indeterminate.
+        Codepoint cp = 0U;
+
+        for (; cp < Codepoint(32U); ++cp)
+        {
+            result[cp.Value()] = EncodingType::Control;
+        }
+
+        for (; cp < Codepoint(0x7FU); ++cp)
+        {
+            result[cp.Value()] = EncodingType::Ascii;
+        }
+
+        result[cp.Value()] = EncodingType::Control;
+
+        ++cp;
+        for (; cp < Codepoint(result.size()); ++cp)
+        {
+            result[cp.Value()] = EncodingType::Indeterminate;
+        }
+    }
+    else
+    {
+        for (Codepoint cp = 0U; cp < Codepoint(result.size()); ++cp)
+        {
+            result[cp.Value()] = GetCodepointType(cp, encoding);
+        }
+    }
+
+    return result;
 }
 
 void PrepareConsoleForUtf8()

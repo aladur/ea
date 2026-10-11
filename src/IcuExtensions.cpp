@@ -349,15 +349,15 @@ std::unordered_set<Codepoint> GetInvalidCodepoints(const std::string &encoding)
             return {0xA5, 0xAE, 0xBE, 0xC3, 0xD0, 0xE3, 0xF0};
 
         case Encoding::ISO_8859_6:
-            return {0xAE, 0xD2, 0xFF};
-
-        case Encoding::ISO_8859_7:
             return {
                 0xA1, 0xA2, 0xA3, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB,
                 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7,
                 0xB8, 0xB9, 0xBA, 0xBC, 0xBD, 0xBE, 0xC0, 0xDB, 0xDC, 0xDD,
                 0xDE, 0xDF, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA,
                 0xFB, 0xFC, 0xFD, 0xFE, 0xFF};
+
+        case Encoding::ISO_8859_7:
+            return {0xAE, 0xD2, 0xFF};
 
         case Encoding::ISO_8859_8:
             return {0xA1, 0xFB, 0xFC, 0xFF};
@@ -529,6 +529,7 @@ std::string GetFamily(const std::string &encoding)
         { "ibm-9449_P100-2002", ASCII },
         { "ibm-12712_P100-1998", EBCDIC },
         { "ibm-16804_X110-1999", EBCDIC },
+        { "ISO-8859-1", ASCII },
         { "iso-8859_10-1998", ASCII },
         { "iso-8859_11-2001", ASCII },
         { "iso-8859_14-1998", ASCII },
@@ -539,6 +540,11 @@ std::string GetFamily(const std::string &encoding)
         { "macos-7_3-10.2", ASCII },
         { "windows-874-2000", ASCII },
     };
+
+    if (encoding == "none")
+    {
+        return ASCII;
+    }
 
     const auto iter = familyForEncoding.find(encoding);
     return iter == familyForEncoding.end() ?  "" : iter->second;

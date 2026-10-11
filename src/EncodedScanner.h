@@ -42,14 +42,15 @@ public:
     std::optional<TypedCodepoint> GetNext(unsigned &size);
 
 protected:
-    bool IsUtf8CharacterInBuffer(unsigned &size) const;
+    bool IsUtf8CharacterInBuffer(unsigned &size, bool withSingleByte) const;
     Codepoint GetUtf8CharacterFromBuffer(unsigned size) const;
 
 private:
     std::istream &istream_;
     std::string fallbackEncoding_;
-    std::vector<uint8_t> buffer_{};
+    std::vector<std::uint8_t> buffer_{};
     unsigned int filePosition_{};
+    bool hasFallbackEncoding_{};
 };
 
 #endif
