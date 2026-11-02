@@ -30,6 +30,7 @@ SOFTWARE.
 #include <type_traits>
 #include <string>
 #include <array>
+#include <unordered_set>
 #include <ostream>
 
 extern std::string to_string(EncodingType type);
@@ -54,6 +55,9 @@ extern std::string AsControlCharacter(const Codepoint &cp);
 extern Codepoint GetUtf8Character(const char *data, int size);
 extern EncodingTypes ToCategories(const std::string categoryString,
         std::string &invalidCategory);
+extern std::unordered_set<Codepoint> ToUnicodeCodepoints(
+        const std::string &unicodeCodepointsString,
+        std::string &invalidUnicodeCodepoints);
 extern EncodingTypes ToEncodingTypes(EncodingType encodingType);
 extern OutputBomMode ToOutputBomMode(const std::string &outputBomString);
 extern void PrepareConsoleForUtf8();

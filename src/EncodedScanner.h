@@ -31,13 +31,15 @@ SOFTWARE.
 #include <optional>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <istream>
 
 class EncodedScanner
 {
 public:
     EncodedScanner(std::istream &istream,
-            const std::string &fallbackEncoding);
+            const std::string &fallbackEncoding,
+            std::unordered_set<Codepoint> excludeUnicodeCodepoints);
 
     std::optional<TypedCodepoint> GetNext(unsigned &size);
 
@@ -49,6 +51,7 @@ private:
     std::istream &istream_;
     std::string fallbackEncoding_;
     std::vector<std::uint8_t> buffer_{};
+    std::unordered_set<Codepoint> excludeUnicodeCodepoints_;
     unsigned int filePosition_{};
     bool hasFallbackEncoding_{};
 };
