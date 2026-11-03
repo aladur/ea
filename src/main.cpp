@@ -28,6 +28,7 @@ SOFTWARE.
 #include "version.h"
 #include <stdexcept>
 #include <optional>
+#include <utility>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -54,8 +55,10 @@ int main(int argc, char* argv[])
         bool printLineNumber = false;
         bool printFilename = false;
         bool printCategories = false;
+        bool isPrintUnicodeCodepoints = false;
         std::string colorModeString;
         std::string outputBomString;
+        std::string excludeUnicodeCodepointsString;
         std::optional<fs::path> optOutputFilename;
         po::options_description desc("Supported options", 80, 58);
         desc.add_options()
@@ -106,6 +109,15 @@ int main(int argc, char* argv[])
                         ->implicit_value("yes"),
              "Output file BOM can be: 'yes', 'no', 'as_input' (default).\n"
              "'as_input' uses the BOM of the first input file (if present).")
+            ("exclude-unicode",
+             po::value<std::string>(&excludeUnicodeCodepointsString),
+             "Exclude a comma separated list of unicode codepoints from being "
+             "treated as unicode. Instead they are treated as fallback "
+             "encoding codepoints or indeterminate. If arg is 'list' all "
+             "found unicode codepoints are listed in one line and exits.\n"
+             "Example:\n"
+             "ea --exclude-unicode U+FC,U+58A,U+2665,U+1d191\n"
+             "ea --exclude-unicode list\n")
             ("FILE", po::value<std::vector<fs::path>>(),
              "Input file(s) to process");
 
@@ -172,6 +184,10 @@ int main(int argc, char* argv[])
         std::string invalidCategory;
         const auto categoryFilter =
             ToCategories(vm["filter"].as<std::string>(), invalidCategory);
+        isPrintUnicodeCodepoints = (excludeUnicodeCodepointsString == "list");
+        std::string invalidUnicodeExcludes;
+        const auto excludeUnicodeCodepoints = ToUnicodeCodepoints(
+                excludeUnicodeCodepointsString, invalidUnicodeExcludes);
         if (vm.count("output-file"))
         {
             optOutputFilename = vm["output-file"].as<std::string>();
@@ -188,6 +204,11 @@ int main(int argc, char* argv[])
         {
             throw std::runtime_error("Undefined filter category '" +
                     invalidCategory + "'");
+        }
+        if (!invalidUnicodeExcludes.empty())
+        {
+            throw std::runtime_error("Got invalid unicode excludes '" +
+                    invalidUnicodeExcludes + "'");
         }
         const auto colorMode = ToMode(colorModeString);
         const auto lcEncoding = boost::to_lower_copy(encoding);
@@ -220,7 +241,13 @@ int main(int argc, char* argv[])
             return 0;
         }
 
-        if (printAll)
+        if (isPrintUnicodeCodepoints)
+        {
+            printSummary = false;
+            printStatistics = false;
+            printLines = false;
+        }
+        else if (printAll)
         {
             printSummary = true;
             printStatistics = true;
@@ -260,7 +287,6 @@ int main(int argc, char* argv[])
             throw std::runtime_error(messageStream.str());
         }
 
-
         if (vm.count("FILE") > 0)
         {
             const auto filePaths = vm["FILE"].as<std::vector<fs::path>>();
@@ -289,7 +315,9 @@ int main(int argc, char* argv[])
                 EncodingApplication app(istream,
                         encoding, printLines, printSummary, printStatistics,
                         printFilename, printLineNumber, printCategories,
+                        isPrintUnicodeCodepoints,
                         colorMode, categoryFilter, outputBomMode,
+                        std::move(excludeUnicodeCodepoints),
                         filePath.filename().string(),
                         optOutputFilename);
 
@@ -306,7 +334,9 @@ int main(int argc, char* argv[])
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
                 printFilename, printLineNumber, printCategories,
+                isPrintUnicodeCodepoints,
                 colorMode, categoryFilter, outputBomMode,
+                std::move(excludeUnicodeCodepoints),
                 std::nullopt, optOutputFilename);
 
         return app.Run();

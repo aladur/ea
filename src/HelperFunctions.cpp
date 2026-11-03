@@ -29,6 +29,7 @@ SOFTWARE.
 #include <cctype>
 #include <cstdint>
 #include <iomanip>
+#include <charconv>
 #include <stdexcept>
 #include <utility>
 #include <string>
@@ -461,7 +462,8 @@ Codepoint GetUtf8Character(const char *data, int size)
     }
 }
 
-EncodingTypes ToCategories(const std::string categoriesString, std::string &invalidCategory)
+EncodingTypes ToCategories(const std::string categoriesString,
+        std::string &invalidCategory)
 {
     using Type = std::vector<std::pair<std::string, EncodingTypes>>;
 
@@ -497,6 +499,51 @@ EncodingTypes ToCategories(const std::string categoriesString, std::string &inva
             invalidCategory = category;
             return EncodingTypes::None;
         }
+    }
+
+    return result;
+}
+
+std::unordered_set<Codepoint> ToUnicodeCodepoints(
+        const std::string &unicodeCodepointsString,
+        std::string &invalidUnicodeCodepoints)
+{
+    std::unordered_set<Codepoint> result;
+    std::vector<std::string> codepoints;
+
+    if (unicodeCodepointsString == "list")
+    {
+        return {};
+    }
+
+    invalidUnicodeCodepoints.clear();
+    boost::split(codepoints, unicodeCodepointsString, boost::is_any_of(","));
+
+    for (const auto &codepoint : codepoints)
+    {
+        std::uint32_t value = 0U;
+        bool isValid = (codepoint.substr(0, 2) == "U+" &&
+            codepoint.size() >= 4U && codepoint.size() <= 8U);
+
+        if (isValid)
+        {
+            const auto [ptr, ec] =
+                std::from_chars(codepoint.data() + 2U,
+                        codepoint.data() + codepoint.size(), value, 16);
+            isValid &= (ec == std::errc() && *ptr == '\0');
+        }
+
+        if (!isValid)
+        {
+            if (!invalidUnicodeCodepoints.empty())
+            {
+                invalidUnicodeCodepoints += ',';
+            }
+            invalidUnicodeCodepoints.append(codepoint);
+            continue;
+        }
+
+        result.insert(value);
     }
 
     return result;

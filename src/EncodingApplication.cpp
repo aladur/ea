@@ -37,8 +37,10 @@ SOFTWARE.
 #include <cstddef>
 #include <stdexcept>
 #include <optional>
+#include <utility>
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <iostream>
 
 EncodingApplication::EncodingApplication(
@@ -50,17 +52,21 @@ EncodingApplication::EncodingApplication(
         bool printFilename,
         bool printLineNumber,
         bool printCategories,
+        bool isPrintUnicodeCodepoints,
         ColorMode colorMode,
         EncodingTypes categoryFilter,
         OutputBomMode outputBomMode,
+        std::unordered_set<Codepoint> excludeUnicodeCodepoints,
         std::optional<std::string> optFilename,
         std::optional<fs::path> optOutputFilePath)
     : istream_(is)
     , fallbackEncoding_(fallbackEncoding)
     , printSummary_(printSummary)
     , printStatistics_(printStatistics)
+    , isPrintUnicodeCodepoints_(isPrintUnicodeCodepoints)
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
+    , excludeUnicodeCodepoints_(std::move(excludeUnicodeCodepoints))
     , output_(std::cout,
                 printLines,
                 printFilename,
@@ -85,7 +91,8 @@ EncodingApplication::EncodingApplication(
 int EncodingApplication::Run()
 {
     assert(GetEncodingNames().size() == GetEncodingTypes().size());
-    EncodedScanner scanner(istream_, fallbackEncoding_);
+    EncodedScanner scanner(istream_, fallbackEncoding_,
+            std::move(excludeUnicodeCodepoints_));
     std::unordered_map<EncodingType, CharacterStatistics> statistics;
     std::optional<TypedCodepoint> optResult;
     std::stringstream lineStream;
@@ -240,6 +247,26 @@ int EncodingApplication::Run()
                 }
             }
         }
+    }
+
+    if (isPrintUnicodeCodepoints_)
+    {
+        const auto encodingType = EncodingType::Unicode;
+        const auto &stat = statistics[encodingType];
+        bool withDelimiter = false;
+
+        for (const auto codepoint : stat.GetCodepoints())
+        {
+            if (withDelimiter)
+            {
+                std::cout << ',';
+            }
+
+            std::cout << codepoint;
+            withDelimiter = true;
+        }
+
+        std::cout << "\n";
     }
 
     const auto &optOutputFilePath = output_.GetOptOutputFilePath();

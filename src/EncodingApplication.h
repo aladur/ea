@@ -32,6 +32,7 @@ SOFTWARE.
 #include <optional>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <istream>
 #include <filesystem>
 
@@ -46,8 +47,10 @@ public:
             bool printLines, bool printSummary, bool printStatistics,
             bool printFilename, bool printLineNumber,
             bool printCategories,
+            bool isPrintUnicodeCodepoints,
             ColorMode colorMode, EncodingTypes categoryFilter,
             OutputBomMode outputBomMode,
+            std::unordered_set<Codepoint> excludeUnicodeCodepoints,
             std::optional<std::string> optFilename = std::nullopt,
             std::optional<fs::path> optOutputFilePath = std::nullopt);
     EncodingApplication() = delete;
@@ -66,8 +69,10 @@ private:
     std::string fallbackEncoding_;
     bool printSummary_;
     bool printStatistics_;
+    bool isPrintUnicodeCodepoints_;
     ColorMode colorMode_;
     EncodingTypes categoryFilter_;
+    std::unordered_set<Codepoint> excludeUnicodeCodepoints_;
     EncodedOutput output_;
 };
 

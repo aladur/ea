@@ -25,14 +25,18 @@ SOFTWARE.
 #include "Codepoint.h"
 #include "EncodedScanner.h"
 #include <optional>
+#include <utility>
 #include <string>
+#include <unordered_set>
 #include <istream>
 #include <iostream>
 
 EncodedScanner::EncodedScanner(std::istream &istream,
-            const std::string &fallbackEncoding)
+            const std::string &fallbackEncoding,
+            std::unordered_set<Codepoint> excludeUnicodeCodepoints)
     : istream_(istream)
     , fallbackEncoding_(fallbackEncoding)
+    , excludeUnicodeCodepoints_(std::move(excludeUnicodeCodepoints))
 {
 }
 
@@ -51,7 +55,13 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
     // Check for UTF-8 encoded character (with min. 2-byte size)
     if (IsUtf8CharacterInBuffer(size, false))
     {
-        return CreateResultFct(size);
+        const auto codepoint = GetUtf8CharacterFromBuffer(size);
+
+        if (excludeUnicodeCodepoints_.find(codepoint) ==
+            excludeUnicodeCodepoints_.cend())
+        {
+            return CreateResultFct(size);
+        }
     }
 
     if (!istream_.eof() && !istream_.fail())
@@ -67,7 +77,13 @@ std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
             buffer_.push_back(static_cast<uint8_t>(data));
             if (IsUtf8CharacterInBuffer(size, false))
             {
-                return CreateResultFct(size);
+                const auto codepoint = GetUtf8CharacterFromBuffer(size);
+
+                if (excludeUnicodeCodepoints_.find(codepoint) ==
+                    excludeUnicodeCodepoints_.cend())
+                {
+                    return CreateResultFct(size);
+                }
             }
         }
     }
