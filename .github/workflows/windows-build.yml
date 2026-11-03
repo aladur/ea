@@ -30,7 +30,13 @@ jobs:
       - uses: actions/checkout@v6
         with:
           submodules: 'true'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
       - uses: microsoft/setup-msbuild@v3
+
+      - name: Install pytest
+        run: python -m pip install pytest
 
       - name: Download and Build boost
         shell: bash
@@ -112,6 +118,7 @@ jobs:
         continue-on-error: false
         run: |
           install/bin/ea.exe --color=auto examples/example_all_categories.txt
+          python -m pytest -rap test
           cd ea_build
           test/Release/unittests
 
