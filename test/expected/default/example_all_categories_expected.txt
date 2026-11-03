@@ -1,0 +1,7 @@
+ASCII:         The quick brown fox jumps over the lazy dog.
+UTF-8:         Café, Fußball & Ökostrom für wenig €.
+Windows-1252:  Caf\xE9, Fu\xDFball & \xD6kostrom f\xFCr wenig \x80.
+Mixed:         Café, Fußball & \xD6kostrom f\xFCr wenig \x80.
+Controls:      DLE \x10 DC1 \x11 DC2 \x12 DC3 \x13.
+Indeterminate: \x81 \x8D \x8F \x90 \x9D (on Windows-1252).
+In one line:   Café, Fußball & \xD6kostrom f\xFCr wenig \x80. DLE \x10 \x81.
