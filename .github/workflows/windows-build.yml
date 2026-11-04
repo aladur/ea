@@ -118,6 +118,7 @@ jobs:
         continue-on-error: false
         run: |
           install/bin/ea.exe --color=auto examples/example_all_categories.txt
+          python test/file_test.py
           python -m pytest -rap test
           cd ea_build
           test/Release/unittests

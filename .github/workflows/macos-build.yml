@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v6
         with:
           submodules: 'true'
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -75,7 +75,7 @@ jobs:
         run: |
           install/bin/ea --color=auto examples/example_all_categories.txt
           otool -L install/bin/ea
-          python3 -m pytest -rap test
+          python -m pytest -rap test
           cd ea_build
           test/unittests
 
