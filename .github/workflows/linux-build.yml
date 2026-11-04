@@ -30,6 +30,12 @@ jobs:
     env:
       CXX: ${{ matrix.compiler }}
     steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'true'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
 
       - name: Context
         run: |
@@ -38,19 +44,15 @@ jobs:
           VER=`$CXX --version | sed -nE $CCVER`
           echo "C++ compiler version:" $VER
           echo "Number of cores: " `grep -c processor /proc/cpuinfo`
+          echo "Python version: " `python3 --version`
           echo `lscpu | grep "^CPU(s):"`
           echo `lscpu | grep "Thread(s)"`
-
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          submodules: 'true'
 
       - name: Install packages
         run: |
           sudo apt-get update
           sudo apt-get install build-essential cmake ninja-build \
-          libboost-program-options-dev libicu-dev python3 python3-pip -y
+          libboost-program-options-dev libicu-dev -y
           python3 -m pip install --upgrade pip pytest
 
       - name: Build ea

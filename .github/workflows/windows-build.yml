@@ -27,16 +27,16 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: 'true'
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
       - uses: microsoft/setup-msbuild@v3
 
-      - name: Install pytest
-        run: python -m pip install pytest charset_normalizer
+      - name: Install packages
+        run: python -m pip install --upgrade pip pytest charset_normalizer
 
       - name: Download and Build boost
         shell: bash
