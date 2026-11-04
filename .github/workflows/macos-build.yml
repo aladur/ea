@@ -18,7 +18,7 @@ jobs:
   build-and-test:
     strategy:
       matrix:
-        os: [ macos-15, macos-26 ]
+        os: [ macos-15-intel, macos-26-intel ]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -30,15 +30,22 @@ jobs:
     env:
       CXX: clang++
     steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: 'true'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
 
       - name: Install packages
         run: |
           brew untap aws/tap
-          brew install gnu-sed boost icu4c@78
+          brew install gnu-sed boost
           echo "/opt/homebrew/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
           ICU_PREFIX=$(brew --prefix icu4c)
           echo "ICU_ROOT=${ICU_PREFIX}" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=${ICU_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}" >> $GITHUB_ENV
+          python -m pip install --upgrade pip pytest
 
       - name: Context
         run: |
@@ -54,12 +61,8 @@ jobs:
           echo "Shell:" $SHELL
           echo "PATH:" $PATH
           echo `sed --version | sed -ne "/^sed.*[0-9]\+\.[0-9]\+/p;q"`
+          echo "Python version: " `python --version`
           cmake --version
-
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          submodules: 'true'
 
       - name: Build ea
         run: |
@@ -71,6 +74,7 @@ jobs:
         run: |
           install/bin/ea --color=auto examples/example_all_categories.txt
           otool -L install/bin/ea
+          python -m pytest -rap test
           cd ea_build
           test/unittests
 

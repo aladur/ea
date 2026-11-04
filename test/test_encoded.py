@@ -1,8 +1,12 @@
+import sys
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List
 from helper_functions import Run, GetExamplesPath, GetExpectedPath, \
     CompareWithFile, IsPrepare
+
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 
 def test_encoded():

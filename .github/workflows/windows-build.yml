@@ -27,10 +27,16 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: 'true'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
       - uses: microsoft/setup-msbuild@v3
+
+      - name: Install packages
+        run: python -m pip install --upgrade pip pytest
 
       - name: Download and Build boost
         shell: bash
@@ -112,6 +118,7 @@ jobs:
         continue-on-error: false
         run: |
           install/bin/ea.exe --color=auto examples/example_all_categories.txt
+          python -m pytest -rap test
           cd ea_build
           test/Release/unittests
 
