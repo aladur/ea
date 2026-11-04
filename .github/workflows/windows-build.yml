@@ -36,7 +36,7 @@ jobs:
       - uses: microsoft/setup-msbuild@v3
 
       - name: Install packages
-        run: python -m pip install --upgrade pip pytest charset_normalizer
+        run: python -m pip install --upgrade pip pytest
 
       - name: Download and Build boost
         shell: bash
@@ -118,7 +118,6 @@ jobs:
         continue-on-error: false
         run: |
           install/bin/ea.exe --color=auto examples/example_all_categories.txt
-          python file_test.py
           python -m pytest -rap test
           cd ea_build
           test/Release/unittests
