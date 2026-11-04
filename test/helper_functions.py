@@ -12,8 +12,8 @@ def _findBinary():
       if os.name == "nt":
           candidates.extend([
               root / "install" / "bin" / "ea.exe",
-              root / "ea_build" / "Release" / "ea.exe",
               root / "ea_build" / "src" / "Release" / "ea.exe",
+              root / ".." / "ea_build" / "src" / "Release" / "ea.exe",
           ])
       else:
           candidates.extend([
@@ -55,6 +55,7 @@ def Run(
         capture_output=True,
         text=True,
         check=False,
+        encoding="utf-8",
     )
 
     if result.returncode != expectedExitCode:

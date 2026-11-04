@@ -1,10 +1,11 @@
 import os
+import sys
 from pathlib import Path
-from typing import Sequence
 from charset_normalizer import from_bytes
 
 
 def main():
+    sys.stdout.reconfigure(encoding='utf-8')
     path = Path(__file__).resolve().parents[0] / "test" / "expected" / "default" / "example_utf8_expected.txt"
     match = from_bytes(path.read_bytes()).best()
     if match is None:
