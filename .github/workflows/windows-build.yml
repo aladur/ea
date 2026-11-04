@@ -36,7 +36,7 @@ jobs:
       - uses: microsoft/setup-msbuild@v3
 
       - name: Install pytest
-        run: python -m pip install pytest
+        run: python -m pip install pytest charset_normalizer
 
       - name: Download and Build boost
         shell: bash

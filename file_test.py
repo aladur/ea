@@ -5,7 +5,7 @@ from charset_normalizer import from_bytes
 
 
 def main():
-    path = Path(__file__).resolve().parents[0] / "expected" / "default" / "example_utf8_expected.txt"
+    path = Path(__file__).resolve().parents[0] / "test" / "expected" / "default" / "example_utf8_expected.txt"
     match = from_bytes(path.read_bytes()).best()
     if match is None:
         print("Could not determine an encoding")
