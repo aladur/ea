@@ -228,6 +228,7 @@ void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)
         { 'f', EncodingTypes::Fallback, Color::YELLOW },
         { 'i', EncodingTypes::Indeterminate, Color::RED },
         { 'c', EncodingTypes::Control, Color::CYAN },
+        { 'e', EncodingTypes::Empty, Color::RESET },
     };
 
     for (const auto &props : categoryProperties)

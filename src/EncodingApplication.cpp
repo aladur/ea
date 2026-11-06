@@ -166,6 +166,10 @@ int EncodingApplication::Run()
 
             if (isNewLine)
             {
+                if (categories == EncodingTypes::None)
+                {
+                    categories = EncodingTypes::Empty;
+                }
                 output_.PrintLine(withColor, categories);
                 categories = EncodingTypes::None;
                 continue;
