@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
              "emits color codes when standard output is connected to a\n"
              "terminal.")
             ("filter,f",
-             po::value<std::string>()->default_value("c,a,u,f,i"),
+             po::value<std::string>()->default_value("c,a,u,f,i,e"),
              "Filter output for a list of categories (use a comma\n"
              "separated list of first character of each category).\n"
              "For example to display lines containing control or\n"

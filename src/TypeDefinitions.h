@@ -64,6 +64,7 @@ enum class EncodingTypes : std::uint8_t
     Unicode = 4U,
     Fallback = 8U,
     Indeterminate = 16U,
+    Empty = 32U,
 };
 
 enum class ColorMode : std::uint8_t

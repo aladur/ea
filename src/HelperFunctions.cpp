@@ -539,6 +539,7 @@ EncodingTypes ToCategories(const std::string categoriesString,
         { "unicode", EncodingTypes::Unicode },
         { "fallback", EncodingTypes::Fallback },
         { "indeterminate", EncodingTypes::Indeterminate },
+        { "empty", EncodingTypes::Empty },
     };
     auto result = EncodingTypes::None;
     std::vector<std::string> categories;
