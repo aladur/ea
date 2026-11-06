@@ -151,6 +151,30 @@ void EncodedOutput::UpdateColor(const char *color)
     }
 }
 
+void EncodedOutput::PrintLine(bool withColor, const std::string &text)
+{
+    if (printFilename_)
+    {
+        if (withColor)
+        {
+            ostream_ << Color::MAGENTA << filename_ <<
+                Color::BLUE << ":" << Color::RESET;
+        }
+        else
+        {
+            ostream_ << filename_ << ":";
+        }
+    }
+
+    ostream_ << text;
+
+#ifdef _WIN32
+    ostream_ << "\r\n";
+#else
+    ostream_ << "\n";
+#endif
+}
+
 void EncodedOutput::Output(const TypedCodepoint &tcp)
 {
     if (printLines_)

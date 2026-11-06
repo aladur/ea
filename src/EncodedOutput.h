@@ -56,6 +56,7 @@ public:
     void Reset();
     void PrintLine(bool withColor, EncodingTypes categories,
                    bool isLastLine = false);
+    void PrintLine(bool withColor, const std::string &text);
     void UpdateColor(const char *color);
     void Output(const TypedCodepoint &typedCodepoint);
     bool HasReplacementCharacter() const;
