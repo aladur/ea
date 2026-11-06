@@ -42,6 +42,10 @@ extern ColorMode ToMode(std::string colorString);
 extern bool IsValidEncoding(const std::string &encoding, std::string &error);
 extern bool IsValidColorMode(const std::string &colorString);
 extern std::string GetStandardName(const std::string &encoding);
+extern std::string GetName(const Codepoint &cp);
+extern std::string GetBlockName(const Codepoint &cp);
+extern Codepoint ToUnicodeCodepoint(const Codepoint &cp,
+        const std::string &encoding);
 extern EncodingType GetCodepointType(const Codepoint &cp,
         const std::string &encoding);
 extern bool IsSingleByteEncoding(const std::string &encoding);

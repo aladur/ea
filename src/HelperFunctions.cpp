@@ -40,6 +40,7 @@ SOFTWARE.
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <unicode/unistr.h>
+#include <unicode/uchar.h>
 #include <unicode/ucnv.h>
 #include <unicode/utypes.h>
 #ifdef _WIN32
@@ -187,6 +188,71 @@ std::string GetStandardName(const std::string &encoding)
     }
 
     return {};
+}
+
+std::string GetName(const Codepoint &cp)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    const auto nameChoice = U_UNICODE_CHAR_NAME;
+    std::vector<char> buffer;
+
+    auto length = u_charName(cp, nameChoice, buffer.data(), 0, &status);
+    if (status == U_BUFFER_OVERFLOW_ERROR && length > 0)
+    {
+        status = U_ZERO_ERROR;
+        buffer.resize(length + 1);
+        length =
+            u_charName(cp, nameChoice, buffer.data(), length + 1, &status);
+
+        if (U_SUCCESS(status))
+        {
+            buffer.resize(length);
+            return buffer.data();
+        }
+    }
+
+    return {};
+}
+
+std::string GetBlockName(const Codepoint &cp)
+{
+    const auto block = ublock_getCode(cp.Value());
+
+    return u_getPropertyValueName(UCHAR_BLOCK, block, U_SHORT_PROPERTY_NAME);
+}
+
+Codepoint ToUnicodeCodepoint(const Codepoint &cp, const std::string &encoding)
+{
+    Codepoint result{};
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *conv = NULL;
+
+    if (encoding != "none")
+    {
+         conv = ucnv_open(encoding.c_str(), &status);
+    }
+
+    if (U_SUCCESS(status) && conv != NULL)
+    {
+        std::array<char, 1> buffer{};
+        const char *source = buffer.data();
+
+        buffer[0] = static_cast<char>(cp.Value());
+        UChar32 unicodeCodepoint = ucnv_getNextUChar(
+                    conv,
+                    &source,
+                    buffer.data() + buffer.size(),
+                    &status);
+
+        if (U_SUCCESS(status))
+        {
+            result = Codepoint(unicodeCodepoint);
+        }
+
+        ucnv_close(conv);
+    }
+
+    return result;
 }
 
 EncodingType GetCodepointType(const Codepoint &cp,
