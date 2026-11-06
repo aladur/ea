@@ -117,12 +117,12 @@ void EncodedOutput::PrintLine(bool withColor, EncodingTypes categories,
         {
             if (withColor)
             {
-                ostream_ << Color::GREEN << lineNumber_ <<
+                ostream_ << Color::GREEN << std::dec << lineNumber_ <<
                     Color::BLUE << ":" << Color::RESET;
             }
             else
             {
-                ostream_ << lineNumber_ << ":";
+                ostream_ << std::dec << lineNumber_ << ":";
             }
         }
 
