@@ -40,6 +40,7 @@ SOFTWARE.
 #include <utility>
 #include <sstream>
 #include <string>
+#include <sstream>
 #include <unordered_set>
 #include <iostream>
 
@@ -95,7 +96,6 @@ int EncodingApplication::Run()
             std::move(excludeUnicodeCodepoints_));
     std::unordered_map<EncodingType, CharacterStatistics> statistics;
     std::optional<TypedCodepoint> optResult;
-    std::stringstream lineStream;
     const auto standardName = GetStandardName(fallbackEncoding_);
     const auto family = GetFamily(standardName);
     const bool isAscii = (family == "ASCII");
@@ -196,29 +196,39 @@ int EncodingApplication::Run()
     if (printSummary_)
     {
         std::size_t sum = 0U;
+        std::stringstream lineStream;
 
-        std::cout << "BOM: " << AsHumanReadable(bomType) << "\n";
+        lineStream << "BOM: " << AsHumanReadable(bomType);
+        output_.PrintLine(withColor, lineStream.str());
         for (int i = 0; i < static_cast<int>(GetEncodingNames().size()); ++i)
         {
             const auto encodingType = GetEncodingTypes()[i];
-            std::cout << statistics[encodingType].GetCount() << " " <<
-                GetEncodingNames()[i] << " characters\n";
+
+            lineStream.clear();
+            lineStream.str("");
+            lineStream << statistics[encodingType].GetCount() << " " <<
+                GetEncodingNames()[i] << " characters";
+            output_.PrintLine(withColor, lineStream.str());
             sum += statistics[encodingType].GetCount();
         }
 
-        std::cout << sum << " characters in total" << "\n";
+        lineStream.clear();
+        lineStream.str("");
+        lineStream << sum << " characters in total";
+        output_.PrintLine(withColor, lineStream.str());
     }
 
     if (printStatistics_)
     {
-        std::cout << "\n";
-
         for (int i = 0; i < static_cast<int>(GetEncodingNames().size()); ++i)
         {
             const auto encodingType = GetEncodingTypes()[i];
             const auto &stat = statistics[encodingType];
+            std::stringstream lineStream;
 
-            std::cout << "List of " << GetEncodingNames()[i] << " characters\n";
+            lineStream << "List of " << GetEncodingNames()[i] << " characters";
+            output_.PrintLine(withColor, lineStream.str());
+
             for (const auto codepoint : stat.GetCodepoints())
             {
                 const auto count = stat.GetCount(codepoint);
@@ -229,7 +239,8 @@ int EncodingApplication::Run()
                           encodingType == EncodingType::Indeterminate) ?
                         "" : ToUtf8(codepoint));
 
-                std::cout << std::dec << count << " ";
+                lineStream.clear();
+                lineStream.str("");
                 if (encodingType == EncodingType::Unicode)
                 {
                     if (u_charType(codepoint) == U_CONTROL_CHAR)
@@ -237,14 +248,17 @@ int EncodingApplication::Run()
                         utf8Char = "";
                     }
 
-                    std::cout << codepoint << " " << utf8Char << "\n";
+                    lineStream << std::dec << count << " " << codepoint <<
+                        " " << utf8Char;
                 }
                 else
                 {
-                    std::cout << std::uppercase << std::setw(2) <<
-                        std::setfill('0') << std::hex << codepoint.Value() <<
-                        " " << utf8Char << "\n";
+                    lineStream << std::dec << count << " " <<
+                        std::uppercase << std::setw(2) << std::setfill('0') <<
+                        std::hex << codepoint.Value() << " " << utf8Char;
                 }
+
+                output_.PrintLine(withColor, lineStream.str());
             }
         }
     }
