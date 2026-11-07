@@ -71,10 +71,9 @@ def GetExpectedPath() -> Path:
 
 def Run(
     programOptions: Sequence[str],
-    exampleFile: str | os.PathLike,
     expectedExitCode: int,
 ) -> subprocess.CompletedProcess:
-    command = [str(_findBinary()), *programOptions, str(exampleFile)]
+    command = [str(_findBinary()), *programOptions]
     result = subprocess.run(
         command,
         capture_output=True,
