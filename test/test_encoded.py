@@ -1,33 +1,13 @@
 import sys
-from pathlib import Path
-from dataclasses import dataclass
-from typing import List
-from helper_functions import Run, GetExamplesPath, GetExpectedPath, \
-    CompareWithFile, IsPrepare
+from helper_functions import Run, GetTestFiles, GetExamplesPath, \
+    GetExpectedPath, CompareWithFile, IsPrepare
 
 
 sys.stdout.reconfigure(encoding='utf-8')
 
 
 def test_encoded():
-    @dataclass
-    class EncodedItem:
-        stem: str
-        encoding: str
-
-    items: List[EncodedItem] = [
-        EncodedItem("example_utf8", "none"),
-        EncodedItem("example_windows1252", "cp1252"),
-        EncodedItem("example_spam_mail", "none"),
-        EncodedItem("example_all_categories", "cp1252"),
-        EncodedItem("example_c0_controls_with_del", "none"),
-        EncodedItem("example_ebcdic_english_cp037", "cp037"),
-        EncodedItem("single_byte_character_set_ascii", "cp1252"),
-        EncodedItem("single_byte_character_set_ebcdic", "cp037"),
-        EncodedItem("UTF-8-demo", "none"),
-    ]
-
-    for item in items:
+    for item in GetTestFiles():
         path = GetExamplesPath() / (item.stem + ".txt")
         expected = GetExpectedPath() / "encoded" / (item.stem + "_expected.txt")
         params = ["--color=never", f"--encoding={item.encoding}"]

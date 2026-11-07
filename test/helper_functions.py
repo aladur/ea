@@ -3,6 +3,28 @@ import re
 import subprocess
 from pathlib import Path
 from typing import Sequence
+from typing import List
+from dataclasses import dataclass
+
+
+@dataclass
+class EncodedFileStem:
+    stem: str
+    encoding: str
+
+def GetTestFiles() -> List[EncodedFileStem]:
+    items: List[EncodedFileStem] = [
+        EncodedFileStem("example_utf8", "none"),
+        EncodedFileStem("example_windows1252", "cp1252"),
+        EncodedFileStem("example_spam_mail", "none"),
+        EncodedFileStem("example_all_categories", "cp1252"),
+        EncodedFileStem("example_c0_controls_with_del", "none"),
+        EncodedFileStem("example_ebcdic_english_cp037", "cp037"),
+        EncodedFileStem("single_byte_character_set_ascii", "cp1252"),
+        EncodedFileStem("single_byte_character_set_ebcdic", "cp037"),
+        EncodedFileStem("UTF-8-demo", "none"),
+    ]
+    return items;
 
 
 def _findBinary():
@@ -32,7 +54,10 @@ def _findBinary():
 
 
 def IsPrepare() -> bool:
-    """Only to be used for test preparation"""
+    """
+    Only to be used for test preparation.
+    It initially creates the expected test file result.
+    """
     return False
 
 
