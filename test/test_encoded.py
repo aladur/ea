@@ -10,8 +10,12 @@ def test_encoded():
     for item in GetTestFiles():
         path = GetExamplesPath() / (item.stem + ".txt")
         expected = GetExpectedPath() / "encoded" / (item.stem + "_expected.txt")
-        params = ["--color=never", f"--encoding={item.encoding}"]
-        result = Run(params, path, 0)
+        params = [
+            "--color=never",
+            f"--encoding={item.encoding}",
+            str(path),
+        ]
+        result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
@@ -42,8 +46,12 @@ def test_encoded_iso_8859_x():
     for encoding in encodings:
         filename = stem + "_" + encoding + "_expected.txt"
         expected = GetExpectedPath() / "iso-8859-x" / filename
-        params = ["--color=never", f"--encoding={encoding}"]
-        result = Run(params, path, 0)
+        params = [
+            "--color=never",
+            f"--encoding={encoding}",
+            str(path),
+        ]
+        result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
@@ -69,8 +77,12 @@ def test_encoded_windows_125x():
     for encoding in encodings:
         filename = stem + "_" + encoding + "_expected.txt"
         expected = GetExpectedPath() / "windows-125x" / filename
-        params = ["--color=never", f"--encoding={encoding}"]
-        result = Run(params, path, 0)
+        params = [
+            "--color=never",
+            f"--encoding={encoding}",
+            str(path),
+        ]
+        result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
@@ -142,8 +154,12 @@ def test_encoded_ebcdic():
     for encoding in encodings:
         filename = stem + "_" + encoding + "_expected.txt"
         expected = GetExpectedPath() / "ebcdic" / filename
-        params = ["--color=never", f"--encoding={encoding}"]
-        result = Run(params, path, 0)
+        params = [
+            "--color=never",
+            f"--encoding={encoding}",
+            str(path),
+        ]
+        result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
