@@ -51,7 +51,6 @@ int main(int argc, char* argv[])
         bool printSummary = false;
         bool printStatistics = false;
         bool printLines = true;
-        bool printAll = false;
         bool printLineNumber = false;
         bool printFilename = false;
         bool printCategories = false;
@@ -83,8 +82,6 @@ int main(int argc, char* argv[])
              "Print character count per category")
             ("statistics,s", po::bool_switch(&printStatistics),
              "Print character count for each character in each category")
-            ("all,a", po::bool_switch(&printAll),
-             "Print file contents, character count and statistics")
             ("color", po::value<std::string>(&colorModeString)
                         ->default_value("auto")
                         ->implicit_value("auto"),
@@ -246,12 +243,6 @@ int main(int argc, char* argv[])
             printSummary = false;
             printStatistics = false;
             printLines = false;
-        }
-        else if (printAll)
-        {
-            printSummary = true;
-            printStatistics = true;
-            printLines = true;
         }
         else if (printSummary || printStatistics)
         {
