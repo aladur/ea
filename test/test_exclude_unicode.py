@@ -37,3 +37,26 @@ def test_exclude_unicode_ebcdic():
         EqualsPattern(result.stderr, "")
         CompareWithFile(result.stdout, expected)
 
+
+def test_exclude_unicode_ebcdic_list():
+    @dataclass
+    class FileStemWithCount:
+        stem: str
+        count: int
+
+    items = [
+        FileStemWithCount("example_ebcdic_english_cp037", 2),
+        FileStemWithCount("example_ebcdic_german_cp037", 10),
+    ]
+
+    for item in items:
+        encoding="cp037"
+        path = GetExamplesPath() / (item.stem + ".txt")
+        params = [
+            f"--exclude-unicode=list",
+            f"--encoding={encoding}",
+            path,
+        ]
+        result = Run(params, 0)
+
+        assert(result.stdout.count(",") == item.count)
