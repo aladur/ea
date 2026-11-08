@@ -1,6 +1,7 @@
 import sys
 from helper_functions import Run, GetTestFiles, GetExamplesPath, \
-    GetExpectedPath, CompareWithFile, IsPrepare, EqualsPattern
+    GetExpectedPath, CompareWithFile, IsPrepare, EqualsPattern, \
+    ContainsPattern
 
 
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore[attr-defined]
@@ -169,3 +170,127 @@ def test_encoded_ebcdic():
 
         EqualsPattern(result.stderr, "")
         CompareWithFile(result.stdout, expected)
+
+
+def test_encoding_list():
+    result = Run(["--encoding=list"], 0)
+    result_a = Run(["--encoding=list-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    ContainsPattern(result_a.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    ContainsPattern(result.stdout, "ISO-8859-1")
+    ContainsPattern(result.stdout, "US-ASCII")
+    ContainsPattern(result.stdout, "macos-0_2-10.2") # Mac OS Roman
+    ContainsPattern(result.stdout, "ibm-1089_P100-1995") # Latin/Arabic
+    ContainsPattern(result_a.stdout, "ISO-8859-1")
+    ContainsPattern(result_a.stdout, "ISO-8859-6")
+    ContainsPattern(result_a.stdout, "ISO-8859-15")
+
+
+def test_encoding_list_standards():
+    result = Run(["--encoding=list-standards"], 0)
+
+    ContainsPattern(result.stderr, "")
+    ContainsPattern(result.stdout, "IANA")
+    ContainsPattern(result.stdout, "IBM")
+    ContainsPattern(result.stdout, "JAVA")
+    ContainsPattern(result.stdout, "MIME")
+    ContainsPattern(result.stdout, "UTR22")
+    ContainsPattern(result.stdout, "WINDOWS")
+
+
+def test_encoding_list_iana():
+    encoding = "iana"
+    result = Run([f"--encoding=list-{encoding}"], 0)
+    result_a = Run([f"--encoding=list-{encoding}-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    ContainsPattern(result.stdout, "ISO_8859-6")
+    ContainsPattern(result.stdout, "IBM437")
+    ContainsPattern(result.stdout, "windows-1252")
+    ContainsPattern(result.stdout, "hp-roman8")
+    ContainsPattern(result.stdout, "macintosh")
+
+
+def test_encoding_list_ibm():
+    encoding = "ibm"
+    result = Run([f"--encoding=list-{encoding}"], 0)
+    result_a = Run([f"--encoding=list-{encoding}-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    for line in result.stdout.splitlines():
+        ContainsPattern(line, "ibm-")
+
+
+def test_encoding_list_java():
+    encoding = "java"
+    result = Run([f"--encoding=list-{encoding}"], 0)
+    result_a = Run([f"--encoding=list-{encoding}-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    ContainsPattern(result.stdout, "ISO-8859-6")
+    ContainsPattern(result.stdout, "ASCII")
+    ContainsPattern(result.stdout, "windows-1252")
+    ContainsPattern(result.stdout, "x-macroman")
+
+
+
+def test_encoding_list_mime():
+    encoding = "mime"
+    result = Run([f"--encoding=list-{encoding}"], 0)
+    result_a = Run([f"--encoding=list-{encoding}-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    ContainsPattern(result.stdout, "US-ASCII")
+    ContainsPattern(result.stdout, "KOI8-R")
+    ContainsPattern(result.stdout, "IBM860")
+    ContainsPattern(result.stdout, "ISO-8859-15")
+    ContainsPattern(result.stdout, "macintosh")
+
+
+def test_encoding_list_utr22():
+    encoding = "utr22"
+    result = Run([f"--encoding=list-{encoding}"], 0)
+    result_a = Run([f"--encoding=list-{encoding}-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    ContainsPattern(result.stdout, "ibm-437_P100-1995")
+    ContainsPattern(result.stdout, "macos-0_2-10.2")
+    ContainsPattern(result.stdout, "windows-874-2000")
+
+
+def test_encoding_list_windows():
+    encoding = "windows"
+    result = Run([f"--encoding=list-{encoding}"], 0)
+    result_a = Run([f"--encoding=list-{encoding}-a"], 0)
+
+    ContainsPattern(result.stderr, "")
+    assert(len(result.stdout.splitlines()) == len(result_a.stdout.splitlines()))
+    for line in result.stdout.splitlines():
+        ContainsPattern(line, "windows-")
+    ContainsPattern(result.stdout, "windows-437")
+    ContainsPattern(result.stdout, "windows-850")
+    ContainsPattern(result.stdout, "windows-1252")
+
+
+def test_encoding_list_aliases():
+    standards=[
+        "IANA",
+        "IBM",
+        "JAVA",
+        "MIME",
+        "UTR22",
+        "WINDOWS",
+    ]
+
+    for standard in standards:
+        result = Run([f"--encoding=list-{standard}-a"], 0)
+        ContainsPattern(result.stderr, "")
+        for line in result.stdout.splitlines():
+            ContainsPattern(line, ";")
