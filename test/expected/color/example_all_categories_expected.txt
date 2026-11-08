@@ -1,0 +1,9 @@
+[35mexample_all_categories.txt[34m:[0m[32m1[34m:[0m[0ma[0m-[0m-[0m-[0m-[0m-[34m:[0mASCII:         The quick brown fox jumps over the lazy dog.
+[35mexample_all_categories.txt[34m:[0m[32m2[34m:[0m[0ma[32mu[0m-[0m-[0m-[0m-[34m:[0mUTF-8:         Caf[32mé[0m, Fu[32mß[0mball & [32mÖ[0mkostrom f[32mü[0mr wenig [32m€[0m.
+[35mexample_all_categories.txt[34m:[0m[32m3[34m:[0m[0ma[0m-[33mf[0m-[0m-[0m-[34m:[0mWindows-1252:  Caf[33mé[0m, Fu[33mß[0mball & [33mÖ[0mkostrom f[33mü[0mr wenig [33m€[0m.
+[35mexample_all_categories.txt[34m:[0m[32m4[34m:[0m[0ma[32mu[33mf[0m-[0m-[0m-[34m:[0mMixed:         Caf[32mé[0m, Fu[32mß[0mball & [33mÖ[0mkostrom f[33mü[0mr wenig [33m€[0m.
+[35mexample_all_categories.txt[34m:[0m[32m5[34m:[0m[0ma[0m-[0m-[0m-[36mc[0m-[34m:[0mControls:      DLE [36m\x10[0m DC1 [36m\x11[0m DC2 [36m\x12[0m DC3 [36m\x13[0m.
+[35mexample_all_categories.txt[34m:[0m[32m6[34m:[0m[0ma[0m-[0m-[31mi[0m-[0m-[34m:[0mIndeterminate: [31m\x81[0m [31m\x8D[0m [31m\x8F[0m [31m\x90[0m [31m\x9D[0m (on Windows-1252).
+[35mexample_all_categories.txt[34m:[0m[32m7[34m:[0m[0ma[32mu[33mf[31mi[36mc[0m-[34m:[0mIn one line:   Caf[32mé[0m, Fu[32mß[0mball & [33mÖ[0mkostrom f[33mü[0mr wenig [33m€[0m. DLE [36m\x10[0m [31m\x81[0m.
+[35mexample_all_categories.txt[34m:[0m[32m8[34m:[0m[0ma[0m-[0m-[0m-[0m-[0m-[34m:[0mEmpty:         
+[35mexample_all_categories.txt[34m:[0m[32m9[34m:[0m[0m-[0m-[0m-[0m-[0m-[0me[34m:[0m

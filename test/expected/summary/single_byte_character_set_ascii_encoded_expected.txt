@@ -1,0 +1,7 @@
+BOM: None
+32 CONTROL characters
+95 ASCII characters
+0 UNICODE characters
+123 FALLBACK(cp1252) characters
+5 INDETERMINATE characters
+255 characters in total

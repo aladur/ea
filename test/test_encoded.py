@@ -1,9 +1,9 @@
 import sys
 from helper_functions import Run, GetTestFiles, GetExamplesPath, \
-    GetExpectedPath, CompareWithFile, IsPrepare
+    GetExpectedPath, CompareWithFile, IsPrepare, EqualsPattern
 
 
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8') # type: ignore[attr-defined]
 
 
 def test_encoded():
@@ -13,13 +13,14 @@ def test_encoded():
         params = [
             "--color=never",
             f"--encoding={item.encoding}",
-            str(path),
+            path,
         ]
         result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
 
+        EqualsPattern(result.stderr, "")
         CompareWithFile(result.stdout, expected)
 
 
@@ -49,13 +50,14 @@ def test_encoded_iso_8859_x():
         params = [
             "--color=never",
             f"--encoding={encoding}",
-            str(path),
+            path,
         ]
         result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
 
+        EqualsPattern(result.stderr, "")
         CompareWithFile(result.stdout, expected)
 
 
@@ -80,13 +82,14 @@ def test_encoded_windows_125x():
         params = [
             "--color=never",
             f"--encoding={encoding}",
-            str(path),
+            path,
         ]
         result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
 
+        EqualsPattern(result.stderr, "")
         CompareWithFile(result.stdout, expected)
 
 
@@ -157,11 +160,12 @@ def test_encoded_ebcdic():
         params = [
             "--color=never",
             f"--encoding={encoding}",
-            str(path),
+            path,
         ]
         result = Run(params, 0)
         if IsPrepare() and not expected.exists():
             with open(expected, "w", encoding="utf-8") as f:
                 f.write(result.stdout)
 
+        EqualsPattern(result.stderr, "")
         CompareWithFile(result.stdout, expected)
