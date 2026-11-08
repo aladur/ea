@@ -1,0 +1,3 @@
+a-f---:Windows-1252:  Café, Fußball & Ökostrom für wenig €.
+auf---:Mixed:         Café, Fußball & Ökostrom für wenig €.
+aufic-:In one line:   Café, Fußball & Ökostrom für wenig €. DLE \x10 \x81.

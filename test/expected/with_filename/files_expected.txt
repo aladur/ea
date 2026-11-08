@@ -1,0 +1,290 @@
+example_utf8.txt:Der Apfel fällt nicht weit vom Stamm.
+example_utf8.txt:Lügen haben kurze Beine.
+example_utf8.txt:Übung macht den Meister.
+example_utf8.txt:Wer anderen eine Grube gräbt, fällt selbst hinein.
+example_utf8.txt:Alle Flüsse fließen ins Meer.
+example_utf8.txt:Wer den Cent nicht ehrt, ist den € nicht wert.
+example_windows1252.txt:Der Apfel f\xE4llt nicht weit vom Stamm.
+example_windows1252.txt:L\xFCgen haben kurze Beine.
+example_windows1252.txt:\xDCbung macht den Meister.
+example_windows1252.txt:Wer anderen eine Grube gr\xE4bt, f\xE4llt selbst hinein.
+example_windows1252.txt:Alle Fl\xFCsse flie\xDFen ins Meer.
+example_windows1252.txt:Wer den Cent nicht ehrt, ist den \x80 nicht wert.
+example_spam_mail.txt:Your tіме іs vaոіѕhiոɡ ѕwiftly.
+example_spam_mail.txt:
+example_spam_mail.txt:Наѵе you ոоtісеd thаt yоur dеνiсeѕ have bееn ɑсtіոg wеіrd latеly?
+example_spam_mail.txt:It'ѕ bесausе ẏоu gо to ẇеbѕitеs ԝіthout thіnƙinɡ.
+example_spam_mail.txt:Onе of them hаd my ѕpeϲіal ϲоde on it аnԁ it wоrkеԁ.
+example_spam_mail.txt:
+example_spam_mail.txt:What thаt mеаոѕ to уоu іѕ that І ϲɑո ѕеe еvеrythіnɡ that happens on ẏоur sсreen ɑոd in frоոt of ẏоur ѕcrеen.
+example_spam_mail.txt:If you doubt іt thеn ԁоn't rеɑԁ any furthеr іոtо thiѕ lettеr.
+example_spam_mail.txt:І'м not ԝɑstiոԍ мy tіme оո you eіthеr аnd I'm juѕt ԍоոna роst аll thіѕ crɑp
+example_spam_mail.txt:ẇith уоu on every роѕsible ԝеbѕitе and sоcіɑl nеtworks ɑnd ѕеոd it out to аll your contacts.
+example_spam_mail.txt:
+example_spam_mail.txt:I've mаԁe а ϲopy оf уour most iмрortаոt files and ɡаthered thе ϲoոtact aԁdrеѕѕеs you frеԛuеոtlẏ uѕе.
+example_spam_mail.txt:І also hɑvе accеsѕ tо уour browsіոg hiѕtоrẏ. Іո short, І hɑνe eνеrуthing І neеԁ.
+example_spam_mail.txt:At fіrѕt, I ϲonsіdеreԁ dеleting all thе dɑtɑ froм your ԁeviсеѕ ɑոԁ walkіոg аԝɑẏ.
+example_spam_mail.txt:Вut аftеr ѕeeinɡ the kіnds оf sitеѕ you rеԍulɑrly visit, I chanɡеԁ му mіnd.
+example_spam_mail.txt:I'м tаlkinɡ abоut the ƙind of сoոtеոt that's, ԝеll, ոot еxaсtlẏ ѕоmеthіng tо bе prоuԁ of.
+example_spam_mail.txt:
+example_spam_mail.txt:Ţheո, I сɑме uр ԝith ɑn ideɑ. І tooƙ ѕcreeոshоts of the ԝеbsіteѕ ẏou ѕpeոԁ yоur prіvаte time on.
+example_spam_mail.txt:I alsо manɑgеd to cаpturе імagеѕ оf you in сoмрromiѕіոԍ моmеոtѕ uѕinԍ thе cамеrɑ oո оոе of your dеvicеs.
+example_spam_mail.txt:/* Ву the ᴡaу, it tоoƙ sоmе patieոϲе to get the riɡht ɑոgle, but іt ᴡɑѕ wоrth the wаit. */
+example_spam_mail.txt:Now, I haѵe мaterіаl thɑt ẇоuld ϲеrtаіnly мakе аո iмpreѕsioո оn your frіеnԁs, aсԛuaіոtaոces, aոԁ aոуоոe elѕе оոline.
+example_spam_mail.txt:
+example_spam_mail.txt:То cut а lоnԍ ѕtоry short I'll мɑκе you а ԁeаl. Yоu wire мe thе моոeẏ aոd I'll ԁеletе аll thаt shit ɑbоut yоu and we'll forgеt ɑbout each other.
+example_spam_mail.txt:1990 unіteԁ stateѕ ԁоllɑrѕ is fіnе ẇith ме. Мy BTС wallеt, rемоve ѕpɑceѕ bеfоrе uѕе: 16n Rn6 nRDPy ZmaYC UCDq 7wv gGj V6iA 5xW9
+example_spam_mail.txt:
+example_spam_mail.txt:I'll giνe you 40 hоurѕ froм now to раy. І tоld yоu ẇhat haрpеոѕ if yоu ԁon't pay, І ԁon't givе a fuϲk, it'ѕ up tо ẏоu.
+example_spam_mail.txt:Aոd ԁoո't hold а gruԁԍе. Еvеrẏbоԁẏ's got а jоb tо ԁо.
+example_spam_mail.txt:
+example_all_categories.txt:ASCII:         The quick brown fox jumps over the lazy dog.
+example_all_categories.txt:UTF-8:         Café, Fußball & Ökostrom für wenig €.
+example_all_categories.txt:Windows-1252:  Caf\xE9, Fu\xDFball & \xD6kostrom f\xFCr wenig \x80.
+example_all_categories.txt:Mixed:         Café, Fußball & \xD6kostrom f\xFCr wenig \x80.
+example_all_categories.txt:Controls:      DLE \x10 DC1 \x11 DC2 \x12 DC3 \x13.
+example_all_categories.txt:Indeterminate: \x81 \x8D \x8F \x90 \x9D (on Windows-1252).
+example_all_categories.txt:In one line:   Café, Fußball & \xD6kostrom f\xFCr wenig \x80. DLE \x10 \x81.
+example_all_categories.txt:Empty:         
+example_all_categories.txt:
+example_c0_controls_with_del.txt:NUL \x00 SOH \x01 STX \x02 ETX \x03 
+example_c0_controls_with_del.txt:EOT \x04 ENQ \x05 ACK \x06 BEL \x07 
+example_c0_controls_with_del.txt:BS  \x08 HT  \x09 (LF)     VT  \x0B 
+example_c0_controls_with_del.txt:FF  \x0C CR  \x0D SO  \x0E SI  \x0F 
+example_c0_controls_with_del.txt:DLE \x10 DC1 \x11 DC2 \x12 DC3 \x13 
+example_c0_controls_with_del.txt:DC4 \x14 NAK \x15 SYN \x16 ETB \x17 
+example_c0_controls_with_del.txt:CAN \x18 EM  \x19 SUB \x1A ESC \x1B 
+example_c0_controls_with_del.txt:FS  \x1C GS  \x1D RS  \x1E US  \x1F 
+example_c0_controls_with_del.txt:DEL \x7F
+example_ebcdic_english_cp037.txt:\xC1@\x83\x93\x85\x81\x95@\x83\x96\x95\xA2\x83\x89\x85\x95\x83\x85@\x89\xA2@\x81@\x87\x96\x96\x84@\x97\x89\x93\x93\x96\xA6K%\xC1@\x87\x96\x93\x84\x85\x95@\x92\x85\xA8@\x83\x81\x95@\x96\x97\x85\x95@\x81\x95\xA8@\x84\x96\x96\x99K%U+0085\xA3\xA3\x85\x99@\x81@\xA2\x94\x81\x93\x93@\x86\x89\xA2\x88@\xA3\x88\x81\x95@\x81\x95@\x85\x94\x97\xA3\xA8@\x84\x89\xA2\x88K%Ɩ\x99\xA3\xA4\x95\x85@\x86\x81\xA5\x96\x99\xA2@\xA3\x88\x85@\x82\x99\x81\xA5\x85K%Ȗ\x95\x85\xA2\xA3\xA8@\x89\xA2@\xA3\x88\x85@\x82\x85\xA2\xA3@\x97\x96\x93\x89\x83\xA8K%
+single_byte_character_set_ascii.txt:\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09
+single_byte_character_set_ascii.txt:\x0B\x0C\x0D\x0E\x0F
+single_byte_character_set_ascii.txt:\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F
+single_byte_character_set_ascii.txt: !"#$%&'()*+,-./
+single_byte_character_set_ascii.txt:0123456789:;<=>?
+single_byte_character_set_ascii.txt:@ABCDEFGHIJKLMNO
+single_byte_character_set_ascii.txt:PQRSTUVWXYZ[\]^_
+single_byte_character_set_ascii.txt:`abcdefghijklmno
+single_byte_character_set_ascii.txt:pqrstuvwxyz{|}~\x7F
+single_byte_character_set_ascii.txt:\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F
+single_byte_character_set_ascii.txt:\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F
+single_byte_character_set_ascii.txt:\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF
+single_byte_character_set_ascii.txt:\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF
+single_byte_character_set_ascii.txt:\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF
+single_byte_character_set_ascii.txt:\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF
+single_byte_character_set_ascii.txt:\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF
+single_byte_character_set_ascii.txt:\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF
+single_byte_character_set_ebcdic.txt:\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09
+single_byte_character_set_ebcdic.txt:\x0B\x0C\x0D\x0E\x0F%\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F% !"#$%&'()*+,-./%0123456789:;<=>?%@ABCDEFGHIJKLMNO%PQRSTUVWXYZ[\]^_%`abcdefghijklmno%pqrstuvwxyz{|}~\x7F%\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F%\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F%\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF%\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF%\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF%\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF%\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF%\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF%
+UTF-8-demo.txt:
+UTF-8-demo.txt:UTF-8 encoded sample plain-text file
+UTF-8-demo.txt:‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+UTF-8-demo.txt:
+UTF-8-demo.txt:Markus Kuhn [ˈmaʳkʊs kuːn] <http://www.cl.cam.ac.uk/~mgk25/> — 2002-07-25 CC BY
+UTF-8-demo.txt:
+UTF-8-demo.txt:
+UTF-8-demo.txt:The ASCII compatible UTF-8 encoding used in this plain-text file
+UTF-8-demo.txt:is defined in Unicode, ISO 10646-1, and RFC 2279.
+UTF-8-demo.txt:
+UTF-8-demo.txt:
+UTF-8-demo.txt:Using Unicode/UTF-8, you can write in emails and source code things such as
+UTF-8-demo.txt:
+UTF-8-demo.txt:Mathematics and sciences:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i),      ⎧⎡⎛┌─────┐⎞⎤⎫
+UTF-8-demo.txt:                                            ⎪⎢⎜│a²+b³ ⎟⎥⎪
+UTF-8-demo.txt:  ∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β),    ⎪⎢⎜│───── ⎟⎥⎪
+UTF-8-demo.txt:                                            ⎪⎢⎜⎷ c₈   ⎟⎥⎪
+UTF-8-demo.txt:  ℕ ⊆ ℕ₀ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ,                   ⎨⎢⎜       ⎟⎥⎬
+UTF-8-demo.txt:                                            ⎪⎢⎜ ∞     ⎟⎥⎪
+UTF-8-demo.txt:  ⊥ < a ≠ b ≡ c ≤ d ≪ ⊤ ⇒ (⟦A⟧ ⇔ ⟪B⟫),      ⎪⎢⎜ ⎲     ⎟⎥⎪
+UTF-8-demo.txt:                                            ⎪⎢⎜ ⎳aⁱ-bⁱ⎟⎥⎪
+UTF-8-demo.txt:  2H₂ + O₂ ⇌ 2H₂O, R = 4.7 kΩ, ⌀ 200 mm     ⎩⎣⎝i=1    ⎠⎦⎭
+UTF-8-demo.txt:
+UTF-8-demo.txt:Linguistics and dictionaries:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn
+UTF-8-demo.txt:  Y [ˈʏpsilɔn], Yen [jɛn], Yoga [ˈjoːgɑ]
+UTF-8-demo.txt:
+UTF-8-demo.txt:APL:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈
+UTF-8-demo.txt:
+UTF-8-demo.txt:Nicer typography in plain text files:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ╔══════════════════════════════════════════╗
+UTF-8-demo.txt:  ║                                          ║
+UTF-8-demo.txt:  ║   • ‘single’ and “double” quotes         ║
+UTF-8-demo.txt:  ║                                          ║
+UTF-8-demo.txt:  ║   • Curly apostrophes: “We’ve been here” ║
+UTF-8-demo.txt:  ║                                          ║
+UTF-8-demo.txt:  ║   • Latin-1 apostrophe and accents: '´`  ║
+UTF-8-demo.txt:  ║                                          ║
+UTF-8-demo.txt:  ║   • ‚deutsche‘ „Anführungszeichen“       ║
+UTF-8-demo.txt:  ║                                          ║
+UTF-8-demo.txt:  ║   • †, ‡, ‰, •, 3–4, —, −5/+5, ™, …      ║
+UTF-8-demo.txt:  ║                                          ║
+UTF-8-demo.txt:  ║   • ASCII safety test: 1lI|, 0OD, 8B     ║
+UTF-8-demo.txt:  ║                      ╭─────────╮         ║
+UTF-8-demo.txt:  ║   • the euro symbol: │ 14.95 € │         ║
+UTF-8-demo.txt:  ║                      ╰─────────╯         ║
+UTF-8-demo.txt:  ╚══════════════════════════════════════════╝
+UTF-8-demo.txt:
+UTF-8-demo.txt:Combining characters:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  STARGΛ̊TE SG-1, a = v̇ = r̈, a⃑ ⊥ b⃑
+UTF-8-demo.txt:
+UTF-8-demo.txt:Greek (in Polytonic):
+UTF-8-demo.txt:
+UTF-8-demo.txt:  The Greek anthem:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Σὲ γνωρίζω ἀπὸ τὴν κόψη
+UTF-8-demo.txt:  τοῦ σπαθιοῦ τὴν τρομερή,
+UTF-8-demo.txt:  σὲ γνωρίζω ἀπὸ τὴν ὄψη
+UTF-8-demo.txt:  ποὺ μὲ βία μετράει τὴ γῆ.
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ᾿Απ᾿ τὰ κόκκαλα βγαλμένη
+UTF-8-demo.txt:  τῶν ῾Ελλήνων τὰ ἱερά
+UTF-8-demo.txt:  καὶ σὰν πρῶτα ἀνδρειωμένη
+UTF-8-demo.txt:  χαῖρε, ὦ χαῖρε, ᾿Ελευθεριά!
+UTF-8-demo.txt:
+UTF-8-demo.txt:  From a speech of Demosthenes in the 4th century BC:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Οὐχὶ ταὐτὰ παρίσταταί μοι γιγνώσκειν, ὦ ἄνδρες ᾿Αθηναῖοι,
+UTF-8-demo.txt:  ὅταν τ᾿ εἰς τὰ πράγματα ἀποβλέψω καὶ ὅταν πρὸς τοὺς
+UTF-8-demo.txt:  λόγους οὓς ἀκούω· τοὺς μὲν γὰρ λόγους περὶ τοῦ
+UTF-8-demo.txt:  τιμωρήσασθαι Φίλιππον ὁρῶ γιγνομένους, τὰ δὲ πράγματ᾿
+UTF-8-demo.txt:  εἰς τοῦτο προήκοντα,  ὥσθ᾿ ὅπως μὴ πεισόμεθ᾿ αὐτοὶ
+UTF-8-demo.txt:  πρότερον κακῶς σκέψασθαι δέον. οὐδέν οὖν ἄλλο μοι δοκοῦσιν
+UTF-8-demo.txt:  οἱ τὰ τοιαῦτα λέγοντες ἢ τὴν ὑπόθεσιν, περὶ ἧς βουλεύεσθαι,
+UTF-8-demo.txt:  οὐχὶ τὴν οὖσαν παριστάντες ὑμῖν ἁμαρτάνειν. ἐγὼ δέ, ὅτι μέν
+UTF-8-demo.txt:  ποτ᾿ ἐξῆν τῇ πόλει καὶ τὰ αὑτῆς ἔχειν ἀσφαλῶς καὶ Φίλιππον
+UTF-8-demo.txt:  τιμωρήσασθαι, καὶ μάλ᾿ ἀκριβῶς οἶδα· ἐπ᾿ ἐμοῦ γάρ, οὐ πάλαι
+UTF-8-demo.txt:  γέγονεν ταῦτ᾿ ἀμφότερα· νῦν μέντοι πέπεισμαι τοῦθ᾿ ἱκανὸν
+UTF-8-demo.txt:  προλαβεῖν ἡμῖν εἶναι τὴν πρώτην, ὅπως τοὺς συμμάχους
+UTF-8-demo.txt:  σώσομεν. ἐὰν γὰρ τοῦτο βεβαίως ὑπάρξῃ, τότε καὶ περὶ τοῦ
+UTF-8-demo.txt:  τίνα τιμωρήσεταί τις καὶ ὃν τρόπον ἐξέσται σκοπεῖν· πρὶν δὲ
+UTF-8-demo.txt:  τὴν ἀρχὴν ὀρθῶς ὑποθέσθαι, μάταιον ἡγοῦμαι περὶ τῆς
+UTF-8-demo.txt:  τελευτῆς ὁντινοῦν ποιεῖσθαι λόγον.
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Δημοσθένους, Γ´ ᾿Ολυνθιακὸς
+UTF-8-demo.txt:
+UTF-8-demo.txt:Georgian:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  From a Unicode conference invitation:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  გთხოვთ ახლავე გაიაროთ რეგისტრაცია Unicode-ის მეათე საერთაშორისო
+UTF-8-demo.txt:  კონფერენციაზე დასასწრებად, რომელიც გაიმართება 10-12 მარტს,
+UTF-8-demo.txt:  ქ. მაინცში, გერმანიაში. კონფერენცია შეჰკრებს ერთად მსოფლიოს
+UTF-8-demo.txt:  ექსპერტებს ისეთ დარგებში როგორიცაა ინტერნეტი და Unicode-ი,
+UTF-8-demo.txt:  ინტერნაციონალიზაცია და ლოკალიზაცია, Unicode-ის გამოყენება
+UTF-8-demo.txt:  ოპერაციულ სისტემებსა, და გამოყენებით პროგრამებში, შრიფტებში,
+UTF-8-demo.txt:  ტექსტების დამუშავებასა და მრავალენოვან კომპიუტერულ სისტემებში.
+UTF-8-demo.txt:
+UTF-8-demo.txt:Russian:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  From a Unicode conference invitation:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Зарегистрируйтесь сейчас на Десятую Международную Конференцию по
+UTF-8-demo.txt:  Unicode, которая состоится 10-12 марта 1997 года в Майнце в Германии.
+UTF-8-demo.txt:  Конференция соберет широкий круг экспертов по  вопросам глобального
+UTF-8-demo.txt:  Интернета и Unicode, локализации и интернационализации, воплощению и
+UTF-8-demo.txt:  применению Unicode в различных операционных системах и программных
+UTF-8-demo.txt:  приложениях, шрифтах, верстке и многоязычных компьютерных системах.
+UTF-8-demo.txt:
+UTF-8-demo.txt:Thai (UCS Level 2):
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Excerpt from a poetry on The Romance of The Three Kingdoms (a Chinese
+UTF-8-demo.txt:  classic 'San Gua'):
+UTF-8-demo.txt:
+UTF-8-demo.txt:  [----------------------------|------------------------]
+UTF-8-demo.txt:    ๏ แผ่นดินฮั่นเสื่อมโทรมแสนสังเวช  พระปกเกศกองบู๊กู้ขึ้นใหม่
+UTF-8-demo.txt:  สิบสองกษัตริย์ก่อนหน้าแลถัดไป       สององค์ไซร้โง่เขลาเบาปัญญา
+UTF-8-demo.txt:    ทรงนับถือขันทีเป็นที่พึ่ง           บ้านเมืองจึงวิปริตเป็นนักหนา
+UTF-8-demo.txt:  โฮจิ๋นเรียกทัพทั่วหัวเมืองมา         หมายจะฆ่ามดชั่วตัวสำคัญ
+UTF-8-demo.txt:    เหมือนขับไสไล่เสือจากเคหา      รับหมาป่าเข้ามาเลยอาสัญ
+UTF-8-demo.txt:  ฝ่ายอ้องอุ้นยุแยกให้แตกกัน          ใช้สาวนั้นเป็นชนวนชื่นชวนใจ
+UTF-8-demo.txt:    พลันลิฉุยกุยกีกลับก่อเหตุ          ช่างอาเพศจริงหนาฟ้าร้องไห้
+UTF-8-demo.txt:  ต้องรบราฆ่าฟันจนบรรลัย           ฤๅหาใครค้ำชูกู้บรรลังก์ ฯ
+UTF-8-demo.txt:
+UTF-8-demo.txt:  (The above is a two-column text. If combining characters are handled
+UTF-8-demo.txt:  correctly, the lines of the second column should be aligned with the
+UTF-8-demo.txt:  | character above.)
+UTF-8-demo.txt:
+UTF-8-demo.txt:Ethiopian:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Proverbs in the Amharic language:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ሰማይ አይታረስ ንጉሥ አይከሰስ።
+UTF-8-demo.txt:  ብላ ካለኝ እንደአባቴ በቆመጠኝ።
+UTF-8-demo.txt:  ጌጥ ያለቤቱ ቁምጥና ነው።
+UTF-8-demo.txt:  ደሀ በሕልሙ ቅቤ ባይጠጣ ንጣት በገደለው።
+UTF-8-demo.txt:  የአፍ ወለምታ በቅቤ አይታሽም።
+UTF-8-demo.txt:  አይጥ በበላ ዳዋ ተመታ።
+UTF-8-demo.txt:  ሲተረጉሙ ይደረግሙ።
+UTF-8-demo.txt:  ቀስ በቀስ፥ ዕንቁላል በእግሩ ይሄዳል።
+UTF-8-demo.txt:  ድር ቢያብር አንበሳ ያስር።
+UTF-8-demo.txt:  ሰው እንደቤቱ እንጅ እንደ ጉረቤቱ አይተዳደርም።
+UTF-8-demo.txt:  እግዜር የከፈተውን ጉሮሮ ሳይዘጋው አይድርም።
+UTF-8-demo.txt:  የጎረቤት ሌባ፥ ቢያዩት ይስቅ ባያዩት ያጠልቅ።
+UTF-8-demo.txt:  ሥራ ከመፍታት ልጄን ላፋታት።
+UTF-8-demo.txt:  ዓባይ ማደሪያ የለው፥ ግንድ ይዞ ይዞራል።
+UTF-8-demo.txt:  የእስላም አገሩ መካ የአሞራ አገሩ ዋርካ።
+UTF-8-demo.txt:  ተንጋሎ ቢተፉ ተመልሶ ባፉ።
+UTF-8-demo.txt:  ወዳጅህ ማር ቢሆን ጨርስህ አትላሰው።
+UTF-8-demo.txt:  እግርህን በፍራሽህ ልክ ዘርጋ።
+UTF-8-demo.txt:
+UTF-8-demo.txt:Runes:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ᚻᛖ ᚳᚹᚫᚦ ᚦᚫᛏ ᚻᛖ ᛒᚢᛞᛖ ᚩᚾ ᚦᚫᛗ ᛚᚪᚾᛞᛖ ᚾᚩᚱᚦᚹᛖᚪᚱᛞᚢᛗ ᚹᛁᚦ ᚦᚪ ᚹᛖᛥᚫ
+UTF-8-demo.txt:
+UTF-8-demo.txt:  (Old English, which transcribed into Latin reads 'He cwaeth that he
+UTF-8-demo.txt:  bude thaem lande northweardum with tha Westsae.' and means 'He said
+UTF-8-demo.txt:  that he lived in the northern land near the Western Sea.')
+UTF-8-demo.txt:
+UTF-8-demo.txt:Braille:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ⡌⠁⠧⠑ ⠼⠁⠒  ⡍⠜⠇⠑⠹⠰⠎ ⡣⠕⠌
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ⡍⠜⠇⠑⠹ ⠺⠁⠎ ⠙⠑⠁⠙⠒ ⠞⠕ ⠃⠑⠛⠔ ⠺⠊⠹⠲ ⡹⠻⠑ ⠊⠎ ⠝⠕ ⠙⠳⠃⠞
+UTF-8-demo.txt:  ⠱⠁⠞⠑⠧⠻ ⠁⠃⠳⠞ ⠹⠁⠞⠲ ⡹⠑ ⠗⠑⠛⠊⠌⠻ ⠕⠋ ⠙⠊⠎ ⠃⠥⠗⠊⠁⠇ ⠺⠁⠎
+UTF-8-demo.txt:  ⠎⠊⠛⠝⠫ ⠃⠹ ⠹⠑ ⠊⠇⠻⠛⠹⠍⠁⠝⠂ ⠹⠑ ⠊⠇⠻⠅⠂ ⠹⠑ ⠥⠝⠙⠻⠞⠁⠅⠻⠂
+UTF-8-demo.txt:  ⠁⠝⠙ ⠹⠑ ⠡⠊⠑⠋ ⠍⠳⠗⠝⠻⠲ ⡎⠊⠗⠕⠕⠛⠑ ⠎⠊⠛⠝⠫ ⠊⠞⠲ ⡁⠝⠙
+UTF-8-demo.txt:  ⡎⠊⠗⠕⠕⠛⠑⠰⠎ ⠝⠁⠍⠑ ⠺⠁⠎ ⠛⠕⠕⠙ ⠥⠏⠕⠝ ⠰⡡⠁⠝⠛⠑⠂ ⠋⠕⠗ ⠁⠝⠹⠹⠔⠛ ⠙⠑
+UTF-8-demo.txt:  ⠡⠕⠎⠑ ⠞⠕ ⠏⠥⠞ ⠙⠊⠎ ⠙⠁⠝⠙ ⠞⠕⠲
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ⡕⠇⠙ ⡍⠜⠇⠑⠹ ⠺⠁⠎ ⠁⠎ ⠙⠑⠁⠙ ⠁⠎ ⠁ ⠙⠕⠕⠗⠤⠝⠁⠊⠇⠲
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ⡍⠔⠙⠖ ⡊ ⠙⠕⠝⠰⠞ ⠍⠑⠁⠝ ⠞⠕ ⠎⠁⠹ ⠹⠁⠞ ⡊ ⠅⠝⠪⠂ ⠕⠋ ⠍⠹
+UTF-8-demo.txt:  ⠪⠝ ⠅⠝⠪⠇⠫⠛⠑⠂ ⠱⠁⠞ ⠹⠻⠑ ⠊⠎ ⠏⠜⠞⠊⠊⠥⠇⠜⠇⠹ ⠙⠑⠁⠙ ⠁⠃⠳⠞
+UTF-8-demo.txt:  ⠁ ⠙⠕⠕⠗⠤⠝⠁⠊⠇⠲ ⡊ ⠍⠊⠣⠞ ⠙⠁⠧⠑ ⠃⠑⠲ ⠔⠊⠇⠔⠫⠂ ⠍⠹⠎⠑⠇⠋⠂ ⠞⠕
+UTF-8-demo.txt:  ⠗⠑⠛⠜⠙ ⠁ ⠊⠕⠋⠋⠔⠤⠝⠁⠊⠇ ⠁⠎ ⠹⠑ ⠙⠑⠁⠙⠑⠌ ⠏⠊⠑⠊⠑ ⠕⠋ ⠊⠗⠕⠝⠍⠕⠝⠛⠻⠹
+UTF-8-demo.txt:  ⠔ ⠹⠑ ⠞⠗⠁⠙⠑⠲ ⡃⠥⠞ ⠹⠑ ⠺⠊⠎⠙⠕⠍ ⠕⠋ ⠳⠗ ⠁⠝⠊⠑⠌⠕⠗⠎
+UTF-8-demo.txt:  ⠊⠎ ⠔ ⠹⠑ ⠎⠊⠍⠊⠇⠑⠆ ⠁⠝⠙ ⠍⠹ ⠥⠝⠙⠁⠇⠇⠪⠫ ⠙⠁⠝⠙⠎
+UTF-8-demo.txt:  ⠩⠁⠇⠇ ⠝⠕⠞ ⠙⠊⠌⠥⠗⠃ ⠊⠞⠂ ⠕⠗ ⠹⠑ ⡊⠳⠝⠞⠗⠹⠰⠎ ⠙⠕⠝⠑ ⠋⠕⠗⠲ ⡹⠳
+UTF-8-demo.txt:  ⠺⠊⠇⠇ ⠹⠻⠑⠋⠕⠗⠑ ⠏⠻⠍⠊⠞ ⠍⠑ ⠞⠕ ⠗⠑⠏⠑⠁⠞⠂ ⠑⠍⠏⠙⠁⠞⠊⠊⠁⠇⠇⠹⠂ ⠹⠁⠞
+UTF-8-demo.txt:  ⡍⠜⠇⠑⠹ ⠺⠁⠎ ⠁⠎ ⠙⠑⠁⠙ ⠁⠎ ⠁ ⠙⠕⠕⠗⠤⠝⠁⠊⠇⠲
+UTF-8-demo.txt:
+UTF-8-demo.txt:  (The first couple of paragraphs of "A Christmas Carol" by Dickens)
+UTF-8-demo.txt:
+UTF-8-demo.txt:Compact font selection example text:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  ABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789
+UTF-8-demo.txt:  abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ
+UTF-8-demo.txt:  –—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвгд
+UTF-8-demo.txt:  ∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა
+UTF-8-demo.txt:
+UTF-8-demo.txt:Greetings in various languages:
+UTF-8-demo.txt:
+UTF-8-demo.txt:  Hello world, Καλημέρα κόσμε, コンニチハ
+UTF-8-demo.txt:
+UTF-8-demo.txt:Box drawing alignment tests:                                          █
+UTF-8-demo.txt:                                                                      ▉
+UTF-8-demo.txt:  ╔══╦══╗  ┌──┬──┐  ╭──┬──╮  ╭──┬──╮  ┏━━┳━━┓  ┎┒┏┑   ╷  ╻ ┏┯┓ ┌┰┐    ▊ ╱╲╱╲╳╳╳
+UTF-8-demo.txt:  ║┌─╨─┐║  │╔═╧═╗│  │╒═╪═╕│  │╓─╁─╖│  ┃┌─╂─┐┃  ┗╃╄┙  ╶┼╴╺╋╸┠┼┨ ┝╋┥    ▋ ╲╱╲╱╳╳╳
+UTF-8-demo.txt:  ║│╲ ╱│║  │║   ║│  ││ │ ││  │║ ┃ ║│  ┃│ ╿ │┃  ┍╅╆┓   ╵  ╹ ┗┷┛ └┸┘    ▌ ╱╲╱╲╳╳╳
+UTF-8-demo.txt:  ╠╡ ╳ ╞╣  ├╢   ╟┤  ├┼─┼─┼┤  ├╫─╂─╫┤  ┣┿╾┼╼┿┫  ┕┛┖┚     ┌┄┄┐ ╎ ┏┅┅┓ ┋ ▍ ╲╱╲╱╳╳╳
+UTF-8-demo.txt:  ║│╱ ╲│║  │║   ║│  ││ │ ││  │║ ┃ ║│  ┃│ ╽ │┃  ░░▒▒▓▓██ ┊  ┆ ╎ ╏  ┇ ┋ ▎
+UTF-8-demo.txt:  ║└─╥─┘║  │╚═╤═╝│  │╘═╪═╛│  │╙─╀─╜│  ┃└─╂─┘┃  ░░▒▒▓▓██ ┊  ┆ ╎ ╏  ┇ ┋ ▏
+UTF-8-demo.txt:  ╚══╩══╝  └──┴──┘  ╰──┴──╯  ╰──┴──╯  ┗━━┻━━┛  ▗▄▖▛▀▜   └╌╌┘ ╎ ┗╍╍┛ ┋  ▁▂▃▄▅▆▇█
+UTF-8-demo.txt:                                               ▝▀▘▙▄▟

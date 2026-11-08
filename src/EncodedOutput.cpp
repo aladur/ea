@@ -166,13 +166,7 @@ void EncodedOutput::PrintLine(bool withColor, const std::string &text)
         }
     }
 
-    ostream_ << text;
-
-#ifdef _WIN32
-    ostream_ << "\r\n";
-#else
-    ostream_ << "\n";
-#endif
+    ostream_ << text << "\n";
 }
 
 void EncodedOutput::Output(const TypedCodepoint &tcp)

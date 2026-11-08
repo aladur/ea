@@ -1,0 +1,2 @@
+a--i--:Indeterminate: \x81 \x8D \x8F \x90 \x9D (on Windows-1252).
+aufic-:In one line:   Café, Fußball & Ökostrom für wenig €. DLE \x10 \x81.

@@ -1,0 +1,9 @@
+a---c-:NUL \x00 SOH \x01 STX \x02 ETX \x03 
+a---c-:EOT \x04 ENQ \x05 ACK \x06 BEL \x07 
+a---c-:BS  \x08 HT  \x09 (LF)     VT  \x0B 
+a---c-:FF  \x0C CR  \x0D SO  \x0E SI  \x0F 
+a---c-:DLE \x10 DC1 \x11 DC2 \x12 DC3 \x13 
+a---c-:DC4 \x14 NAK \x15 SYN \x16 ETB \x17 
+a---c-:CAN \x18 EM  \x19 SUB \x1A ESC \x1B 
+a---c-:FS  \x1C GS  \x1D RS  \x1E US  \x1F 
+a---c-:DEL \x7F
