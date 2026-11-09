@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
         std::string colorModeString;
         std::string outputBomString;
         std::string excludeUnicodeCodepointsString;
+        std::string filter;
         std::optional<fs::path> optOutputFilename;
         po::options_description desc("Supported options", 80, 58);
         desc.add_options()
@@ -89,7 +90,7 @@ int main(int argc, char* argv[])
              "emits color codes when standard output is connected to a\n"
              "terminal.")
             ("filter,f",
-             po::value<std::string>()->default_value("c,a,u,f,i,e"),
+             po::value<std::string>(&filter)->default_value("c,a,u,f,i,e"),
              "Filter output for a list of categories (use a comma\n"
              "separated list of first character of each category).\n"
              "For example to display lines containing control or\n"
@@ -103,8 +104,9 @@ int main(int argc, char* argv[])
             ("output-file,o", po::value<std::string>(),
              "Convert input and write as UTF-8 file")
             ("output-bom,b", po::value<std::string>(&outputBomString)
+                        ->default_value("as_input")
                         ->implicit_value("yes"),
-             "Output file BOM can be: 'yes', 'no', 'as_input' (default).\n"
+             "Output file BOM can be: 'yes', 'no', 'as_input'.\n"
              "'as_input' uses the BOM of the first input file (if present).")
             ("exclude-unicode",
              po::value<std::string>(&excludeUnicodeCodepointsString),
@@ -153,8 +155,8 @@ int main(int argc, char* argv[])
                 "\n"
                 "- Print file content with (optionally) different colors for "
                 "each category.\n"
-                "- Optionally print character count for each category\n"
-                "- Optionally print character count for each character in "
+                "- Alternatively print character count for each category\n"
+                "- Alternatively print character count for each character in "
                 "each category\n"
                 "- Optionally on each line print the filename and line "
                 "number.\n"
@@ -165,12 +167,13 @@ int main(int argc, char* argv[])
                 "of categories.\n"
                 "Available categories:\n"
                 "\n"
-                "    control,ascii,unicode,fallback,indeterminate\n"
+                "    control,ascii,unicode,fallback,indeterminate,empty\n"
                 "\n"
                 "The first character of a category is sufficient. "
                 "For example to filter\n"
                 "output for ASCII, UNICODE and FALLBACK encoding, use "
                 "--filter a,u,f.\n"
+                "'empty' is a pseudo category to filter for an empty line.\n"
                 "\n";
 
             std::cout << desc << "\n";
@@ -179,8 +182,7 @@ int main(int argc, char* argv[])
 
         const auto encoding = vm["encoding"].as<std::string>();
         std::string invalidCategory;
-        const auto categoryFilter =
-            ToCategories(vm["filter"].as<std::string>(), invalidCategory);
+        const auto categoryFilter = ToCategories(filter, invalidCategory);
         isPrintUnicodeCodepoints = (excludeUnicodeCodepointsString == "list");
         std::string invalidUnicodeExcludes;
         const auto excludeUnicodeCodepoints = ToUnicodeCodepoints(
@@ -190,7 +192,7 @@ int main(int argc, char* argv[])
             optOutputFilename = vm["output-file"].as<std::string>();
         }
 
-        if (!optOutputFilename.has_value() && !outputBomString.empty())
+        if (!optOutputFilename.has_value() && !vm["output-bom"].defaulted())
         {
             throw std::runtime_error("--output-bom only can be used "
                 "together with --output-file");
@@ -246,6 +248,26 @@ int main(int argc, char* argv[])
         }
         else if (printSummary || printStatistics)
         {
+            using Type = std::vector<std::pair<bool, const char *>>;
+
+            static const bool filterNotDefaulted = !vm["filter"].defaulted();
+            static const Type stateWithOption{
+                { printCategories, "--categories-per-line" },
+                { filterNotDefaulted, "--filter" },
+                { printLineNumber, "--line-number" },
+                { printFilename, "--with-filename" },
+            };
+
+            for (const auto &item : stateWithOption)
+            {
+                if (item.first)
+                {
+                    throw std::runtime_error(std::string("Option ") +
+                        item.second + " cannot be used "
+                        "with --count or --statistics");
+                }
+            }
+
             printLines = false;
         }
 
