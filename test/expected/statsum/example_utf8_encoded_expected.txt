@@ -7,41 +7,41 @@ BOM: None
 210 characters in total
 List of CONTROL characters
 List of ASCII characters
-32 20  
-2 2C ,
-6 2E .
-2 41 A
-1 42 B
-1 43 C
-1 44 D
-1 46 F
-1 47 G
-1 4C L
-2 4D M
-1 53 S
-2 57 W
-4 61 a
-5 62 b
-4 63 c
-4 64 d
-31 65 e
-4 66 f
-3 67 g
-7 68 h
-12 69 i
-1 6B k
-10 6C l
-4 6D m
-18 6E n
-1 6F o
-1 70 p
-11 72 r
-7 73 s
-15 74 t
-3 75 u
-1 76 v
-2 77 w
-1 7A z
+32 U+0020  
+2 U+002C ,
+6 U+002E .
+2 U+0041 A
+1 U+0042 B
+1 U+0043 C
+1 U+0044 D
+1 U+0046 F
+1 U+0047 G
+1 U+004C L
+2 U+004D M
+1 U+0053 S
+2 U+0057 W
+4 U+0061 a
+5 U+0062 b
+4 U+0063 c
+4 U+0064 d
+31 U+0065 e
+4 U+0066 f
+3 U+0067 g
+7 U+0068 h
+12 U+0069 i
+1 U+006B k
+10 U+006C l
+4 U+006D m
+18 U+006E n
+1 U+006F o
+1 U+0070 p
+11 U+0072 r
+7 U+0073 s
+15 U+0074 t
+3 U+0075 u
+1 U+0076 v
+2 U+0077 w
+1 U+007A z
 List of UNICODE characters
 1 U+00DC Ü
 1 U+00DF ß
