@@ -24,7 +24,6 @@ SOFTWARE.
 
 #include "EncodingApplication.h"
 #include "HelperFunctions.h"
-#include "Definitions.h"
 #include "version.h"
 #include <stdexcept>
 #include <optional>
@@ -60,10 +59,21 @@ int main(int argc, char* argv[])
         std::string excludeUnicodeCodepointsString;
         std::string filter;
         std::optional<fs::path> optOutputFilename;
-        po::options_description desc("Supported options", 80, 58);
-        desc.add_options()
+        const unsigned len{80U};
+        const unsigned min{56U};
+
+        po::options_description hidden("Hidden options", len, min);
+        hidden.add_options()
+            ("FILE", po::value<std::vector<fs::path>>(),
+             "Input file(s) to process");
+
+        po::options_description general("General options", len, min);
+        general.add_options()
             ("help,h", "Output a usage message and exit")
-            ("version,V", "Output the version number and exit")
+            ("version,V", "Output the version number and exit");
+
+        po::options_description output("Output control", len, min);
+        output.add_options()
             ("encoding,e",
              po::value<std::string>()->default_value("none"),
              "Fallback encoding hint (in addition to UTF-8):\n"
@@ -77,12 +87,6 @@ int main(int argc, char* argv[])
              " aliases.\n"
              "Examples:\n"
              "ea -e iso-8859-1; ea -e standards; ea -e list-iana-a")
-            ("count,c", po::bool_switch(&printSummary),
-             "Suppress normal output, instead print character counts per "
-             "category")
-            ("statistics,s", po::bool_switch(&printStatistics),
-             "Suppress normal output, instead print character counts per "
-             "character within each category")
             ("color", po::value<std::string>(&colorModeString)
                         ->default_value("auto")
                         ->implicit_value("auto"),
@@ -103,13 +107,6 @@ int main(int argc, char* argv[])
              "Print line numbers with output lines of file content")
             ("categories-per-line,C", po::bool_switch(&printCategories),
              "Print categories found per line of file content")
-            ("output-file,o", po::value<std::string>(),
-             "Write a converted UTF-8 file")
-            ("output-bom,b", po::value<std::string>(&outputBomString)
-                        ->default_value("as_input")
-                        ->implicit_value("yes"),
-             "Output file BOM mode: 'yes', 'no', 'as_input';\n"
-             "'as_input' uses the BOM of the first input file, if present")
             ("exclude-unicode",
              po::value<std::string>(&excludeUnicodeCodepointsString),
              "Exclude a comma-separated list of Unicode codepoints from "
@@ -118,17 +115,38 @@ int main(int argc, char* argv[])
              "found Unicode codepoints on one line and exit.\n"
              "Examples:\n"
              "ea --exclude-unicode U+FC,U+58A,U+2665,U+1d191\n"
-             "ea --exclude-unicode list")
-            ("FILE", po::value<std::vector<fs::path>>(),
-             "Input file(s) to process");
+             "ea --exclude-unicode list");
+
+        po::options_description statistics("Statistics output", len, min);
+        statistics.add_options()
+            ("count,c", po::bool_switch(&printSummary),
+             "Suppress normal output, instead print character counts per "
+             "category")
+            ("statistics,s", po::bool_switch(&printStatistics),
+             "Suppress normal output, instead print character counts per "
+             "character within each category");
+
+        po::options_description conv("Conversion options", len, min);
+        conv.add_options()
+            ("output-file,o", po::value<std::string>(),
+             "Write a converted UTF-8 file")
+            ("output-bom,b", po::value<std::string>(&outputBomString)
+                        ->default_value("as_input")
+                        ->implicit_value("yes"),
+             "Output file BOM mode: 'yes', 'no', 'as_input';\n"
+             "'as_input' uses the BOM of the first input file, if present");
+
+        po::options_description visible("", len, min);
+        visible.add(general).add(output).add(statistics).add(conv);
+        po::options_description all("", len, min);
+        all.add(hidden).add(visible);
 
         po::positional_options_description pos_desc;
         pos_desc.add("FILE", -1);
 
         po::variables_map vm;
-        po::store(
-            po::command_line_parser(argc, argv)
-                .options(desc)
+        po::store(po::command_line_parser(argc, argv)
+                .options(all)
                 .positional(pos_desc)
                 .run(),
             vm
@@ -151,10 +169,9 @@ int main(int argc, char* argv[])
                 "- ASCII encoded characters\n"
                 "- UNICODE encoded characters\n"
                 "- (optionally) Characters encoded in a FALLBACK encoding\n"
-                "- Characters with INDETERMINATE encoding\n"
-                "\n";
+                "- Characters with INDETERMINATE encoding\n";
 
-            std::cout << desc;
+            std::cout << visible;
             return 0;
         }
 
