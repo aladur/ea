@@ -245,7 +245,8 @@ int EncodingApplication::Run()
 
                 lineStream.clear();
                 lineStream.str("");
-                if (encodingType == EncodingType::Unicode)
+                if (encodingType == EncodingType::Unicode ||
+                    encodingType == EncodingType::Ascii)
                 {
                     if (u_charType(codepoint) == U_CONTROL_CHAR)
                     {
