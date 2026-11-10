@@ -22,23 +22,22 @@
 
 ## Overview
 
-Analyze a text file or stream for the following character encoding categories
+Analyze files or standard input for character encoding categories:
 
-- CONTROL characters (except for newline).
+- CONTROL characters (excluding newline).
 - ASCII encoded characters.
 - UNICODE encoded characters.
-- Characters encoded in a FALLBACK encoding.
+- (optionally) Characters encoded as FALLBACK encoding.
 - Characters with INDETERMINATE encoding.
 
 Command line options
 
-- Print file content with different colors for each category.
-- Optionally print character count for each category.
-- Optionally print character count for each character in each category.
-- Optionally on each line print the filename and line number.
-- Optionally a category filter can be set which line to print.
+- Print file content in different colors per category.
+- Alternatively print character counts per category, or per character within each category.
+- Optionally print filename and/or line number with output lines.
+- Optionally set a category filter to control which lines are printed.
 - Optionally write an UTF-8 converted file.
 
-For now `ea` is focused on UTF-8 encoded files (or streams) optionally mixed with any second single-byte encoding, the so called fallback encoding, like Windows-1252 or ISO-8859-1. A well encoded UTF-8 codepoint always has priority over the fallback encoding.
+For now `ea` is focused on UTF-8 encoded files (or streams) optionally mixed with any second single-byte encoding, the so called fallback encoding, like Windows-1252 or ISO-8859-1. By default a well encoded UTF-8 codepoint has priority over the fallback encoding.
 
-`ea` is not able to resolve [Mojibake](https://en.wikipedia.org/wiki/Mojibake).
+`ea` is not capable to resolve [Mojibake](https://en.wikipedia.org/wiki/Mojibake).

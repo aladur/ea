@@ -66,57 +66,59 @@ int main(int argc, char* argv[])
             ("version,V", "Output the version number and exit")
             ("encoding,e",
              po::value<std::string>()->default_value("none"),
-             "Fallback encoding hint (in addition to UTF-8).\n"
+             "Fallback encoding hint (in addition to UTF-8):\n"
              "'none' means no fallback encoding.\n"
-             "'list' lists available single byte encodings and exits.\n"
+             "'list' lists available single byte encodings and exit.\n"
              "'list-a' same as 'list' with aliases.\n"
-             "'list-standards' lists available standards and exits.\n"
+             "'list-standards' lists available standards and exit.\n"
              "'list-<standard>' lists available single byte encodings\n"
-             " for given <standard> and exits.\n"
-             "'list-<standard>-a' same as 'list-<standard>' with\n"
+             " for given <standard> and exit.\n"
+             "'list-<standard>-a' same as 'list-<standard>' with "
              " aliases.\n"
              "Examples:\n"
-             "ea -e iso-8859-1\n"
-             "ea -e standards\n"
-             "ea -e list-iana-a")
+             "ea -e iso-8859-1; ea -e standards; ea -e list-iana-a")
             ("count,c", po::bool_switch(&printSummary),
-             "Print character count per category")
+             "Suppress normal output, instead print character counts per "
+             "category")
             ("statistics,s", po::bool_switch(&printStatistics),
-             "Print character count for each character in each category")
+             "Suppress normal output, instead print character counts per "
+             "character within each category")
             ("color", po::value<std::string>(&colorModeString)
                         ->default_value("auto")
                         ->implicit_value("auto"),
-             "Set color mode: 'always', 'never', 'auto'. 'auto' only\n"
-             "emits color codes when standard output is connected to a\n"
-             "terminal.")
+             "Set color mode: 'always', 'never', 'auto'; 'auto' only "
+             "emits color codes when standard output is connected to a "
+             "terminal")
             ("filter,f",
              po::value<std::string>(&filter)->default_value("c,a,u,f,i,e"),
-             "Filter output for a list of categories (use a comma\n"
-             "separated list of first character of each category).\n"
-             "For example to display lines containing control or\n"
-             "unicode characters use: ea -f c,u")
+             "Filter output by categories (comma-separated list of "
+             "each category's first letter); Available: control,ascii,"
+             "unicode,fallback,indeterminate,empty. "
+             "'empty' is a pseudo-category that matches blank lines.\n"
+             "Example: Print lines containing control, unicode or fallback: "
+             "ea -f c,u,f")
             ("with-filename,H", po::bool_switch(&printFilename),
-             "Print filename for each line of file content")
+             "Print filename with output lines of file content or statistics")
             ("line-number,n", po::bool_switch(&printLineNumber),
-             "Print line number for each line of file content")
+             "Print line numbers with output lines of file content")
             ("categories-per-line,C", po::bool_switch(&printCategories),
-             "Print categories used for each line of file content")
+             "Print categories found per line of file content")
             ("output-file,o", po::value<std::string>(),
-             "Convert input and write as UTF-8 file")
+             "Write a converted UTF-8 file")
             ("output-bom,b", po::value<std::string>(&outputBomString)
                         ->default_value("as_input")
                         ->implicit_value("yes"),
-             "Output file BOM can be: 'yes', 'no', 'as_input'.\n"
-             "'as_input' uses the BOM of the first input file (if present).")
+             "Output file BOM mode: 'yes', 'no', 'as_input';\n"
+             "'as_input' uses the BOM of the first input file, if present")
             ("exclude-unicode",
              po::value<std::string>(&excludeUnicodeCodepointsString),
-             "Exclude a comma separated list of unicode codepoints from being "
-             "treated as unicode. Instead they are treated as fallback "
-             "encoding codepoints or indeterminate. If arg is 'list' all "
-             "found unicode codepoints are listed in one line and exits.\n"
-             "Example:\n"
+             "Exclude a comma-separated list of Unicode codepoints from "
+             "Unicode treatment; treat them instead as fallback or "
+             "indeterminate. If the argument is 'list', print all "
+             "found Unicode codepoints on one line and exit.\n"
+             "Examples:\n"
              "ea --exclude-unicode U+FC,U+58A,U+2665,U+1d191\n"
-             "ea --exclude-unicode list\n")
+             "ea --exclude-unicode list")
             ("FILE", po::value<std::vector<fs::path>>(),
              "Input file(s) to process");
 
@@ -143,40 +145,16 @@ int main(int argc, char* argv[])
         {
             std::cout <<
                 "Usage: ea [OPTIONS]... [FILE]...\n"
-                "\n"
-                "Analyze a text file for the following character encoding "
+                "Analyze each FILE or standard input for character encoding "
                 "categories:\n"
-                "\n"
-                "- CONTROL characters (except for newline)\n"
+                "- CONTROL characters (excluding newlines)\n"
                 "- ASCII encoded characters\n"
                 "- UNICODE encoded characters\n"
-                "- Characters encoded in a FALLBACK encoding\n"
+                "- (optionally) Characters encoded in a FALLBACK encoding\n"
                 "- Characters with INDETERMINATE encoding\n"
-                "\n"
-                "- Print file content with (optionally) different colors for "
-                "each category.\n"
-                "- Alternatively print character count for each category\n"
-                "- Alternatively print character count for each character in "
-                "each category\n"
-                "- Optionally on each line print the filename and line "
-                "number.\n"
-                "- Optionally a category filter can be set which line to "
-                "print.\n"
-                "\n"
-                "By applying a filter output is only processed for a subset "
-                "of categories.\n"
-                "Available categories:\n"
-                "\n"
-                "    control,ascii,unicode,fallback,indeterminate,empty\n"
-                "\n"
-                "The first character of a category is sufficient. "
-                "For example to filter\n"
-                "output for ASCII, UNICODE and FALLBACK encoding, use "
-                "--filter a,u,f.\n"
-                "'empty' is a pseudo category to filter for an empty line.\n"
                 "\n";
 
-            std::cout << desc << "\n";
+            std::cout << desc;
             return 0;
         }
 
