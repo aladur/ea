@@ -149,7 +149,7 @@ jobs:
           nsis=nsis-$NSIS_VERSION
           echo Download VC++ Redistributable
           file=vc_redist.x64.exe
-          s256=843068991daaa1f73ad9f6239bce4d0f6a07a51f18c37ea2a867e9beca71295c
+          s256=9c02c9ed120f671b900e6b9471d890e3b2414117a7e53f4ae2e855466fa2b7c9
           echo $s256 $file > ${file}.sha256sum.txt
           curl -sS --retry 3 -L https://aka.ms/vc14/${file} -o $file
           sha256sum -c ${file}.sha256sum.txt
