@@ -99,8 +99,8 @@ int main(int argc, char* argv[])
              "each category's first letter); Available: control,ascii,"
              "unicode,fallback,indeterminate,empty. "
              "'empty' is a pseudo-category that matches blank lines.\n"
-             "Example: Print lines containing control, unicode or fallback: "
-             "ea -f c,u,f")
+             "Example: Print output lines containing or statistics for "
+             "control, unicode or fallback: ea -f c,u,f")
             ("with-filename,H", po::bool_switch(&printFilename),
              "Print filename with output lines of file content or statistics")
             ("line-number,n", po::bool_switch(&printLineNumber),
@@ -245,12 +245,9 @@ int main(int argc, char* argv[])
         {
             using Type = std::vector<std::pair<bool, const char *>>;
 
-            static const bool filterNotDefaulted = !vm["filter"].defaulted();
             static const Type stateWithOption{
                 { printCategories, "--categories-per-line" },
-                { filterNotDefaulted, "--filter" },
                 { printLineNumber, "--line-number" },
-                { printFilename, "--with-filename" },
             };
 
             for (const auto &item : stateWithOption)
