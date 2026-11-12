@@ -208,12 +208,18 @@ int EncodingApplication::Run()
         {
             const auto encodingType = GetEncodingTypes()[i];
 
+            sum += statistics[encodingType].GetCount();
+            if ((categoryFilter_ & ToEncodingTypes(encodingType)) ==
+                EncodingTypes::None)
+            {
+                continue;
+            }
+
             lineStream.clear();
             lineStream.str("");
             lineStream << statistics[encodingType].GetCount() << " " <<
                 GetEncodingNames()[i] << " characters";
             output_.PrintLine(withColor, lineStream.str());
-            sum += statistics[encodingType].GetCount();
         }
 
         lineStream.clear();
@@ -227,6 +233,12 @@ int EncodingApplication::Run()
         for (int i = 0; i < static_cast<int>(GetEncodingNames().size()); ++i)
         {
             const auto encodingType = GetEncodingTypes()[i];
+            if ((categoryFilter_ & ToEncodingTypes(encodingType)) ==
+                EncodingTypes::None)
+            {
+                continue;
+            }
+
             const auto &stat = statistics[encodingType];
             std::stringstream lineStream;
 
