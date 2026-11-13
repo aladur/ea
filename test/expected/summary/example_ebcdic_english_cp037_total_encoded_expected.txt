@@ -1,0 +1,6 @@
+0 CONTROL characters
+0 ASCII characters
+3 UNICODE characters
+152 FALLBACK(cp037) characters
+0 INDETERMINATE characters
+155 characters in total

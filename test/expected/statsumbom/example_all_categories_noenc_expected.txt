@@ -4,7 +4,6 @@ BOM: None
 9 UNICODE characters
 0 FALLBACK(none) characters
 17 INDETERMINATE characters
-373 characters in total
 List of CONTROL characters
 2 10 
 1 11 

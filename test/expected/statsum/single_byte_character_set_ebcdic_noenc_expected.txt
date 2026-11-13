@@ -3,7 +3,6 @@
 0 UNICODE characters
 0 FALLBACK(none) characters
 128 INDETERMINATE characters
-271 characters in total
 List of CONTROL characters
 1 00 
 1 01 

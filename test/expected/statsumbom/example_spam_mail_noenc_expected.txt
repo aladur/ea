@@ -4,7 +4,6 @@ BOM: None
 480 UNICODE characters
 0 FALLBACK(none) characters
 0 INDETERMINATE characters
-1805 characters in total
 List of CONTROL characters
 List of ASCII characters
 326 U+0020  

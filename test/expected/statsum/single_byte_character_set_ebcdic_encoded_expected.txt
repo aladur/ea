@@ -3,7 +3,6 @@
 0 UNICODE characters
 191 FALLBACK(cp037) characters
 0 INDETERMINATE characters
-253 characters in total
 List of CONTROL characters
 1 00 
 1 01 
