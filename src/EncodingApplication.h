@@ -45,6 +45,7 @@ public:
             std::istream &is,
             const std::string &fallbackEncoding,
             bool printLines, bool printSummary, bool printStatistics,
+            bool printBom,
             bool printFilename, bool printLineNumber,
             bool printCategories,
             bool isPrintUnicodeCodepoints,
@@ -69,6 +70,7 @@ private:
     std::string fallbackEncoding_;
     bool printSummary_;
     bool printStatistics_;
+    bool printBom_;
     bool isPrintUnicodeCodepoints_;
     ColorMode colorMode_;
     EncodingTypes categoryFilter_;

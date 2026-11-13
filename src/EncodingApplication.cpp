@@ -50,6 +50,7 @@ EncodingApplication::EncodingApplication(
         bool printLines,
         bool printSummary,
         bool printStatistics,
+        bool printBom,
         bool printFilename,
         bool printLineNumber,
         bool printCategories,
@@ -64,6 +65,7 @@ EncodingApplication::EncodingApplication(
     , fallbackEncoding_(fallbackEncoding)
     , printSummary_(printSummary)
     , printStatistics_(printStatistics)
+    , printBom_(printBom)
     , isPrintUnicodeCodepoints_(isPrintUnicodeCodepoints)
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
@@ -197,13 +199,19 @@ int EncodingApplication::Run()
     output_.PrintLine(withColor, categories, true);
     categories = EncodingTypes::None;
 
+    if (printBom_)
+    {
+        std::stringstream lineStream;
+
+        lineStream << "BOM: " << AsHumanReadable(bomType);
+        output_.PrintLine(withColor, lineStream.str());
+    }
+
     if (printSummary_)
     {
         std::size_t sum = 0U;
         std::stringstream lineStream;
 
-        lineStream << "BOM: " << AsHumanReadable(bomType);
-        output_.PrintLine(withColor, lineStream.str());
         for (int i = 0; i < static_cast<int>(GetEncodingNames().size()); ++i)
         {
             const auto encodingType = GetEncodingTypes()[i];

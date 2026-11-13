@@ -1,4 +1,3 @@
-BOM: None
 32 CONTROL characters
 95 ASCII characters
 0 UNICODE characters
