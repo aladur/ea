@@ -48,6 +48,7 @@ int main(int argc, char* argv[])
     try
     {
         bool printSummary = false;
+        bool printTotalSum = false;
         bool printStatistics = false;
         bool printBom = false;
         bool printLines = true;
@@ -123,6 +124,8 @@ int main(int argc, char* argv[])
             ("count,c", po::bool_switch(&printSummary),
              "Suppress normal output, instead print character counts per "
              "category")
+            ("total-sum,t", po::bool_switch(&printTotalSum),
+             "With character count also print total character sum")
             ("statistics,s", po::bool_switch(&printStatistics),
              "Suppress normal output, instead print character counts per "
              "character within each category")
@@ -323,7 +326,7 @@ int main(int argc, char* argv[])
 
                 EncodingApplication app(istream,
                         encoding, printLines, printSummary, printStatistics,
-                        printBom,
+                        printBom, printTotalSum,
                         printFilename, printLineNumber, printCategories,
                         isPrintUnicodeCodepoints,
                         colorMode, categoryFilter, outputBomMode,
@@ -343,7 +346,7 @@ int main(int argc, char* argv[])
 
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
-                printBom,
+                printBom, printTotalSum,
                 printFilename, printLineNumber, printCategories,
                 isPrintUnicodeCodepoints,
                 colorMode, categoryFilter, outputBomMode,

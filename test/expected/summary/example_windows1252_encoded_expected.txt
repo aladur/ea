@@ -3,4 +3,3 @@
 0 UNICODE characters
 8 FALLBACK(cp1252) characters
 0 INDETERMINATE characters
-210 characters in total

@@ -1,0 +1,6 @@
+32 CONTROL characters
+111 ASCII characters
+0 UNICODE characters
+0 FALLBACK(none) characters
+128 INDETERMINATE characters
+271 characters in total

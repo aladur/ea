@@ -3,4 +3,3 @@
 0 UNICODE characters
 0 FALLBACK(none) characters
 0 INDETERMINATE characters
-200 characters in total

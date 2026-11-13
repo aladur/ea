@@ -3,7 +3,6 @@
 8 UNICODE characters
 0 FALLBACK(none) characters
 0 INDETERMINATE characters
-210 characters in total
 List of CONTROL characters
 List of ASCII characters
 32 U+0020  

@@ -51,6 +51,7 @@ EncodingApplication::EncodingApplication(
         bool printSummary,
         bool printStatistics,
         bool printBom,
+        bool printTotalSum,
         bool printFilename,
         bool printLineNumber,
         bool printCategories,
@@ -66,6 +67,7 @@ EncodingApplication::EncodingApplication(
     , printSummary_(printSummary)
     , printStatistics_(printStatistics)
     , printBom_(printBom)
+    , printTotalSum_(printTotalSum)
     , isPrintUnicodeCodepoints_(isPrintUnicodeCodepoints)
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
@@ -230,10 +232,13 @@ int EncodingApplication::Run()
             output_.PrintLine(withColor, lineStream.str());
         }
 
-        lineStream.clear();
-        lineStream.str("");
-        lineStream << sum << " characters in total";
-        output_.PrintLine(withColor, lineStream.str());
+        if (printTotalSum_)
+        {
+            lineStream.clear();
+            lineStream.str("");
+            lineStream << sum << " characters in total";
+            output_.PrintLine(withColor, lineStream.str());
+        }
     }
 
     if (printStatistics_)

@@ -3,7 +3,6 @@
 9 UNICODE characters
 11 FALLBACK(cp1252) characters
 6 INDETERMINATE characters
-373 characters in total
 List of CONTROL characters
 2 10 
 1 11 
