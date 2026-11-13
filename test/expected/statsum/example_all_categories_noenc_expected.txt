@@ -1,3 +1,10 @@
+BOM: None
+5 CONTROL characters
+342 ASCII characters
+9 UNICODE characters
+0 FALLBACK(none) characters
+17 INDETERMINATE characters
+373 characters in total
 List of CONTROL characters
 2 10 
 1 11 
@@ -61,15 +68,15 @@ List of UNICODE characters
 3 U+00E9 é
 1 U+00FC ü
 1 U+20AC €
-List of FALLBACK(cp1252) characters
-3 80 €
-3 D6 Ö
-1 DF ß
-1 E9 é
-3 FC ü
+List of FALLBACK(none) characters
 List of INDETERMINATE characters
+3 80 
 2 81 
 1 8D 
 1 8F 
 1 90 
 1 9D 
+3 D6 
+1 DF 
+1 E9 
+3 FC 
