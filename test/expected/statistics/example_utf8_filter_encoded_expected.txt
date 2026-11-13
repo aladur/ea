@@ -1,0 +1,7 @@
+List of UNICODE characters
+1 U+00DC Ü
+1 U+00DF ß
+3 U+00E4 ä
+2 U+00FC ü
+1 U+20AC €
+List of FALLBACK(none) characters

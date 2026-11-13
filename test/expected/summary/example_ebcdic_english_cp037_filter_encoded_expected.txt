@@ -1,0 +1,2 @@
+3 UNICODE characters
+152 FALLBACK(cp037) characters
