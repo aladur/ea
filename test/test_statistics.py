@@ -4,13 +4,14 @@ from helper_functions import Run, GetTestFiles, GetExamplesPath, \
 
 
 sys.stdout.reconfigure(encoding='utf-8') # type: ignore[attr-defined]
+subdir = "statistics"
 
 
 def test_statistics_encoded():
 
     for item in GetTestFiles():
         path = GetExamplesPath() / (item.stem + ".txt")
-        expected = GetExpectedPath() / "statistics" / (item.stem + "_encoded_expected.txt")
+        expected = GetExpectedPath() / subdir / (item.stem + "_encoded_expected.txt")
         params = [
             "--color=never",
             "--statistics",
@@ -30,11 +31,10 @@ def test_statistics():
 
     for item in GetTestFiles():
         path = GetExamplesPath() / (item.stem + ".txt")
-        expected = GetExpectedPath() / "statistics" / (item.stem + "_expected.txt")
+        expected = GetExpectedPath() / subdir / (item.stem + "_noenc_expected.txt")
         params = [
             "--color=never",
             "--statistics",
-            f"--encoding={item.encoding}",
             path,
         ]
         result = Run(params, 0)
