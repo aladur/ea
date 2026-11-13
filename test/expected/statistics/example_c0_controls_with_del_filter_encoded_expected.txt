@@ -1,0 +1,2 @@
+List of UNICODE characters
+List of FALLBACK(none) characters

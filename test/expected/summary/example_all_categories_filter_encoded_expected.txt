@@ -1,0 +1,2 @@
+9 UNICODE characters
+11 FALLBACK(cp1252) characters

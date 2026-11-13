@@ -27,6 +27,27 @@ def test_statistics_encoded():
         CompareWithFile(result.stdout, expected)
 
 
+def test_statistics_filter_encoded():
+
+    for item in GetTestFiles():
+        path = GetExamplesPath() / (item.stem + ".txt")
+        expected = GetExpectedPath() / subdir / (item.stem + "_filter_encoded_expected.txt")
+        params = [
+            "--color=never",
+            "--statistics",
+            "--filter=u,f",
+            f"--encoding={item.encoding}",
+            path,
+        ]
+        result = Run(params, 0)
+        if IsPrepare() and not expected.exists():
+            with open(expected, "w", encoding="utf-8") as f:
+                f.write(result.stdout)
+
+        EqualsPattern(result.stderr, "")
+        CompareWithFile(result.stdout, expected)
+
+
 def test_statistics():
 
     for item in GetTestFiles():

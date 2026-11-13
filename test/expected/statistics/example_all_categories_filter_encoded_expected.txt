@@ -1,0 +1,12 @@
+List of UNICODE characters
+1 U+00D6 Ö
+3 U+00DF ß
+3 U+00E9 é
+1 U+00FC ü
+1 U+20AC €
+List of FALLBACK(cp1252) characters
+3 80 €
+3 D6 Ö
+1 DF ß
+1 E9 é
+3 FC ü

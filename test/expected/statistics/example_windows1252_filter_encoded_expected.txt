@@ -1,0 +1,7 @@
+List of UNICODE characters
+List of FALLBACK(cp1252) characters
+1 80 €
+1 DC Ü
+1 DF ß
+3 E4 ä
+2 FC ü
