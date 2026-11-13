@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
     {
         bool printSummary = false;
         bool printStatistics = false;
+        bool printBom = false;
         bool printLines = true;
         bool printLineNumber = false;
         bool printFilename = false;
@@ -124,13 +125,15 @@ int main(int argc, char* argv[])
              "category")
             ("statistics,s", po::bool_switch(&printStatistics),
              "Suppress normal output, instead print character counts per "
-             "character within each category");
+             "character within each category")
+            ("bom,b", po::bool_switch(&printBom),
+             "Suppress normal output, instead print BOM type of file");
 
         po::options_description conv("Conversion options", len, min);
         conv.add_options()
             ("output-file,o", po::value<std::string>(),
              "Write a converted UTF-8 file")
-            ("output-bom,b", po::value<std::string>(&outputBomString)
+            ("output-bom,B", po::value<std::string>(&outputBomString)
                         ->default_value("as_input")
                         ->implicit_value("yes"),
              "Output file BOM mode: 'yes', 'no', 'as_input';\n"
@@ -239,9 +242,10 @@ int main(int argc, char* argv[])
         {
             printSummary = false;
             printStatistics = false;
+            printBom = false;
             printLines = false;
         }
-        else if (printSummary || printStatistics)
+        else if (printSummary || printStatistics || printBom)
         {
             using Type = std::vector<std::pair<bool, const char *>>;
 
@@ -319,6 +323,7 @@ int main(int argc, char* argv[])
 
                 EncodingApplication app(istream,
                         encoding, printLines, printSummary, printStatistics,
+                        printBom,
                         printFilename, printLineNumber, printCategories,
                         isPrintUnicodeCodepoints,
                         colorMode, categoryFilter, outputBomMode,
@@ -338,6 +343,7 @@ int main(int argc, char* argv[])
 
         EncodingApplication app(std::cin,
                 encoding, printLines, printSummary, printStatistics,
+                printBom,
                 printFilename, printLineNumber, printCategories,
                 isPrintUnicodeCodepoints,
                 colorMode, categoryFilter, outputBomMode,

@@ -1,0 +1,82 @@
+BOM: None
+5 CONTROL characters
+342 ASCII characters
+9 UNICODE characters
+11 FALLBACK(cp1252) characters
+6 INDETERMINATE characters
+373 characters in total
+List of CONTROL characters
+2 10 
+1 11 
+1 12 
+1 13 
+List of ASCII characters
+98 U+0020  
+4 U+0026 &
+1 U+0028 (
+1 U+0029 )
+4 U+002C ,
+3 U+002D -
+8 U+002E .
+3 U+0031 1
+5 U+0032 2
+1 U+0033 3
+2 U+0035 5
+1 U+0038 8
+8 U+003A :
+1 U+0041 A
+9 U+0043 C
+5 U+0044 D
+3 U+0045 E
+5 U+0046 F
+4 U+0049 I
+2 U+004C L
+1 U+004D M
+1 U+0053 S
+2 U+0054 T
+1 U+0055 U
+2 U+0057 W
+10 U+0061 a
+5 U+0062 b
+1 U+0063 c
+5 U+0064 d
+13 U+0065 e
+9 U+0066 f
+5 U+0067 g
+2 U+0068 h
+10 U+0069 i
+1 U+006A j
+5 U+006B k
+11 U+006C l
+7 U+006D m
+14 U+006E n
+18 U+006F o
+2 U+0070 p
+1 U+0071 q
+12 U+0072 r
+8 U+0073 s
+9 U+0074 t
+6 U+0075 u
+1 U+0076 v
+7 U+0077 w
+2 U+0078 x
+2 U+0079 y
+1 U+007A z
+List of UNICODE characters
+1 U+00D6 Ö
+3 U+00DF ß
+3 U+00E9 é
+1 U+00FC ü
+1 U+20AC €
+List of FALLBACK(cp1252) characters
+3 80 €
+3 D6 Ö
+1 DF ß
+1 E9 é
+3 FC ü
+List of INDETERMINATE characters
+2 81 
+1 8D 
+1 8F 
+1 90 
+1 9D 

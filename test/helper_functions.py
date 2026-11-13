@@ -58,7 +58,7 @@ def IsPrepare() -> bool:
     Only to be used for test preparation.
     It initially creates the expected test file result.
     """
-    return False
+    return True
 
 
 def GetExamplesPath() -> Path:
