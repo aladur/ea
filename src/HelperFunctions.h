@@ -38,7 +38,7 @@ extern std::ostream& operator<<(std::ostream& os, EncodingType type);
 extern std::string to_string(BomType type);
 extern std::ostream& operator<<(std::ostream& os, BomType type);
 extern std::string AsHumanReadable(BomType type);
-extern ColorMode ToMode(std::string colorString);
+extern ColorMode ToColorMode(std::string colorString);
 extern bool IsValidEncoding(const std::string &encoding, std::string &error);
 extern bool IsValidColorMode(const std::string &colorString);
 extern std::string GetStandardName(const std::string &encoding);
