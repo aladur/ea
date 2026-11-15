@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
             throw std::runtime_error("Got invalid unicode excludes '" +
                     invalidUnicodeExcludes + "'");
         }
-        const auto colorMode = ToMode(colorModeString);
+        const auto colorMode = ToColorMode(colorModeString);
         const auto lcEncoding = boost::to_lower_copy(encoding);
         if (lcEncoding.substr(0, 4) == "list")
         {

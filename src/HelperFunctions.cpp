@@ -125,7 +125,7 @@ std::string AsHumanReadable(BomType type)
     }
 }
 
-ColorMode ToMode(std::string colorString)
+ColorMode ToColorMode(std::string colorString)
 {
     balgo::to_lower(colorString);
 
