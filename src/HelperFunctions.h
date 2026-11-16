@@ -39,6 +39,7 @@ extern std::string to_string(BomType type);
 extern std::ostream& operator<<(std::ostream& os, BomType type);
 extern std::string AsHumanReadable(BomType type);
 extern ColorMode ToColorMode(std::string colorString);
+extern StatisticsMode ToStatisticsMode(std::string satisticsString);
 extern bool IsValidEncoding(const std::string &encoding, std::string &error);
 extern bool IsValidColorMode(const std::string &colorString);
 extern std::string GetStandardName(const std::string &encoding);
@@ -51,6 +52,7 @@ extern EncodingType GetCodepointType(const Codepoint &cp,
 extern bool IsSingleByteEncoding(const std::string &encoding);
 extern std::string ToUtf8(const Codepoint &cp);
 extern std::string ToUtf8(const Codepoint &cp, const std::string &encoding);
+extern std::string AsHex(const std::string &data);
 extern void OutputAvailableStandards(std::ostream &os);
 extern void OutputAvailableEncodings(std::ostream &os,
         const std::string &standard, bool withAliases, bool isSingleByte);

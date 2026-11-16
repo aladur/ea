@@ -14,6 +14,7 @@ def test_statistics_summary_encoded():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
             "--count",
             f"--encoding={item.encoding}",
             path,
@@ -35,6 +36,7 @@ def test_statistics_summary():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
             "--count",
             path,
         ]

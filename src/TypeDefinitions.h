@@ -43,6 +43,8 @@ namespace Color
 namespace Utf8
 {
     extern const char* BOM;
+    extern const char* DOTTED_CIRCLE;
+    extern const char* DOTTED_SQUARE;
     extern const char* REPLACEMENT_CHARACTER;
 }
 
@@ -89,6 +91,14 @@ enum class OutputBomMode : std::uint8_t
     No,
     Yes,
     AsInput,
+};
+
+enum class StatisticsMode : std::uint8_t
+{
+    None,
+    Brief,
+    Normal,
+    Full,
 };
 
 struct TypedCodepoint

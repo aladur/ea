@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
         bool isPrintUnicodeCodepoints = false;
         std::string colorModeString;
         std::string outputBomString;
+        std::string statisticsModeString = "none";
         std::string excludeUnicodeCodepointsString;
         std::string filter;
         std::optional<fs::path> optOutputFilename;
@@ -128,7 +129,10 @@ int main(int argc, char* argv[])
              "With character count also print total character sum")
             ("statistics,s", po::bool_switch(&printStatistics),
              "Suppress normal output, instead print character counts per "
-             "character within each category")
+             "character within each category.")
+            ("statistics-mode", po::value<std::string>(&statisticsModeString)
+                    ->default_value("normal"),
+             "Statistics detail level: 'brief', 'normal', 'full'.")
             ("bom,b", po::bool_switch(&printBom),
              "Suppress normal output, instead print BOM type of file");
 
@@ -211,6 +215,22 @@ int main(int argc, char* argv[])
                     invalidUnicodeExcludes + "'");
         }
         const auto colorMode = ToColorMode(colorModeString);
+        auto statisticsMode = StatisticsMode::None;
+        if (!printStatistics && !vm["statistics-mode"].defaulted())
+        {
+            throw std::runtime_error("--statistics-mode only can be used "
+                "together with --statistics");
+        }
+        if (printStatistics)
+        {
+            statisticsMode = ToStatisticsMode(statisticsModeString);
+            if (statisticsMode == StatisticsMode::None)
+            {
+               throw std::runtime_error("Undefined value '" +
+                       statisticsModeString + "' for --statistics-mode");
+            }
+        }
+
         const auto lcEncoding = boost::to_lower_copy(encoding);
         if (lcEncoding.substr(0, 4) == "list")
         {
@@ -243,12 +263,13 @@ int main(int argc, char* argv[])
 
         if (isPrintUnicodeCodepoints)
         {
+            statisticsMode = StatisticsMode::None;
             printSummary = false;
-            printStatistics = false;
             printBom = false;
             printLines = false;
         }
-        else if (printSummary || printStatistics || printBom)
+        else if (statisticsMode != StatisticsMode::None ||
+                 printSummary || printBom)
         {
             using Type = std::vector<std::pair<bool, const char *>>;
 
@@ -325,10 +346,11 @@ int main(int argc, char* argv[])
                 }
 
                 EncodingApplication app(istream,
-                        encoding, printLines, printSummary, printStatistics,
+                        encoding, printLines, printSummary,
                         printBom, printTotalSum,
                         printFilename, printLineNumber, printCategories,
                         isPrintUnicodeCodepoints,
+                        statisticsMode,
                         colorMode, categoryFilter, outputBomMode,
                         std::move(excludeUnicodeCodepoints),
                         filePath.filename().string(),
@@ -345,10 +367,11 @@ int main(int argc, char* argv[])
         }
 
         EncodingApplication app(std::cin,
-                encoding, printLines, printSummary, printStatistics,
+                encoding, printLines, printSummary,
                 printBom, printTotalSum,
                 printFilename, printLineNumber, printCategories,
                 isPrintUnicodeCodepoints,
+                statisticsMode,
                 colorMode, categoryFilter, outputBomMode,
                 std::move(excludeUnicodeCodepoints),
                 std::nullopt, optOutputFilename);

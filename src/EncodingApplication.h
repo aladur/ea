@@ -44,11 +44,12 @@ public:
     EncodingApplication(
             std::istream &is,
             const std::string &fallbackEncoding,
-            bool printLines, bool printSummary, bool printStatistics,
+            bool printLines, bool printSummary,
             bool printBom, bool printTotalSum,
             bool printFilename, bool printLineNumber,
             bool printCategories,
             bool isPrintUnicodeCodepoints,
+            StatisticsMode statisticsMode,
             ColorMode colorMode, EncodingTypes categoryFilter,
             OutputBomMode outputBomMode,
             std::unordered_set<Codepoint> excludeUnicodeCodepoints,
@@ -69,10 +70,10 @@ private:
     std::istream &istream_;
     std::string fallbackEncoding_;
     bool printSummary_;
-    bool printStatistics_;
     bool printBom_;
     bool printTotalSum_;
     bool isPrintUnicodeCodepoints_;
+    StatisticsMode statisticsMode_;
     ColorMode colorMode_;
     EncodingTypes categoryFilter_;
     std::unordered_set<Codepoint> excludeUnicodeCodepoints_;

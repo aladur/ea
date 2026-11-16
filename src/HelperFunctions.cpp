@@ -145,6 +145,26 @@ ColorMode ToColorMode(std::string colorString)
     return ColorMode::Never;
 }
 
+StatisticsMode ToStatisticsMode(std::string statisticsString)
+{
+    balgo::to_lower(statisticsString);
+
+    if (statisticsString == "brief")
+    {
+        return StatisticsMode::Brief;
+    }
+    else if (statisticsString == "normal")
+    {
+        return StatisticsMode::Normal;
+    }
+    else if (statisticsString == "full")
+    {
+        return StatisticsMode::Full;
+    }
+
+    return StatisticsMode::None;
+}
+
 bool IsValidEncoding(const std::string &encoding, std::string &error)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -382,6 +402,23 @@ std::string ToUtf8(const Codepoint &cp, const std::string &encoding)
     }
 
     return {};
+}
+
+std::string AsHex(const std::string &data)
+{
+    std::stringstream stream;
+
+    for (const auto &ch : data)
+    {
+        const auto value =
+            static_cast<unsigned>(static_cast<unsigned char>(ch));
+
+        stream <<
+            std::uppercase << std::setw(2) <<
+            std::setfill('0') << std::hex << value;
+    }
+
+    return stream.str();
 }
 
 bool IsValidStandard(std::string standard)
