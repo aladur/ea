@@ -15,6 +15,7 @@ def test_statistics_encoded():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
             f"--encoding={item.encoding}",
             path,
         ]
@@ -35,6 +36,7 @@ def test_statistics_filter_encoded():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
             "--filter=u,f",
             f"--encoding={item.encoding}",
             path,
@@ -56,6 +58,34 @@ def test_statistics():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
+            path,
+        ]
+        result = Run(params, 0)
+        if IsPrepare() and not expected.exists():
+            with open(expected, "w", encoding="utf-8") as f:
+                f.write(result.stdout)
+
+        EqualsPattern(result.stderr, "")
+        CompareWithFile(result.stdout, expected)
+
+
+def test_statistics_modes():
+
+    statisticsModes = [
+        "brief",
+        "normal",
+        "full",
+    ]
+    stem = "example_all_categories";
+    path = GetExamplesPath() / (stem + ".txt")
+    for statisticsMode in statisticsModes:
+        filename = f"{stem}_{statisticsMode}_expected.txt"
+        expected = GetExpectedPath() / subdir / filename
+        params = [
+            "--color=never",
+            "--statistics",
+            f"--statistics-mode={statisticsMode}",
             path,
         ]
         result = Run(params, 0)

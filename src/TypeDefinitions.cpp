@@ -39,6 +39,8 @@ namespace Color
 namespace Utf8
 {
     const char* BOM = "\xEF\xBB\xBF";
+    const char* DOTTED_CIRCLE = "\xE2\x97\x8C";
+    const char* DOTTED_SQUARE = "\xE2\xAC\x9A";
     const char* REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 }
 

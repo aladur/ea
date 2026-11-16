@@ -6,13 +6,14 @@ BOM: None
 121 INDETERMINATE characters
 List of CONTROL characters
 List of ASCII characters
-5 U+0025 %
-26 U+0040 @
-5 U+004B K
+5 %
+26 @
+5 K
 List of UNICODE characters
-1 U+0085 
-1 U+0196 Ɩ
-1 U+0216 Ȗ
+1 ⬚
+1 Ɩ
+1 Ȗ
+Unicode codepoints without a glyph are displayed as ⬚
 List of FALLBACK(none) characters
 List of INDETERMINATE characters
 10 81 

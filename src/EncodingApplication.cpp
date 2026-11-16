@@ -49,13 +49,13 @@ EncodingApplication::EncodingApplication(
         const std::string &fallbackEncoding,
         bool printLines,
         bool printSummary,
-        bool printStatistics,
         bool printBom,
         bool printTotalSum,
         bool printFilename,
         bool printLineNumber,
         bool printCategories,
         bool isPrintUnicodeCodepoints,
+        StatisticsMode statisticsMode,
         ColorMode colorMode,
         EncodingTypes categoryFilter,
         OutputBomMode outputBomMode,
@@ -65,10 +65,10 @@ EncodingApplication::EncodingApplication(
     : istream_(is)
     , fallbackEncoding_(fallbackEncoding)
     , printSummary_(printSummary)
-    , printStatistics_(printStatistics)
     , printBom_(printBom)
     , printTotalSum_(printTotalSum)
     , isPrintUnicodeCodepoints_(isPrintUnicodeCodepoints)
+    , statisticsMode_(statisticsMode)
     , colorMode_(colorMode)
     , categoryFilter_(categoryFilter)
     , excludeUnicodeCodepoints_(std::move(excludeUnicodeCodepoints))
@@ -241,7 +241,7 @@ int EncodingApplication::Run()
         }
     }
 
-    if (printStatistics_)
+    if (statisticsMode_ != StatisticsMode::None)
     {
         for (int i = 0; i < static_cast<int>(GetEncodingNames().size()); ++i)
         {
@@ -254,12 +254,14 @@ int EncodingApplication::Run()
 
             const auto &stat = statistics[encodingType];
             std::stringstream lineStream;
+            bool hasNoGlyph = false;
 
             lineStream << "List of " << GetEncodingNames()[i] << " characters";
             output_.PrintLine(withColor, lineStream.str());
 
             for (const auto codepoint : stat.GetCodepoints())
             {
+                bool isCf = u_iscntrl(codepoint.Value());
                 const auto count = stat.GetCount(codepoint);
                 std::string utf8Char =
                     (encodingType == EncodingType::Fallback) ?
@@ -273,13 +275,31 @@ int EncodingApplication::Run()
                 if (encodingType == EncodingType::Unicode ||
                     encodingType == EncodingType::Ascii)
                 {
-                    if (u_charType(codepoint) == U_CONTROL_CHAR)
+                    std::string hexDigits;
+
+                    if (statisticsMode_ != StatisticsMode::Brief)
                     {
-                        utf8Char = "";
+                        hexDigits = AsHex(utf8Char);
                     }
 
-                    lineStream << std::dec << count << " " << codepoint <<
-                        " " << utf8Char;
+                    if (u_charType(codepoint) == U_CONTROL_CHAR || isCf)
+                    {
+                        utf8Char = Utf8::DOTTED_SQUARE;
+                        hasNoGlyph = true;
+                    }
+
+                    lineStream << std::dec << count << " " << utf8Char;
+
+                    if (statisticsMode_ != StatisticsMode::Brief)
+                    {
+                        lineStream << " " << codepoint << " " << hexDigits;
+                    }
+
+                    if (statisticsMode_ == StatisticsMode::Full)
+                    {
+                        lineStream << " " << GetBlockName(codepoint) <<
+                            " [" << GetName(codepoint) << "]";
+                    }
                 }
                 else
                 {
@@ -288,6 +308,16 @@ int EncodingApplication::Run()
                         std::hex << codepoint.Value() << " " << utf8Char;
                 }
 
+                output_.PrintLine(withColor, lineStream.str());
+            }
+
+            if (hasNoGlyph)
+            {
+                lineStream.clear();
+                lineStream.str("");
+                lineStream <<
+                    "Unicode codepoints without a glyph are displayed as " <<
+                    Utf8::DOTTED_SQUARE;
                 output_.PrintLine(withColor, lineStream.str());
             }
         }

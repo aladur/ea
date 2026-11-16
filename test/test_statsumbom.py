@@ -14,6 +14,7 @@ def test_statistics_summary_bom_encoded():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
             "--count",
             "--bom",
             f"--encoding={item.encoding}",
@@ -36,6 +37,7 @@ def test_statistics_summary_bom():
         params = [
             "--color=never",
             "--statistics",
+            "--statistics-mode=brief",
             "--count",
             "--bom",
             path,

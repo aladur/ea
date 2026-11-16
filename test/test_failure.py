@@ -41,3 +41,22 @@ def test_output_bom_failure():
     result = Run([ "--output-file=o.txt", "--output-bom=invalid", str(path)], 1)
     EqualsPattern(result.stdout, "")
     ContainsPattern(result.stderr, "Undefined")
+
+
+def test_statistics_failure():
+    stem = "example_utf8"
+    path = GetExamplesPath() / (stem + ".txt")
+    options = [
+        "--statistics-mode=brief",
+        "--statistics-mode=normal",
+        "--statistics-mode=full",
+    ]
+
+    for option in options:
+        result = Run([ f"{option}", str(path)], 1)
+        EqualsPattern(result.stdout, "")
+        ContainsPattern(result.stderr, "only can be used together with")
+
+    result = Run([ "--statistics", "--statistics-mode=undefined", str(path)], 1)
+    EqualsPattern(result.stdout, "")
+    ContainsPattern(result.stderr, "Undefined")
