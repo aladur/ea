@@ -421,6 +421,26 @@ std::string AsHex(const std::string &data)
     return stream.str();
 }
 
+std::string AsEscaped(const Codepoint &cp)
+{
+    std::stringstream stream;
+
+    if (cp.Value() <= 0xFFFF)
+    {
+       stream << "\\u" <<
+            std::uppercase << std::setw(4) <<
+            std::setfill('0') << std::hex << cp.Value();
+    }
+    else
+    {
+       stream << "\\U" <<
+            std::uppercase << std::setw(8) <<
+            std::setfill('0') << std::hex << cp.Value();
+    }
+
+    return stream.str();
+}
+
 bool IsValidStandard(std::string standard)
 {
     UErrorCode status = U_ZERO_ERROR;
