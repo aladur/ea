@@ -3,6 +3,7 @@ UTF-8:         Caf√©, Fu√üball & √ñkostrom f√ºr wenig ‚Ç¨.
 Windows-1252:  CafÈ, Fuﬂball & ÷kostrom f¸r wenig Ä.
 Mixed:         Caf√©, Fu√üball & ÷kostrom f¸r wenig Ä.
 Controls:      DLE  DC1  DC2  DC3 .
+UTF-8 no glyph:ZWS ‚Äã WJ ‚Å† ZWNBS Ôªø.
 Indeterminate: Å ç è ê ù (on Windows-1252).
 In one line:   Caf√©, Fu√üball & ÷kostrom f¸r wenig Ä. DLE  Å.
 Empty:         

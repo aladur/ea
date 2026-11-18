@@ -3,7 +3,8 @@
 3:Windows-1252:  Café, Fußball & Ökostrom für wenig €.
 4:Mixed:         Café, Fußball & Ökostrom für wenig €.
 5:Controls:      DLE \x10 DC1 \x11 DC2 \x12 DC3 \x13.
-6:Indeterminate: \x81 \x8D \x8F \x90 \x9D (on Windows-1252).
-7:In one line:   Café, Fußball & Ökostrom für wenig €. DLE \x10 \x81.
-8:Empty:         
-9:
+6:UTF-8 no glyph:ZWS \u200B WJ \u2060 ZWNBS \uFEFF.
+7:Indeterminate: \x81 \x8D \x8F \x90 \x9D (on Windows-1252).
+8:In one line:   Café, Fußball & Ökostrom für wenig €. DLE \x10 \x81.
+9:Empty:         
+10:

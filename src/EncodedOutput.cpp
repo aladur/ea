@@ -176,15 +176,7 @@ void EncodedOutput::Output(const TypedCodepoint &tcp)
         lineStream_ << AsUtf8String(tcp);
     }
 
-    if (isBomProcessed)
-    {
-        // A BOM in between is ignored.
-        if (tcp.codepoint == Codepoint(0xFEFF))
-        {
-            return;
-        }
-    }
-    else
+    if (!isBomProcessed)
     {
         isBomProcessed = true;
 
@@ -249,6 +241,9 @@ void EncodedOutput::PrintCategories(bool withColor, EncodingTypes categories)
 
 std::string EncodedOutput::AsUtf8String(const TypedCodepoint &tcp) const
 {
+    const bool isCf =
+        tcp.type == EncodingType::Unicode && u_iscntrl(tcp.codepoint.Value());
+
     switch (tcp.type)
     {
         case EncodingType::Control:
@@ -264,6 +259,12 @@ std::string EncodedOutput::AsUtf8String(const TypedCodepoint &tcp) const
             {
                 std::stringstream stream;
                 stream << tcp.codepoint;
+                return stream.str();
+            }
+            else if (isCf)
+            {
+                std::stringstream stream;
+                stream << AsEscaped(tcp.codepoint);
                 return stream.str();
             }
             return ToUtf8(tcp.codepoint);

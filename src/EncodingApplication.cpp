@@ -133,8 +133,6 @@ int EncodingApplication::Run()
             }
             auto encodingType = optResult.value().type;
 
-            //std::cout << "codepoint=" << std::hex << codepoint <<
-            //    " type=" << encodingType << "\n";
             const bool isNewLine = encodingType == EncodingType::Control &&
                 ((isAscii && codepoint == Codepoint(0x0A)) ||
                  (isEbcdic && (codepoint == Codepoint(0x15) ||

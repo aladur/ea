@@ -3,7 +3,11 @@ List of UNICODE characters
 3 ß
 3 é
 1 ü
+1 ⬚
+1 ⬚
 1 €
+1 ⬚
+Unicode codepoints without a glyph are displayed as ⬚
 List of FALLBACK(cp1252) characters
 3 80 €
 3 D6 Ö

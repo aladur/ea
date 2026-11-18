@@ -1,3 +1,4 @@
 au----:UTF-8:         Café, Fußball & Ökostrom für wenig €.
 auf---:Mixed:         Café, Fußball & Ökostrom für wenig €.
+au----:UTF-8 no glyph:ZWS \u200B WJ \u2060 ZWNBS \uFEFF.
 aufic-:In one line:   Café, Fußball & Ökostrom für wenig €. DLE \x10 \x81.

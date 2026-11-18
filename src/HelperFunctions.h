@@ -53,6 +53,7 @@ extern bool IsSingleByteEncoding(const std::string &encoding);
 extern std::string ToUtf8(const Codepoint &cp);
 extern std::string ToUtf8(const Codepoint &cp, const std::string &encoding);
 extern std::string AsHex(const std::string &data);
+extern std::string AsEscaped(const Codepoint &cp);
 extern void OutputAvailableStandards(std::ostream &os);
 extern void OutputAvailableEncodings(std::ostream &os,
         const std::string &standard, bool withAliases, bool isSingleByte);
