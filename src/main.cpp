@@ -202,6 +202,11 @@ int main(int argc, char* argv[])
             throw std::runtime_error("--output-bom only can be used "
                 "together with --output-file");
         }
+        if (!IsValidOutputBom(outputBomString))
+        {
+            throw std::runtime_error("Undefined --output-bom value '" +
+                   outputBomString + "'. Valid is 'yes', 'no', 'as_input'");
+        }
         const auto outputBomMode = ToOutputBomMode(outputBomString);
 
         if (!invalidCategory.empty())

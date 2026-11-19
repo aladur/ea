@@ -30,7 +30,6 @@ SOFTWARE.
 #include <cstdint>
 #include <iomanip>
 #include <charconv>
-#include <stdexcept>
 #include <utility>
 #include <string>
 #include <array>
@@ -188,6 +187,16 @@ bool IsValidColorMode(const std::string &colorString)
 
     return std::find(colorModes.cbegin(), colorModes.cend(),
             balgo::to_lower_copy(colorString)) != colorModes.cend();
+}
+
+bool IsValidOutputBom(const std::string &outputBomString)
+{
+    const static std::array<const char *, 3> outputBom{
+        "yes", "no", "as_input"
+    };
+
+    return std::find(outputBom.cbegin(), outputBom.cend(),
+            balgo::to_lower_copy(outputBomString)) != outputBom.cend();
 }
 
 std::string GetStandardName(const std::string &encoding)
@@ -692,8 +701,10 @@ EncodingTypes ToEncodingTypes(EncodingType encodingType)
     }
 }
 
-OutputBomMode ToOutputBomMode(const std::string &outputBomString)
+OutputBomMode ToOutputBomMode(std::string outputBomString)
 {
+    balgo::to_lower(outputBomString);
+
     if (outputBomString == "no")
     {
         return OutputBomMode::No;
@@ -707,8 +718,7 @@ OutputBomMode ToOutputBomMode(const std::string &outputBomString)
         return OutputBomMode::AsInput;
     }
 
-    throw std::runtime_error("Undefined --output-bom value '" +
-        outputBomString + "'. Valid is 'yes', 'no', 'as_input'");
+    return OutputBomMode::No;
 }
 
 std::array<EncodingType, 256U> GetCodepointTypes(const std::string &encoding)
