@@ -42,6 +42,7 @@ extern ColorMode ToColorMode(std::string colorString);
 extern StatisticsMode ToStatisticsMode(std::string satisticsString);
 extern bool IsValidEncoding(const std::string &encoding, std::string &error);
 extern bool IsValidColorMode(const std::string &colorString);
+extern bool IsValidOutputBom(const std::string &outputBomString);
 extern std::string GetStandardName(const std::string &encoding);
 extern std::string GetName(const Codepoint &cp);
 extern std::string GetBlockName(const Codepoint &cp);
@@ -66,7 +67,7 @@ extern std::unordered_set<Codepoint> ToUnicodeCodepoints(
         const std::string &unicodeCodepointsString,
         std::string &invalidUnicodeCodepoints);
 extern EncodingTypes ToEncodingTypes(EncodingType encodingType);
-extern OutputBomMode ToOutputBomMode(const std::string &outputBomString);
+extern OutputBomMode ToOutputBomMode(std::string outputBomString);
 extern void PrepareConsoleForUtf8();
 extern std::array<EncodingType, 256U> GetCodepointTypes(
         const std::string &encoding);
