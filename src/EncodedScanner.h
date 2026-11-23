@@ -27,10 +27,10 @@ SOFTWARE.
 
 #include "Codepoint.h"
 #include "TypeDefinitions.h"
-#include <cstdint>
+#include <cstddef>
 #include <optional>
 #include <string>
-#include <vector>
+#include <array>
 #include <unordered_set>
 #include <istream>
 
@@ -44,16 +44,18 @@ public:
     std::optional<TypedCodepoint> GetNext(unsigned &size);
 
 protected:
-    bool IsUtf8CharacterInBuffer(unsigned &size, bool withSingleByte) const;
-    Codepoint GetUtf8CharacterFromBuffer(unsigned size) const;
+    std::optional<Codepoint> TryGetUtf8CharacterFromBuffer(
+            unsigned &size, bool withSingleByte);
 
 private:
     std::istream &istream_;
     std::string fallbackEncoding_;
-    std::vector<std::uint8_t> buffer_{};
+    std::array<char, 16384U> buffer_{};
+    std::size_t size_{};
+    std::size_t offset_{};
     std::unordered_set<Codepoint> excludeUnicodeCodepoints_;
-    unsigned int filePosition_{};
     bool hasFallbackEncoding_{};
+    bool hasExcludes{};
 };
 
 #endif

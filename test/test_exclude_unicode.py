@@ -14,9 +14,9 @@ def test_exclude_unicode_ebcdic():
         excludes: str
 
     items = [
-        FileStemWithExcludes("example_ebcdic_english_cp037", "U+0085,U+0196"),
+        FileStemWithExcludes("example_ebcdic_english_cp037", "U+0085,U+0196,U+0216"),
         FileStemWithExcludes("example_ebcdic_german_cp037",
-                             "U+0053,U+0057,U+0085,U+0105,U+0193,U+01D9,U+0505,U+0707,U+0722,U+28C1"),
+                             "U+0053,U+0057,U+0085,U+0105,U+0193,U+01D9,U+0505,U+0707,U+0722,U+28C1,U+6159"),
     ]
 
     for item in items:
