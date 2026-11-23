@@ -48,6 +48,11 @@ namespace Utf8
     extern const char* REPLACEMENT_CHARACTER;
 }
 
+namespace Unicode
+{
+    extern const Codepoint MAX;
+}
+
 enum class EncodingType : std::uint8_t
 {
     Control,
