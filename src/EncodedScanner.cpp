@@ -126,10 +126,15 @@ std::optional<Codepoint> EncodedScanner::TryGetUtf8CharacterFromBuffer(
         (ch4 & 0xC0) == 0x80)
     {
         size = 4U;
-        return Codepoint((static_cast<uint32_t>(ch1) & 0x1FU) << 18U |
+        const auto codepoint =
+               Codepoint((static_cast<uint32_t>(ch1) & 0x1FU) << 18U |
                          (static_cast<uint32_t>(ch2) & 0x3FU) << 12U |
                          (static_cast<uint32_t>(ch3) & 0x3FU) << 6U |
                          (static_cast<uint32_t>(ch4) & 0x3FU));
+        if (codepoint <= Unicode::MAX)
+        {
+            return codepoint;
+        }
     }
 
     return std::nullopt;

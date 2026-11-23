@@ -44,3 +44,7 @@ namespace Utf8
     const char* REPLACEMENT_CHARACTER = "\xEF\xBF\xBD";
 }
 
+namespace Unicode
+{
+    const Codepoint MAX(0x10FFFFU);
+}

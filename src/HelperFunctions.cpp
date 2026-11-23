@@ -371,7 +371,7 @@ bool IsSingleByteEncoding(const std::string &encoding)
 
 std::string ToUtf8(const Codepoint &cp)
 {
-    if (cp.Value() > 0x10FFFF)
+    if (cp > Unicode::MAX)
     {
         return {};
     }
@@ -541,7 +541,7 @@ void OutputAvailableEncodings(std::ostream &os, const std::string &standard,
 
 std::string AsControlCharacter(const Codepoint &cp)
 {
-    if (cp.Value() > 0x10FFFFU)
+    if (cp > Unicode::MAX)
     {
         return {};
     }
