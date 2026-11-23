@@ -30,6 +30,7 @@ SOFTWARE.
 #include <unordered_set>
 #include <istream>
 #include <iostream>
+#include <algorithm>
 
 EncodedScanner::EncodedScanner(std::istream &istream,
             const std::string &fallbackEncoding,
@@ -37,142 +38,100 @@ EncodedScanner::EncodedScanner(std::istream &istream,
     : istream_(istream)
     , fallbackEncoding_(fallbackEncoding)
     , excludeUnicodeCodepoints_(std::move(excludeUnicodeCodepoints))
+    , hasExcludes(!excludeUnicodeCodepoints_.empty())
 {
 }
 
 std::optional<TypedCodepoint> EncodedScanner::GetNext(unsigned &size)
 {
-    auto CreateResultFct = [&](unsigned size){
-        TypedCodepoint result;
-        result.codepoint = GetUtf8CharacterFromBuffer(size);
-        result.type = EncodingType::Unicode;
-        buffer_.erase(buffer_.begin(), buffer_.begin() + size);
-
-        return result;
-    };
+    auto diff = size_ - offset_;
     size = 0U;
 
-    // Check for UTF-8 encoded character (with min. 2-byte size)
-    if (IsUtf8CharacterInBuffer(size, false))
+    if (diff < 4U)
     {
-        const auto codepoint = GetUtf8CharacterFromBuffer(size);
+        if (diff > 0U)
+        {
+            std::copy(buffer_.begin() + offset_, buffer_.begin() + size_,
+                      buffer_.begin());
+        }
+        offset_ = 0U;
+        size_ = diff;
+        if (!istream_.eof() && !istream_.fail())
+        {
+            istream_.read(buffer_.data() + diff, buffer_.size() - diff);
+            size_ += istream_.gcount();
+        }
+    }
 
-        if (excludeUnicodeCodepoints_.find(codepoint) ==
+    // Check for UTF-8 encoded character (with min. 2-byte size)
+    const auto optCodepoint = TryGetUtf8CharacterFromBuffer(size, false);
+    if (optCodepoint.has_value())
+    {
+        const auto &codepoint = optCodepoint.value();
+
+        if (!hasExcludes ||
+            excludeUnicodeCodepoints_.find(codepoint) ==
             excludeUnicodeCodepoints_.cend())
         {
-            return CreateResultFct(size);
+            offset_ += size;
+            return TypedCodepoint{codepoint, EncodingType::Unicode};
         }
     }
 
-    if (!istream_.eof() && !istream_.fail())
+    if (offset_ < size_)
     {
-        for (auto i = buffer_.size(); i <= 4; ++i)
-        {
-            auto data = istream_.get();
-            ++filePosition_;
-            if (istream_.eof() || istream_.fail())
-            {
-                break;
-            }
-            buffer_.push_back(static_cast<uint8_t>(data));
-            if (IsUtf8CharacterInBuffer(size, false))
-            {
-                const auto codepoint = GetUtf8CharacterFromBuffer(size);
-
-                if (excludeUnicodeCodepoints_.find(codepoint) ==
-                    excludeUnicodeCodepoints_.cend())
-                {
-                    return CreateResultFct(size);
-                }
-            }
-        }
-    }
-
-    if (!buffer_.empty())
-    {
-        TypedCodepoint result;
-        result.codepoint = buffer_.front();
-        result.type = EncodingType::Fallback;
-        buffer_.erase(buffer_.begin());
         size = 1U;
-        return result;
+        return TypedCodepoint{
+                Codepoint{static_cast<uint32_t>(buffer_[offset_++] & 0xFFU)},
+                EncodingType::Fallback};
     }
 
     return std::nullopt;
 }
 
-bool EncodedScanner::IsUtf8CharacterInBuffer(unsigned &size,
-        bool withSingleByte) const
+std::optional<Codepoint> EncodedScanner::TryGetUtf8CharacterFromBuffer(
+        unsigned &size, bool withSingleByte)
 {
-    bool isUtf8 = false;
+    const auto diff = size_ - offset_;
+    const auto ch1 = diff >= 1U ? buffer_[offset_] : '\0';
 
-    for (size = 1U; size <= static_cast<unsigned>(buffer_.size()); ++size)
+    if (withSingleByte && diff >= 1U && (ch1 & 0x80) == 0x00)
     {
-        switch (size)
-        {
-            default:
-                [[fallthrough]];
-            case 0U:
-                isUtf8 = false;
-                break;
-
-            case 1U:
-                isUtf8 = withSingleByte && ((buffer_[0] & 0x80) == 0x00);
-                break;
-
-            case 2U:
-                isUtf8 = ((buffer_[0] & 0xE0) == 0xC0 &&
-                          (buffer_[1] & 0xC0) == 0x80);
-                break;
-
-            case 3U:
-                isUtf8 = ((buffer_[0] & 0xF0) == 0xE0 &&
-                          (buffer_[1] & 0xC0) == 0x80 &&
-                          (buffer_[2] & 0xC0) == 0x80);
-                break;
-
-            case 4U:
-                isUtf8 = ((buffer_[0] & 0xF8) == 0xF0 &&
-                          (buffer_[1] & 0xC0) == 0x80 &&
-                          (buffer_[2] & 0xC0) == 0x80 &&
-                          (buffer_[3] & 0xC0) == 0x80);
-                break;
-        }
-
-        if (isUtf8)
-        {
-            return true;
-        }
+        size = 1U;
+        return (Codepoint(ch1 & 0x7FU));
     }
 
-    return false;
-}
+    const auto ch2 = diff >= 2U ? buffer_[offset_ + 1U] : '\0';
 
-Codepoint EncodedScanner::GetUtf8CharacterFromBuffer(unsigned size) const
-{
-    switch (size)
+    if ((ch1 & 0xE0) == 0xC0 && (ch2 & 0xC0) == 0x80)
     {
-        default:
-            [[fallthrough]];
-        case 0U:
-            [[fallthrough]];
-        case 1U:
-            return (static_cast<uint32_t>(buffer_[0] & 0x7FU));
-
-        case 2U:
-            return (static_cast<uint32_t>(buffer_[0]) & 0x1FU) << 6U |
-                    (static_cast<uint32_t>(buffer_[1]) & 0x3FU);
-
-        case 3U:
-            return (static_cast<uint32_t>(buffer_[0]) & 0x0FU) << 12U |
-                    (static_cast<uint32_t>(buffer_[1]) & 0x3FU) << 6U |
-                    (static_cast<uint32_t>(buffer_[2]) & 0x3FU);
-
-        case 4U:
-            return (static_cast<uint32_t>(buffer_[0]) & 0x07U) << 18U |
-                    (static_cast<uint32_t>(buffer_[1]) & 0x3FU) << 12U |
-                    (static_cast<uint32_t>(buffer_[2]) & 0x3FU) << 6U |
-                    (static_cast<uint32_t>(buffer_[3]) & 0x3FU);
+        size = 2U;
+        return Codepoint((static_cast<uint32_t>(ch1) & 0x1FU) << 6U |
+                         (static_cast<uint32_t>(ch2) & 0x3FU));
     }
+
+    const auto ch3 = diff >= 3U ? buffer_[offset_ + 2U] : '\0';
+
+    if ((ch1 & 0xF0) == 0xE0 && (ch2 & 0xC0) == 0x80 && (ch3 & 0xC0) == 0x80)
+    {
+        size = 3U;
+        return Codepoint((static_cast<uint32_t>(ch1) & 0x1FU) << 12U |
+                         (static_cast<uint32_t>(ch2) & 0x3FU) << 6U |
+                         (static_cast<uint32_t>(ch3) & 0x3FU));
+    }
+
+    const auto ch4 = diff >= 4U ? buffer_[offset_ + 3U] : '\0';
+
+    if ((ch1 & 0xF8) == 0xF0 && (ch2 & 0xC0) == 0x80 && (ch3 & 0xC0) == 0x80 &&
+        (ch4 & 0xC0) == 0x80)
+    {
+        size = 4U;
+        return Codepoint((static_cast<uint32_t>(ch1) & 0x1FU) << 18U |
+                         (static_cast<uint32_t>(ch2) & 0x3FU) << 12U |
+                         (static_cast<uint32_t>(ch3) & 0x3FU) << 6U |
+                         (static_cast<uint32_t>(ch4) & 0x3FU));
+    }
+
+    return std::nullopt;
 }
 
