@@ -61,6 +61,16 @@ public:
         return value_ < cp.value_;
     }
 
+    bool operator<= (const Codepoint &cp) const noexcept
+    {
+        return value_ <= cp.value_;
+    }
+
+    bool operator> (const Codepoint &cp) const noexcept
+    {
+        return value_ > cp.value_;
+    }
+
     bool operator>= (const Codepoint &cp) const noexcept
     {
         return value_ >= cp.value_;
@@ -69,6 +79,11 @@ public:
     bool operator== (const Codepoint &cp) const noexcept
     {
         return value_ == cp.value_;
+    }
+
+    bool operator!= (const Codepoint &cp) const noexcept
+    {
+        return value_ != cp.value_;
     }
 
     Codepoint &operator++ () noexcept
